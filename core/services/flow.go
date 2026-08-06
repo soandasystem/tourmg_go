@@ -13,21 +13,23 @@ import (
 )
 
 type flowService struct {
-	config       config.Config
-	gatewaysRepo ports.GatewaysRepository
-	salesRepo    ports.SaleRepository
-	cursoRepo    ports.CursoRepository
-	paymentRepo  ports.PaymentRepository
+	config        config.Config
+	gatewaysRepo  ports.GatewaysRepository
+	gatewayscRepo ports.GatewayscRepository
+	salesRepo     ports.SaleRepository
+	cursoRepo     ports.CursoRepository
+	paymentRepo   ports.PaymentRepository
 }
 
 // NewFlowService creates a new flow service
-func NewFlowService(cfg config.Config, gatewaysRepo ports.GatewaysRepository, salesRepo ports.SaleRepository, cursoRepo ports.CursoRepository, paymentRepo ports.PaymentRepository) ports.FlowService {
+func NewFlowService(cfg config.Config, gatewaysRepo ports.GatewaysRepository, gatewayscRepo ports.GatewayscRepository, salesRepo ports.SaleRepository, cursoRepo ports.CursoRepository, paymentRepo ports.PaymentRepository) ports.FlowService {
 	return &flowService{
-		config:       cfg,
-		gatewaysRepo: gatewaysRepo,
-		salesRepo:    salesRepo,
-		cursoRepo:    cursoRepo,
-		paymentRepo:  paymentRepo,
+		config:        cfg,
+		gatewaysRepo:  gatewaysRepo,
+		gatewayscRepo: gatewayscRepo,
+		salesRepo:     salesRepo,
+		cursoRepo:     cursoRepo,
+		paymentRepo:   paymentRepo,
 	}
 }
 
@@ -63,7 +65,7 @@ func (s *flowService) InitPayment(ctx context.Context, req models.InitFlowPaymen
 
 	// 2. Get Gateway Config
 	gatewayFilter := map[string]interface{}{"company_id": req.CompanyID, "gateway_id": 3} // 3 = Flow
-	gatewayResult, err := s.gatewaysRepo.Get(ctx, gatewayFilter, nil, nil)
+	gatewayResult, err := s.gatewayscRepo.Get(ctx, gatewayFilter, nil, nil)
 	if err != nil {
 		return models.InitFlowPaymentResp{}, fmt.Errorf("error fetching gateway: %v", err)
 	}
