@@ -15,8 +15,8 @@ import (
 )
 
 // SetFlowRoutes creates flow payment routes
-func SetFlowRoutes(ctx context.Context, cfg config.Config, r *gin.Engine, s ports.FlowService) {
-	r.POST("/api/v3.5/inicioPagoFlow", initFlowPayment(ctx, cfg, s))
+func SetFlowRoutes(ctx context.Context, cfg config.Config, r *gin.Engine, p ports.FlowService) {
+	r.POST("/api/v3.5/iniciopagoflow", initFlowPayment(ctx, cfg, p))
 }
 
 // @Summary Init Flow Payment
@@ -27,7 +27,7 @@ func SetFlowRoutes(ctx context.Context, cfg config.Config, r *gin.Engine, s port
 // @Failure 400 {object} object
 // @Failure 500 {object} object
 // @Router /api/v3.5/gateways/flow/init [post]
-func initFlowPayment(ctx context.Context, cfg config.Config, s ports.FlowService) gin.HandlerFunc {
+func initFlowPayment(ctx context.Context, cfg config.Config, p ports.FlowService) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		ctx := c.Request.Context()
 
@@ -45,7 +45,7 @@ func initFlowPayment(ctx context.Context, cfg config.Config, s ports.FlowService
 			return
 		}
 
-		resp, err := s.InitPayment(ctx, req)
+		resp, err := p.InitPayment(ctx, req)
 		if err != nil {
 			response := util.NewErrorResponse(err, http.StatusInternalServerError)
 			c.JSON(response.StatusCode, response)
