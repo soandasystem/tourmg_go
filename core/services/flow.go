@@ -65,7 +65,8 @@ func (s *flowService) InitPayment(ctx context.Context, req models.InitFlowPaymen
 
 	// 2. Get Gateway Config
 	gatewayFilter := map[string]interface{}{"company_id": req.CompanyID, "gateway_id": 3} // 3 = Flow
-	gatewayResult, err := s.gatewayscRepo.Get(ctx, gatewayFilter, nil, nil)
+	globalCtx := context.WithValue(ctx, "schema", "global")
+	gatewayResult, err := s.gatewayscRepo.Get(globalCtx, gatewayFilter, nil, nil)
 	if err != nil {
 		return models.InitFlowPaymentResp{}, fmt.Errorf("error fetching gateway: %v", err)
 	}
