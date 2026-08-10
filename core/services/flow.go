@@ -16,18 +16,18 @@ type flowService struct {
 	config        config.Config
 	gatewaysRepo  ports.GatewaysRepository
 	gatewayscRepo ports.GatewayscRepository
-	salesRepo     ports.SaleRepository
+	saleRepo      ports.SaleRepository
 	cursoRepo     ports.CursoRepository
 	paymentRepo   ports.PaymentRepository
 }
 
 // NewFlowService creates a new flow service
-func NewFlowService(cfg config.Config, gatewaysRepo ports.GatewaysRepository, gatewayscRepo ports.GatewayscRepository, salesRepo ports.SaleRepository, cursoRepo ports.CursoRepository, paymentRepo ports.PaymentRepository) ports.FlowService {
+func NewFlowService(cfg config.Config, gatewaysRepo ports.GatewaysRepository, gatewayscRepo ports.GatewayscRepository, saleRepo ports.SaleRepository, cursoRepo ports.CursoRepository, paymentRepo ports.PaymentRepository) ports.FlowService {
 	return &flowService{
 		config:        cfg,
 		gatewaysRepo:  gatewaysRepo,
 		gatewayscRepo: gatewayscRepo,
-		salesRepo:     salesRepo,
+		saleRepo:      saleRepo,
 		cursoRepo:     cursoRepo,
 		paymentRepo:   paymentRepo,
 	}
@@ -35,16 +35,16 @@ func NewFlowService(cfg config.Config, gatewaysRepo ports.GatewaysRepository, ga
 
 func (s *flowService) InitPayment(ctx context.Context, req models.InitFlowPaymentReq) (models.InitFlowPaymentResp, error) {
 	// 1. Buscar la venta
-	saleFilter := map[string]interface{}{"id": req.SaleID}
-	saleResult, err := s.salesRepo.Get(ctx, saleFilter, nil, nil)
+	saleIDStr := strconv.FormatInt(req.SaleID, 10)
+	saleResult, err := s.saleRepo.GetByID(ctx, saleIDStr)
 	if err != nil {
 		return models.InitFlowPaymentResp{}, fmt.Errorf("error fetching sale: %v", err)
 	}
-	if len(saleResult) == 0 {
+	if saleResult == nil {
 		return models.InitFlowPaymentResp{}, fmt.Errorf("sale not found")
 	}
-	saleList, ok := saleResult[0].(models.SaleListResponse)
-	if !ok || len(saleList.Items) == 0 {
+	_, ok := saleResult.(*models.SaleResp)
+	if !ok {
 		return models.InitFlowPaymentResp{}, fmt.Errorf("sale no encontrado en response")
 	}
 
@@ -64,15 +64,15 @@ func (s *flowService) InitPayment(ctx context.Context, req models.InitFlowPaymen
 	curso := cursoList.Items[0]
 
 	// 2. Get Gateway Config
-	gatewayFilter := map[string]interface{}{"company_id": req.CompanyID, "gateway_id": 3} // 3 = Flow
-	globalCtx := context.WithValue(ctx, "schema", "global")
-	gatewayResult, err := s.gatewayscRepo.Get(globalCtx, gatewayFilter, nil, nil)
+	gatewayFilter := map[string]interface{}{"gateway_id": 3, "company_id": req.CompanyID} // 3 = Flow
+	gatewayResult, err := s.gatewaysRepo.Get(ctx, gatewayFilter, nil, nil)
 	if err != nil {
 		return models.InitFlowPaymentResp{}, fmt.Errorf("error fetching gateway: %v", err)
 	}
 	if len(gatewayResult) == 0 {
 		return models.InitFlowPaymentResp{}, fmt.Errorf("gateway not found")
 	}
+
 	gatewayList, ok := gatewayResult[0].(models.GatewaysListResponse)
 	if !ok || len(gatewayList.Items) == 0 {
 		return models.InitFlowPaymentResp{}, fmt.Errorf("gateway no encontrado en response")
@@ -96,11 +96,10 @@ func (s *flowService) InitPayment(ctx context.Context, req models.InitFlowPaymen
 		"amount":          strconv.Itoa(req.Monto),
 		"email":           curso.Correo,
 		"paymentMethod":   "9",
-		"urlConfirmation": "https://flowresponse.onrender.com/token", // Webhook
-		"urlReturn":       "https://tu-dominio.com/api/returnFlow",   // Return URL
+		"urlConfirmation": "https://flowresponse.onrender.com/token",          // Webhook
+		"urlReturn":       "https://demotravel.tourmanager.cl/api/returnFlow", // Return URL
 		"optional":        string(optionalJSON),
 	}
-
 	flowAPI := util.NewFlowAPI(flowAPIKey, flowSecretKey, s.config.FlowAPIURL)
 	response, err := flowAPI.Send("payment/create", params, "POST")
 	if err != nil {

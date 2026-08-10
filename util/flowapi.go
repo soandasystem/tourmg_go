@@ -54,6 +54,7 @@ func (api *FlowAPI) Send(service string, params map[string]string, method string
 	for k, v := range params {
 		requestParams[k] = v
 	}
+
 	requestParams["apiKey"] = api.APIKey
 
 	data := api.getPack(requestParams, method)
@@ -104,12 +105,8 @@ func (api *FlowAPI) getPack(params map[string]string, method string) string {
 
 	var data strings.Builder
 	for _, k := range keys {
-		if method == "GET" {
-			// Using QueryEscape to emulate PHP's rawurlencode behavior
-			data.WriteString("&" + url.QueryEscape(k) + "=" + url.QueryEscape(params[k]))
-		} else {
-			data.WriteString("&" + k + "=" + params[k])
-		}
+		// Flow expects the payload to be application/x-www-form-urlencoded, so we must URL encode for both GET and POST
+		data.WriteString("&" + url.QueryEscape(k) + "=" + url.QueryEscape(params[k]))
 	}
 
 	res := data.String()
