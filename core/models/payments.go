@@ -68,7 +68,7 @@ type CreatePaymentReq struct {
 	CardNumber      string    `json:"card_number"`
 	AuthCode        string    `json:"auth_code"`
 	AuthDate        time.Time `json:"auth_date"`
-	PeymentToken    string    `json:"payment_token"`
+	PaymentToken    string    `json:"payment_token"`
 	CompanyId       int64     `json:"company_id"`
 	SaleId          int64     `json:"sale_id"`
 	CreatedDate     time.Time `gorm:"autoCreateTime"`
@@ -156,3 +156,33 @@ func (PaymentReport) TableName() string {
 	return "payments" // Nombre de la tabla en la base de datos
 }
 
+type PaymentResponse struct {
+	Amount        string `json:"amount"`
+	CommerceOrder string `json:"commerceOrder"`
+	Currency      string `json:"currency"`
+	FlowOrder     string `json:"flowOrder"`
+	Merchantid    string `json:"merchantId"`
+	Optional      struct {
+		Venta  string `json:"venta"`
+		Alumno string `json:"alumno"`
+	} `json:"optional"`
+	Payer       string `json:"payer"`
+	PaymentData struct {
+		Amount         string `json:"amount"`
+		Balance        string `json:"balance"`
+		Conversiondate string `json:"conversionDate"`
+		Conversionrate string `json:"conversionRate"`
+		Currency       string `json:"currency"`
+		Date           string `json:"date"`
+		Fee            string `json:"fee"`
+		Media          string `json:"media"`
+		Transferdate   string `json:"transferDate"`
+	} `json:"paymentData"`
+	PendingInfo struct {
+		Date  string `json:"date"`
+		Media string `json:"media"`
+	} `json:"pending_info"`
+	RequestDate string `json:"requestDate"`
+	Status      string `json:"status"`
+	Subject     string `json:"subject"`
+}
