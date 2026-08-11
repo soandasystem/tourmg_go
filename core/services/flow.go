@@ -96,12 +96,13 @@ func (s *flowService) InitPayment(ctx context.Context, req models.InitFlowPaymen
 		"amount":          strconv.Itoa(req.Monto),
 		"email":           curso.Correo,
 		"paymentMethod":   "9",
-		"urlConfirmation": "https://flowresponse.onrender.com/token",          // Webhook
-		"urlReturn":       "https://demotravel.tourmanager.cl/api/returnFlow", // Return URL
+		"urlConfirmation": "https://flowresponse.onrender.com/token", // Webhook
+		"urlReturn":       req.Urlreturn,                             // Return URL
 		"optional":        string(optionalJSON),
 	}
 	flowAPI := util.NewFlowAPI(flowAPIKey, flowSecretKey, s.config.FlowAPIURL)
 	response, err := flowAPI.Send("payment/create", params, "POST")
+
 	if err != nil {
 		return models.InitFlowPaymentResp{}, fmt.Errorf("error comunicándose con Flow: %v", err)
 	}

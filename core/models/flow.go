@@ -10,6 +10,7 @@ type InitFlowPaymentReq struct {
 	SaleID        int64  `json:"sale_id"`
 	CursoID       int64  `json:"curso_id"`
 	UserRut       string `json:"user_rut"`
+	Urlreturn     string `json:"urlreturn"`
 }
 
 type InitFlowPaymentResp struct {
