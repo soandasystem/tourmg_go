@@ -495,12 +495,6 @@ func (s *flowService) ConsultaToken(ctx context.Context, token string) (*models.
 
 }
 
-func (s *flowService) ReturnFlow(ctx context.Context, token string) (*models.FlowListResponse, error) {
-
-	s.Redirect(http.StatusFound,
-		"/flowpagos/resultado?commerceOrder="+url.QueryEscape(token))
-
-}
 func parseResponse(response map[string]interface{}) (models.FlowResponse, error) {
 
 	var paymentResponse models.FlowResponse

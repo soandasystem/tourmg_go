@@ -164,12 +164,6 @@ func returnflow(ctx context.Context, cfg config.Config, p ports.FlowService) gin
 			tokenRequest.Token = token
 		}
 
-		// Aquí puedes llamar a tu función principal con el token recibido
-		_, err := p.ReturnFlow(ctx, tokenRequest.Token)
-		if err != nil {
-			fmt.Println(err)
-		}
-
 		// Realizar la redirección HTTP aquí en el handler
 		redirectURL := "/flowpagos/resultado?commerceOrder=" + url.QueryEscape(tokenRequest.Token)
 		c.Redirect(http.StatusFound, redirectURL)
