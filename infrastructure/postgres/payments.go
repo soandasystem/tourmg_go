@@ -43,10 +43,10 @@ func (s *paymentsRepository) Create(ctx context.Context, payments interface{}) (
 	// rollback garantizado en caso de error o panic
 	defer func() {
 		if r := recover(); r != nil {
-			DB.Rollback()
+			tx.Rollback()
 			//	panic(r) // puedes remover esto si no quieres propagar el panic
-		} else if DB.Error != nil || DB.Statement != nil && DB.Statement.ConnPool != nil {
-			_ = DB.Rollback() // rollback silencioso si no se hizo commit
+		} else if tx.Error != nil || DB.Statement != nil && DB.Statement.ConnPool != nil {
+			_ = tx.Rollback() // rollback silencioso si no se hizo commit
 		}
 	}()
 	// Asegúrate de que el tipo del usuario es correcto

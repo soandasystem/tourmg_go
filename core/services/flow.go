@@ -22,10 +22,11 @@ type flowService struct {
 	paymentRepo            ports.PaymentRepository
 	installmentsRepo       ports.InstallmentsRepository
 	paymentInstallmentRepo ports.PaymentInstallmentRepository
+	schemaRegistryRepo     ports.SchemaRegistryRepository
 }
 
 // NewFlowService creates a new flow service
-func NewFlowService(cfg config.Config, gatewaysRepo ports.GatewaysRepository, gatewayscRepo ports.GatewayscRepository, saleRepo ports.SaleRepository, cursoRepo ports.CursoRepository, paymentRepo ports.PaymentRepository, installmentsRepo ports.InstallmentsRepository, paymentInstallmentRepo ports.PaymentInstallmentRepository) ports.FlowService {
+func NewFlowService(cfg config.Config, gatewaysRepo ports.GatewaysRepository, gatewayscRepo ports.GatewayscRepository, saleRepo ports.SaleRepository, cursoRepo ports.CursoRepository, paymentRepo ports.PaymentRepository, installmentsRepo ports.InstallmentsRepository, paymentInstallmentRepo ports.PaymentInstallmentRepository, schemaRegistryRepo ports.SchemaRegistryRepository) ports.FlowService {
 	return &flowService{
 		config:                 cfg,
 		gatewaysRepo:           gatewaysRepo,
@@ -35,6 +36,7 @@ func NewFlowService(cfg config.Config, gatewaysRepo ports.GatewaysRepository, ga
 		paymentRepo:            paymentRepo,
 		installmentsRepo:       installmentsRepo,
 		paymentInstallmentRepo: paymentInstallmentRepo,
+		schemaRegistryRepo:     schemaRegistryRepo,
 	}
 }
 
@@ -124,7 +126,7 @@ func (s *flowService) InitPayment(ctx context.Context, req models.InitFlowPaymen
 		PaymentMethod:   "flow",
 		PaymentDate:     time.Now(),
 		Identifier:      req.Identificador,
-		Notes:           "Pendiente",
+		Notes:           "Pagos",
 		TransactionRef:  "",
 		TransactionType: "",
 		CardNumber:      "",
@@ -132,6 +134,8 @@ func (s *flowService) InitPayment(ctx context.Context, req models.InitFlowPaymen
 		PaymentToken:    flowToken,
 		CompanyId:       req.CompanyID,
 		SaleId:          req.SaleID,
+		Author:          "admin",
+		State:           "Pendiente",
 	}
 
 	insertedID, err := s.paymentRepo.Create(ctx, ingreso)
@@ -139,6 +143,27 @@ func (s *flowService) InitPayment(ctx context.Context, req models.InitFlowPaymen
 		fmt.Println(err)
 	} else {
 		fmt.Println("Pago creado exitosamente con ID: " + insertedID)
+	}
+
+	//obtener scham actual
+	schemaVal, _ := ctx.Value("schema").(string)
+	if schemaVal == "" {
+		schemaVal = "global"
+	}
+
+	//este hay que grabarlo en global
+	tokenRegistry := models.TokenSchemaRegistry{
+		Token:      flowToken,
+		SchemaName: schemaVal,
+		CompanyId:  req.CompanyID,
+		Active:     true,
+	}
+
+	// Cambiamos el schema a "global" en un nuevo contexto para la base de datos
+	ctxGlobal := context.WithValue(ctx, "schema", "global")
+	_, err = s.schemaRegistryRepo.Create(ctxGlobal, tokenRegistry)
+	if err != nil {
+		return models.InitFlowPaymentResp{}, fmt.Errorf("error creando registro en schema: %v", err)
 	}
 
 	destinationURL := fmt.Sprintf("%s?token=%s", flowURL, flowToken)
@@ -152,15 +177,17 @@ func (s *flowService) FlowToken(ctx context.Context, token string) (models.Token
 	error_servicio := "terminado correctamente"
 
 	//----------------------
-	//Buscar el ingreso por token flow
+	//Buscar el ingreso por token flow en el token registry
+	//para saber a que schema pertenece
 	var result []interface{}
 	var err error
 	maxRetries := 7
 	found := false
 
+	ctxGlobal := context.WithValue(ctx, "schema", "global")
+	tokenReg := map[string]interface{}{"token": token}
 	for i := 0; i < maxRetries; i++ {
-		tokenStr := map[string]interface{}{"payment_token": token}
-		result, err = s.paymentRepo.Get(ctx, tokenStr, nil, nil)
+		result, err = s.schemaRegistryRepo.Get(ctxGlobal, tokenReg, nil, nil)
 		if err == nil {
 			found = true
 			break
@@ -180,16 +207,32 @@ func (s *flowService) FlowToken(ctx context.Context, token string) (models.Token
 		}, nil
 	}
 
-	paymentResult, ok := result[0].(models.CreatePaymentReq)
+	//el schema esta en el result de schemaRegistryRepo.Get
+	responseRegistry, ok := result[0].(models.TokenSchemaRegistryResponse)
+	if !ok || len(responseRegistry.Items) == 0 {
+		return models.TokenResponse{
+			Status:  "Error",
+			Message: "No se pudo convertir el ingreso o no se encontraron items",
+		}, nil
+	}
+	tokenRegistry := responseRegistry.Items[0]
+
+	ctx = context.WithValue(ctx, "schema", tokenRegistry.SchemaName)
+
+	tokenStr := map[string]interface{}{"payment_token": token}
+	result, err = s.paymentRepo.Get(ctx, tokenStr, nil, nil)
+
+	paymentResult, ok := result[0].(models.PaymentListResponse)
 	if !ok {
 		return models.TokenResponse{
 			Status:  "Error",
 			Message: "No se pudo convertir el ingreso",
 		}, nil
 	}
+	paymentResponse := paymentResult.Items[0]
 	//---------------------
 	//con el company id del ingeso buscar las key de flow
-	gatewayFilter := map[string]interface{}{"gateway_id": 3, "company_id": paymentResult.CompanyId} // 3 = Flow
+	gatewayFilter := map[string]interface{}{"gateway_id": 3, "company_id": paymentResponse.CompanyId} // 3 = Flow
 	gatewayResult, err := s.gatewaysRepo.Get(ctx, gatewayFilter, nil, nil)
 	if err != nil {
 		return models.TokenResponse{
@@ -216,65 +259,69 @@ func (s *flowService) FlowToken(ctx context.Context, token string) (models.Token
 	flowAPIKey := gateway.AdditionalConfig.FlowAPIKey
 	flowSecretKey := gateway.AdditionalConfig.FlowSecretKey
 
+	fmt.Println("flow api", flowAPIKey)
+
 	// Parámetros para el método Send
 	// Llamar a la API de Flow
 	params := map[string]string{"token": token}
 
 	flowAPI := util.NewFlowAPI(flowAPIKey, flowSecretKey, s.config.FlowAPIURL)
-	response, err := flowAPI.Send("payment/getStatus", params, "GET")
+	responseflow, err := flowAPI.Send("payment/getStatus", params, "GET")
 
 	if err != nil {
 		fmt.Println("Error:", err)
 
 	}
 
-	fmt.Println("respuesta ", response)
+	fmt.Println("respuesta ", responseflow)
 	// Extraer los valores del response y asignarlos a la estructura PaymentResponse
 	continuaOperacion := true
-	paymentResponse, err := parseResponse(response)
+
+	flowResponse, err := parseResponse(responseflow)
 	if err != nil {
 		fmt.Println("Error parsing response", err)
-		status_servicio = "No"
-		error_servicio = "Error al convertir el body a JSON "
+		//	status_servicio := "No"
+		//	error_servicio := "Error al convertir el body a JSON "
 		continuaOperacion = false
 	}
-
+	fmt.Println("FlowResponse:", flowResponse)
 	// Procesar la respuesta
 	if continuaOperacion {
-		status := paymentResponse.Status
-		switch status {
+		flowStatus := flowResponse.Status
+		switch flowStatus {
 		case "1":
 			fmt.Println("Pendiente")
 			paymentNotes := "Pendiente"
 			ingreso := models.UpdatePaymentReq{
-				Notes: &paymentNotes,
+				State: &paymentNotes,
 			}
-			s.paymentRepo.Update(ctx, paymentResult.ID, ingreso)
+			s.paymentRepo.Update(ctx, paymentResponse.ID, ingreso)
 		case "2":
 			fmt.Println("Pagado")
 			// Convertir la cadena a float64
-			fechaAuto := paymentResponse.RequestDate
-			media := paymentResponse.PaymentData.Media
+			fechaAuto := flowResponse.PaymentData.Date
+			media := flowResponse.PaymentData.Media
 
 			fecha_Auto, err := time.Parse("2006-01-02 15:04:05", fechaAuto)
 			if err != nil {
 				fmt.Println("Error al parsear la fecha:", err)
-				status_servicio = "No"
-				error_servicio = "Error al parsear la fecha fechaauto"
+				//	status_servicio = "No"
+				//	error_servicio = "Error al parsear la fecha fechaauto"
 
 			}
+
 			//busco payment que este note = pendiente y identifier = identifier
 			paymentNotes := "Pagado"
 			ingreso := models.UpdatePaymentReq{
 				TransactionType: &media,
 				AuthDate:        &fecha_Auto,
-				Notes:           &paymentNotes,
+				State:           &paymentNotes,
 			}
-			s.paymentRepo.Update(ctx, paymentResult.ID, ingreso)
+			s.paymentRepo.Update(ctx, paymentResponse.ID, ingreso)
 			//en installments busco el balance <> 0 y sumo al paid_amount
 			//balace = amount - paid_amount
-			installmentsFilter := map[string]interface{}{"passenger_id": paymentResult.PassengerId, "company_id": paymentResult.CompanyId, "sale_id": paymentResult.SaleId} // 3 = Flow
-			installmentsResult, err := s.gatewaysRepo.Get(ctx, installmentsFilter, nil, nil)
+			installmentsFilter := map[string]interface{}{"passenger_id": paymentResponse.PassengerId, "company_id": paymentResponse.CompanyId, "sale_id": paymentResponse.SaleId} // 3 = Flow
+			installmentsResult, _ := s.gatewaysRepo.Get(ctx, installmentsFilter, nil, nil)
 
 			var amount float32
 			var newpaidAmount float32
@@ -289,11 +336,12 @@ func (s *flowService) FlowToken(ctx context.Context, token string) (models.Token
 					ID, _ = installment["id"].(string)
 					amount, _ = installment["amount"].(float32)
 					newpaidAmount, _ = installment["paid_amount"].(float32)
-					found = true
+					//		found = true
 					break
 				}
 			}
-			newpaidAmount += float32(paymentResult.Amount)
+			var status string
+			newpaidAmount += float32(paymentResponse.Amount)
 			newBalance = amount - newpaidAmount
 			if newBalance != 0 {
 				status = "PARTIAL"
@@ -308,12 +356,12 @@ func (s *flowService) FlowToken(ctx context.Context, token string) (models.Token
 			}
 			s.installmentsRepo.Update(ctx, ID, installmentUpdate)
 			//grabo payment_installments con el monto pagado
-			id_ip, err := strconv.ParseInt(paymentResult.ID, 10, 64)
-			id_in, err := strconv.ParseInt(ID, 10, 64)
+			id_ip, _ := strconv.ParseInt(paymentResponse.ID, 10, 64)
+			id_in, _ := strconv.ParseInt(ID, 10, 64)
 			payment_installments := models.CreatePaymentInstallmentReq{
 				PaymentId:     id_ip,
 				InstallmentId: id_in,
-				AppliedAmount: float32(paymentResult.Amount),
+				AppliedAmount: float32(paymentResponse.Amount),
 			}
 			s.paymentInstallmentRepo.Create(ctx, payment_installments)
 
@@ -321,23 +369,23 @@ func (s *flowService) FlowToken(ctx context.Context, token string) (models.Token
 			fmt.Println("Transacción Rechazada")
 			paymentNotes := "Rechazado"
 			ingreso := models.UpdatePaymentReq{
-				Notes: &paymentNotes,
+				State: &paymentNotes,
 			}
-			s.paymentRepo.Update(ctx, paymentResult.ID, ingreso)
+			s.paymentRepo.Update(ctx, paymentResponse.ID, ingreso)
 		case "4":
 			fmt.Println("Transacción Anulada")
 			paymentNotes := "Anulado"
 			ingreso := models.UpdatePaymentReq{
-				Notes: &paymentNotes,
+				State: &paymentNotes,
 			}
-			s.paymentRepo.Update(ctx, paymentResult.ID, ingreso)
+			s.paymentRepo.Update(ctx, paymentResponse.ID, ingreso)
 		default:
 			fmt.Println("Estado desconocido")
 			paymentNotes := "Desconocido"
 			ingreso := models.UpdatePaymentReq{
-				Notes: &paymentNotes,
+				State: &paymentNotes,
 			}
-			s.paymentRepo.Update(ctx, paymentResult.ID, ingreso)
+			s.paymentRepo.Update(ctx, paymentResponse.ID, ingreso)
 		}
 
 	}
@@ -347,9 +395,105 @@ func (s *flowService) FlowToken(ctx context.Context, token string) (models.Token
 	}, nil
 }
 
-func parseResponse(response map[string]interface{}) (models.PaymentResponse, error) {
+func (s *flowService) ConsultaToken(ctx context.Context, token string) (*models.FlowListResponse, error) {
+	var err error
+	var result []interface{}
+	tokenStr := map[string]interface{}{"payment_token": token}
+	result, err = s.paymentRepo.Get(ctx, tokenStr, nil, nil)
+	if err != nil {
+		return &models.FlowListResponse{
+			Items:      []models.FlowResponse{},
+			TotalCount: 0,
+		}, nil
+	}
+	if len(result) == 0 {
+		return &models.FlowListResponse{
+			Items:      []models.FlowResponse{},
+			TotalCount: 0,
+		}, nil
+	}
+	paymentResult, ok := result[0].(models.PaymentListResponse)
+	if !ok {
+		return &models.FlowListResponse{
+			Items:      []models.FlowResponse{},
+			TotalCount: 0,
+		}, nil
+	}
 
-	var paymentResponse models.PaymentResponse
+	paymentResponse := paymentResult.Items[0]
+	//---------------------
+	//con el company id del ingeso buscar las key de flow
+	gatewayFilter := map[string]interface{}{"gateway_id": 3, "company_id": paymentResponse.CompanyId} // 3 = Flow
+	gatewayResult, err := s.gatewaysRepo.Get(ctx, gatewayFilter, nil, nil)
+	if err != nil {
+		return &models.FlowListResponse{
+			Items:      []models.FlowResponse{},
+			TotalCount: 0,
+		}, nil
+	}
+	if len(gatewayResult) == 0 {
+		return &models.FlowListResponse{
+			Items:      []models.FlowResponse{},
+			TotalCount: 0,
+		}, nil
+	}
+
+	gatewayList, ok := gatewayResult[0].(models.GatewaysListResponse)
+	if !ok || len(gatewayList.Items) == 0 {
+		return &models.FlowListResponse{
+			Items:      []models.FlowResponse{},
+			TotalCount: 0,
+		}, nil
+	}
+	gateway := gatewayList.Items[0]
+
+	flowAPIKey := gateway.AdditionalConfig.FlowAPIKey
+	flowSecretKey := gateway.AdditionalConfig.FlowSecretKey
+
+	fmt.Println("flow api", flowAPIKey)
+
+	// Parámetros para el método Send
+	// Llamar a la API de Flow
+	params := map[string]string{"token": token}
+
+	flowAPI := util.NewFlowAPI(flowAPIKey, flowSecretKey, s.config.FlowAPIURL)
+	responseflow, err := flowAPI.Send("payment/getStatus", params, "GET")
+
+	if err != nil {
+		fmt.Println("Error:", err)
+
+	}
+
+	fmt.Println("respuesta ", responseflow)
+	// Extraer los valores del response y asignarlos a la estructura PaymentResponse
+	continuaOperacion := true
+	flowResponse := models.FlowResponse{}
+	flowResponse, err = parseResponse(responseflow)
+	if err != nil {
+		fmt.Println("Error parsing response", err)
+		//	status_servicio := "No"
+		//	error_servicio := "Error al convertir el body a JSON "
+		continuaOperacion = false
+	}
+	fmt.Println("FlowResponse:", flowResponse)
+
+	if !continuaOperacion {
+		return &models.FlowListResponse{
+			Items:      []models.FlowResponse{},
+			TotalCount: 0,
+		}, nil
+	}
+
+	return &models.FlowListResponse{
+		Items:      []models.FlowResponse{},
+		TotalCount: 0,
+	}, nil
+
+}
+
+func parseResponse(response map[string]interface{}) (models.FlowResponse, error) {
+
+	var paymentResponse models.FlowResponse
 
 	// Asignar valores directamente desde el map
 	paymentResponse.Amount = response["amount"].(string)

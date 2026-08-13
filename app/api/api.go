@@ -54,6 +54,7 @@ type svs struct {
 	paymentInstallments ports.PaymentInstallmentService
 	contrato            ports.ContratoService
 	flow                ports.FlowService
+	schemaRegistry      ports.SchemaRegistryService
 }
 
 // New creates a new API
@@ -84,6 +85,7 @@ func New(ctx context.Context, cfg config.Config) (a api) {
 	var installmentsRepo ports.InstallmentsRepository
 	var paymentsRepo ports.PaymentRepository
 	var paymentInstallmentsRepo ports.PaymentInstallmentRepository
+	var schemaRegistryRepo ports.SchemaRegistryRepository
 
 	//abre la base de datos
 	db, err := infrastructure.ConnectPostgresOrm(ctx, a.config.DSN)
@@ -115,6 +117,7 @@ func New(ctx context.Context, cfg config.Config) (a api) {
 	installmentsRepo = postgres.NewInstallmentsRepository(ctx, db)
 	paymentsRepo = postgres.NewPaymentsRepository(ctx, db)
 	paymentInstallmentsRepo = postgres.NewPaymentInstallmentsRepository(ctx, db)
+	schemaRegistryRepo = postgres.NewSchemaRegistryRepository(ctx, db)
 
 	a.services.company = services.NewCompanyService(a.config, companyRepo)
 	a.services.colegios = services.NewColegiosService(a.config, colegiosRepo)
@@ -140,7 +143,9 @@ func New(ctx context.Context, cfg config.Config) (a api) {
 	a.services.installments = services.NewInstallmentService(a.config, installmentsRepo)
 	a.services.payments = services.NewPaymentService(a.config, paymentsRepo)
 	a.services.paymentInstallments = services.NewPaymentInstallmentService(a.config, paymentInstallmentsRepo)
-	a.services.flow = services.NewFlowService(a.config, gatewaysRepo, gatewayscRepo, saleRepo, cursoRepo, paymentsRepo, installmentsRepo, paymentInstallmentsRepo)
+	a.services.flow = services.NewFlowService(a.config, gatewaysRepo, gatewayscRepo, saleRepo, cursoRepo, paymentsRepo, installmentsRepo, paymentInstallmentsRepo, schemaRegistryRepo)
+	a.services.schemaRegistry = services.NewSchemaRegistryService(a.config, schemaRegistryRepo)
+
 	// Inicializar B2 Storage y Upload Service
 	var b2Storage ports.UploadStorage
 	if a.config.B2Endpoint != "" {
@@ -203,6 +208,7 @@ func (a *api) Run(ctx context.Context, cancel context.CancelFunc) func() error {
 		handlers.SetPaymentInstallmentsRoutes(ctx, a.config, router, a.services.paymentInstallments)
 		handlers.SetContratoRoutes(ctx, a.config, router, a.services.contrato)
 		handlers.SetFlowRoutes(ctx, a.config, router, a.services.flow)
+		handlers.SetSchemaRegistryRoutes(ctx, a.config, router, a.services.schemaRegistry)
 
 		if a.services.upload != nil {
 			handlers.SetUploadRoutes(ctx, a.config, router, a.services.upload)
