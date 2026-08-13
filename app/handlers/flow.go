@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
 
 	"tourmanager/config"
 	"tourmanager/core/models"
@@ -21,6 +22,7 @@ func SetFlowRoutes(ctx context.Context, cfg config.Config, r *gin.Engine, p port
 	r.POST("/api/v3.5/iniciopagoflow", initFlowPayment(ctx, cfg, p))
 	r.POST("/api/v3.5/token", tokenflow(ctx, cfg, p))
 	r.POST("/api/v3.5/consulta-token", consultatoken(ctx, cfg, p))
+	r.POST("/api/v3.5/returnflow", returnflow(ctx, cfg, p))
 }
 
 // @Summary Init Flow Payment
@@ -134,6 +136,43 @@ func consultatoken(ctx context.Context, cfg config.Config, p ports.FlowService) 
 			fmt.Println(err)
 		}
 		c.JSON(http.StatusOK, response)
+
+	}
+}
+
+func returnflow(ctx context.Context, cfg config.Config, p ports.FlowService) gin.HandlerFunc {
+	return func(c *gin.Context) {
+
+		if c.Request.Method != http.MethodPost {
+			response := util.NewErrorResponse(fmt.Errorf("Método no permitido"), http.StatusMethodNotAllowed)
+			c.JSON(response.StatusCode, response)
+			return
+		}
+
+		var tokenRequest models.TokenRequest
+		body, _ := io.ReadAll(c.Request.Body)
+		c.Request.Body = io.NopCloser(bytes.NewBuffer(body))
+
+		if err := json.Unmarshal(body, &tokenRequest); err != nil || tokenRequest.Token == "" {
+			// Si falla, probamos leerlo desde el formulario (x-www-form-urlencoded)
+			token := c.PostForm("token")
+			if token == "" {
+				response := util.NewErrorResponse(fmt.Errorf("Token no encontrado en JSON ni en formulario"), http.StatusBadRequest)
+				c.JSON(response.StatusCode, response)
+				return
+			}
+			tokenRequest.Token = token
+		}
+
+		// Aquí puedes llamar a tu función principal con el token recibido
+		_, err := p.ReturnFlow(ctx, tokenRequest.Token)
+		if err != nil {
+			fmt.Println(err)
+		}
+
+		// Realizar la redirección HTTP aquí en el handler
+		redirectURL := "/flowpagos/resultado?commerceOrder=" + url.QueryEscape(tokenRequest.Token)
+		c.Redirect(http.StatusFound, redirectURL)
 
 	}
 }

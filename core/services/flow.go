@@ -4,6 +4,8 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"net/http"
+	"net/url"
 	"strconv"
 	"time"
 
@@ -116,7 +118,9 @@ func (s *flowService) InitPayment(ctx context.Context, req models.InitFlowPaymen
 
 	flowURL, hasUrl := response["url"].(string)
 	flowToken, hasToken := response["token"].(string)
-	if !hasUrl || !hasToken {
+	flowOrder, hasFlowOrder := response["flowOrder"].(string)
+
+	if !hasUrl || !hasToken || !hasFlowOrder {
 		return models.InitFlowPaymentResp{}, fmt.Errorf("respuesta inválida de flow: %v", response)
 	}
 	//grabar el pago solo en payments y en notes dejarlo como PENDIENTE
@@ -127,7 +131,7 @@ func (s *flowService) InitPayment(ctx context.Context, req models.InitFlowPaymen
 		PaymentDate:     time.Now(),
 		Identifier:      req.Identificador,
 		Notes:           "Pagos",
-		TransactionRef:  "",
+		TransactionRef:  flowOrder,
 		TransactionType: "",
 		CardNumber:      "",
 		AuthCode:        "",
@@ -491,6 +495,12 @@ func (s *flowService) ConsultaToken(ctx context.Context, token string) (*models.
 
 }
 
+func (s *flowService) ReturnFlow(ctx context.Context, token string) (*models.FlowListResponse, error) {
+
+	s.Redirect(http.StatusFound,
+		"/flowpagos/resultado?commerceOrder="+url.QueryEscape(token))
+
+}
 func parseResponse(response map[string]interface{}) (models.FlowResponse, error) {
 
 	var paymentResponse models.FlowResponse
