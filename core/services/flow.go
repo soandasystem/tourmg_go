@@ -116,7 +116,8 @@ func (s *flowService) InitPayment(ctx context.Context, req models.InitFlowPaymen
 
 	flowURL, hasUrl := response["url"].(string)
 	flowToken, hasToken := response["token"].(string)
-	flowOrder, hasFlowOrder := response["flowOrder"].(string)
+	flowOrder := fmt.Sprint(response["flowOrder"])
+	hasFlowOrder := response["flowOrder"] != nil
 
 	if !hasUrl || !hasToken || !hasFlowOrder {
 		return models.InitFlowPaymentResp{}, fmt.Errorf("respuesta inválida de flow: %v", response)
