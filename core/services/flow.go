@@ -4,8 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"net/http"
-	"net/url"
 	"strconv"
 	"time"
 
@@ -402,8 +400,23 @@ func (s *flowService) FlowToken(ctx context.Context, token string) (models.Token
 func (s *flowService) ConsultaToken(ctx context.Context, token string) (*models.FlowListResponse, error) {
 	var err error
 	var result []interface{}
+	ctxGlobal := context.WithValue(ctx, "schema", "global")
+	tokenReg := map[string]interface{}{"token": token}
+	result, err = s.schemaRegistryRepo.Get(ctxGlobal, tokenReg, nil, nil)
+	//el schema esta en el result de schemaRegistryRepo.Get
+	tokenSchemaRegistryResponse, ok := result[0].(models.TokenSchemaRegistryResponse)
+	if !ok || len(tokenSchemaRegistryResponse.Items) == 0 {
+		return &models.FlowListResponse{
+			Items:      []models.FlowResponse{},
+			TotalCount: 0,
+		}, nil
+	}
+	tokenRegistry := tokenSchemaRegistryResponse.Items[0]
+
+	ctx = context.WithValue(ctx, "schema", tokenRegistry.SchemaName)
+	var resultPay []interface{}
 	tokenStr := map[string]interface{}{"payment_token": token}
-	result, err = s.paymentRepo.Get(ctx, tokenStr, nil, nil)
+	resultPay, err = s.paymentRepo.Get(ctx, tokenStr, nil, nil)
 	if err != nil {
 		return &models.FlowListResponse{
 			Items:      []models.FlowResponse{},
@@ -416,7 +429,7 @@ func (s *flowService) ConsultaToken(ctx context.Context, token string) (*models.
 			TotalCount: 0,
 		}, nil
 	}
-	paymentResult, ok := result[0].(models.PaymentListResponse)
+	paymentResult, ok := resultPay[0].(models.PaymentListResponse)
 	if !ok {
 		return &models.FlowListResponse{
 			Items:      []models.FlowResponse{},
@@ -466,33 +479,27 @@ func (s *flowService) ConsultaToken(ctx context.Context, token string) (*models.
 	if err != nil {
 		fmt.Println("Error:", err)
 
-	}
-
-	fmt.Println("respuesta ", responseflow)
-	// Extraer los valores del response y asignarlos a la estructura PaymentResponse
-	continuaOperacion := true
-	flowResponse := models.FlowResponse{}
-	flowResponse, err = parseResponse(responseflow)
-	if err != nil {
-		fmt.Println("Error parsing response", err)
-		//	status_servicio := "No"
-		//	error_servicio := "Error al convertir el body a JSON "
-		continuaOperacion = false
-	}
-	fmt.Println("FlowResponse:", flowResponse)
-
-	if !continuaOperacion {
 		return &models.FlowListResponse{
 			Items:      []models.FlowResponse{},
 			TotalCount: 0,
-		}, nil
+		}, err
+	}
+
+	flowResponse, err := parseResponse(responseflow)
+
+	if err != nil {
+		fmt.Println("Error parsing response:", err)
+
+		return &models.FlowListResponse{
+			Items:      []models.FlowResponse{},
+			TotalCount: 0,
+		}, err
 	}
 
 	return &models.FlowListResponse{
-		Items:      []models.FlowResponse{},
-		TotalCount: 0,
+		Items:      []models.FlowResponse{flowResponse},
+		TotalCount: 1,
 	}, nil
-
 }
 
 func parseResponse(response map[string]interface{}) (models.FlowResponse, error) {

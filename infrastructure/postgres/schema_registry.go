@@ -37,14 +37,14 @@ func (s *schemaRegistryRepository) Create(ctx context.Context, schema interface{
 
 	var existingReg models.TokenSchemaRegistry
 
-	err := DB.Where("schema_name = ?", u.SchemaName).First(&existingReg).Error
+	err := DB.Where("token = ?", u.Token).First(&existingReg).Error
 	if err == nil {
 		// Si no hay error, significa que se encontró un rol con ese nombre
-		return "error", errors.New("El Schema '" + u.SchemaName + "' ya existe")
+		return "error", errors.New("El Token '" + u.Token + "' ya existe")
 	}
 	if !errors.Is(err, gorm.ErrRecordNotFound) {
 		// Si el error no es de registro no encontrado, es un error inesperado
-		return "error", errors.New("Error al buscar schema: " + err.Error())
+		return "error", errors.New("Error al buscar Token: " + err.Error())
 	}
 
 	//asigna el schma a usar
