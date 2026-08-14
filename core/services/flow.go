@@ -324,22 +324,24 @@ func (s *flowService) FlowToken(ctx context.Context, token string) (models.Token
 			//en installments busco el balance <> 0 y sumo al paid_amount
 			//balace = amount - paid_amount
 			installmentsFilter := map[string]interface{}{"passenger_id": paymentResponse.PassengerId, "company_id": paymentResponse.CompanyId, "sale_id": paymentResponse.SaleId} // 3 = Flow
-			installmentsResult, _ := s.gatewaysRepo.Get(ctx, installmentsFilter, nil, nil)
-
+			installmentsResult, _ := s.installmentsRepo.Get(ctx, installmentsFilter, nil, nil)
+			fmt.Println(installmentsResult)
 			var amount float32
 			var newpaidAmount float32
 			var newBalance float32
 			var ID string
-			for _, item := range installmentsResult {
-				installment := item.(map[string]interface{})
+			if err != nil {
+				fmt.Println("Error al buscar installments", err)
+			}
 
-				balance, _ := installment["balance"].(float64)
+			result := installmentsResult[0].(models.InstallmentListResponse)
 
-				if balance != 0 {
-					ID, _ = installment["id"].(string)
-					amount, _ = installment["amount"].(float32)
-					newpaidAmount, _ = installment["paid_amount"].(float32)
-					//		found = true
+			for _, installment := range result.Items {
+
+				if installment.Balance != 0 {
+					ID = fmt.Sprint(installment.ID)
+					amount = float32(installment.Amount)
+					newpaidAmount = float32(installment.PaidAmount)
 					break
 				}
 			}
@@ -511,8 +513,12 @@ func parseResponse(response map[string]interface{}) (models.FlowResponse, error)
 	paymentResponse.Amount = response["amount"].(string)
 	paymentResponse.CommerceOrder = response["commerceOrder"].(string)
 	paymentResponse.Currency = response["currency"].(string)
-	paymentResponse.FlowOrder = fmt.Sprint(response["flowOrder"])   // Convertir a string
-	paymentResponse.Merchantid = fmt.Sprint(response["merchantId"]) // Si es nil, se asigna un valor vacío
+	paymentResponse.FlowOrder = fmt.Sprint(response["flowOrder"]) // Convertir a string
+	if response["merchantId"] != nil {
+		paymentResponse.Merchantid = fmt.Sprint(response["merchantId"])
+	} else {
+		paymentResponse.Merchantid = ""
+	} // Si es nil, se asigna un valor vacío
 
 	// Optional
 	optional := response["optional"].(map[string]interface{})
