@@ -93,6 +93,7 @@ func (s *flowService) InitPayment(ctx context.Context, req models.InitFlowPaymen
 	optionalData := map[string]string{
 		"venta":  strconv.FormatInt(req.SaleID, 10),
 		"alumno": req.UserRut,
+		"email":  curso.Correo,
 	}
 	optionalJSON, _ := json.Marshal(optionalData)
 
@@ -291,6 +292,7 @@ func (s *flowService) FlowToken(ctx context.Context, token string) (models.Token
 	// Procesar la respuesta
 	if continuaOperacion {
 		flowStatus := flowResponse.Status
+		emailDestinatario := flowResponse.Optional.Email
 		switch flowStatus {
 		case "1":
 			fmt.Println("Pendiente")
@@ -299,6 +301,17 @@ func (s *flowService) FlowToken(ctx context.Context, token string) (models.Token
 				State: &paymentNotes,
 			}
 			s.paymentRepo.Update(ctx, paymentResponse.ID, ingreso)
+			// Enviar notificación por email
+			if emailDestinatario != "" {
+				go func() {
+					if err := util.SendPaymentNotification(
+						s.config, emailDestinatario, flowResponse.Optional.Alumno,
+						"Pendiente", flowResponse.Amount, flowResponse.CommerceOrder,
+					); err != nil {
+						fmt.Println("Error enviando email:", err)
+					}
+				}()
+			}
 		case "2":
 			fmt.Println("Pagado")
 			// Convertir la cadena a float64
@@ -369,6 +382,17 @@ func (s *flowService) FlowToken(ctx context.Context, token string) (models.Token
 				AppliedAmount: float32(paymentResponse.Amount),
 			}
 			s.paymentInstallmentRepo.Create(ctx, payment_installments)
+			// Enviar notificación por email
+			if emailDestinatario != "" {
+				go func() {
+					if err := util.SendPaymentNotification(
+						s.config, emailDestinatario, flowResponse.Optional.Alumno,
+						"Pagado", flowResponse.Amount, flowResponse.CommerceOrder,
+					); err != nil {
+						fmt.Println("Error enviando email:", err)
+					}
+				}()
+			}
 
 		case "3":
 			fmt.Println("Transacción Rechazada")
@@ -377,6 +401,17 @@ func (s *flowService) FlowToken(ctx context.Context, token string) (models.Token
 				State: &paymentNotes,
 			}
 			s.paymentRepo.Update(ctx, paymentResponse.ID, ingreso)
+			// Enviar notificación por email
+			if emailDestinatario != "" {
+				go func() {
+					if err := util.SendPaymentNotification(
+						s.config, emailDestinatario, flowResponse.Optional.Alumno,
+						"Rechazado", flowResponse.Amount, flowResponse.CommerceOrder,
+					); err != nil {
+						fmt.Println("Error enviando email:", err)
+					}
+				}()
+			}
 		case "4":
 			fmt.Println("Transacción Anulada")
 			paymentNotes := "Anulado"
@@ -384,6 +419,17 @@ func (s *flowService) FlowToken(ctx context.Context, token string) (models.Token
 				State: &paymentNotes,
 			}
 			s.paymentRepo.Update(ctx, paymentResponse.ID, ingreso)
+			// Enviar notificación por email
+			if emailDestinatario != "" {
+				go func() {
+					if err := util.SendPaymentNotification(
+						s.config, emailDestinatario, flowResponse.Optional.Alumno,
+						"Anulado", flowResponse.Amount, flowResponse.CommerceOrder,
+					); err != nil {
+						fmt.Println("Error enviando email:", err)
+					}
+				}()
+			}
 		default:
 			fmt.Println("Estado desconocido")
 			paymentNotes := "Desconocido"
@@ -391,6 +437,17 @@ func (s *flowService) FlowToken(ctx context.Context, token string) (models.Token
 				State: &paymentNotes,
 			}
 			s.paymentRepo.Update(ctx, paymentResponse.ID, ingreso)
+			// Enviar notificación por email
+			if emailDestinatario != "" {
+				go func() {
+					if err := util.SendPaymentNotification(
+						s.config, emailDestinatario, flowResponse.Optional.Alumno,
+						"Desconocido", flowResponse.Amount, flowResponse.CommerceOrder,
+					); err != nil {
+						fmt.Println("Error enviando email:", err)
+					}
+				}()
+			}
 		}
 
 	}
@@ -510,10 +567,10 @@ func parseResponse(response map[string]interface{}) (models.FlowResponse, error)
 	var paymentResponse models.FlowResponse
 
 	// Asignar valores directamente desde el map
-	paymentResponse.Amount = response["amount"].(string)
-	paymentResponse.CommerceOrder = response["commerceOrder"].(string)
-	paymentResponse.Currency = response["currency"].(string)
-	paymentResponse.FlowOrder = fmt.Sprint(response["flowOrder"]) // Convertir a string
+	paymentResponse.Amount = fmt.Sprintf("%v", response["amount"])
+	paymentResponse.CommerceOrder = fmt.Sprintf("%v", response["commerceOrder"])
+	paymentResponse.Currency = fmt.Sprintf("%v", response["currency"])
+	paymentResponse.FlowOrder = fmt.Sprintf("%v", response["flowOrder"]) // Convertir a string
 	if response["merchantId"] != nil {
 		paymentResponse.Merchantid = fmt.Sprint(response["merchantId"])
 	} else {
@@ -522,11 +579,12 @@ func parseResponse(response map[string]interface{}) (models.FlowResponse, error)
 
 	// Optional
 	optional := response["optional"].(map[string]interface{})
-	paymentResponse.Optional.Venta = fmt.Sprint(optional["venta"])
-	paymentResponse.Optional.Alumno = optional["alumno"].(string)
+	paymentResponse.Optional.Venta = fmt.Sprintf("%v", optional["venta"])
+	paymentResponse.Optional.Alumno = fmt.Sprintf("%v", optional["alumno"])
+	paymentResponse.Optional.Email = fmt.Sprintf("%v", optional["email"])
 
 	// Payer
-	paymentResponse.Payer = response["payer"].(string)
+	paymentResponse.Payer = fmt.Sprintf("%v", response["payer"])
 
 	// PaymentData
 	paymentData := response["paymentData"].(map[string]interface{})

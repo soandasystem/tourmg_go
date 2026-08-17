@@ -36,6 +36,7 @@ type FlowResponse struct {
 	Optional      struct {
 		Venta  string `json:"venta"`
 		Alumno string `json:"alumno"`
+		Email  string `json:"email"`
 	} `json:"optional"`
 	Payer       string `json:"payer"`
 	PaymentData struct {

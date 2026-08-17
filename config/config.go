@@ -42,6 +42,13 @@ type config struct {
 	AsposeClientID     string
 	AsposeClientSecret string
 	FlowAPIURL         string
+
+	// SMTP Configuration
+	SMTPHost     string
+	SMTPPort     string
+	SMTPUser     string
+	SMTPPassword string
+	SMTPFrom     string
 }
 
 // ReadConfig from the project´s JSON config files.
@@ -109,6 +116,16 @@ func ReadConfig(version, env string, port int, database, dsn string) (Config, er
 	if c.config.FlowAPIURL == "" {
 		c.config.FlowAPIURL = "https://sandbox.flow.cl/api"
 	}
+
+	// SMTP Configuration
+	c.config.SMTPHost = os.Getenv("SMTP_HOST")
+	c.config.SMTPPort = os.Getenv("SMTP_PORT")
+	if c.config.SMTPPort == "" {
+		c.config.SMTPPort = "587"
+	}
+	c.config.SMTPUser = os.Getenv("SMTP_USER")
+	c.config.SMTPPassword = os.Getenv("SMTP_PASSWORD")
+	c.config.SMTPFrom = os.Getenv("SMTP_FROM")
 	//	c.config.B2UploadsPath = os.Getenv("B2_UPLOADS_PATH")
 	return c, nil
 }
