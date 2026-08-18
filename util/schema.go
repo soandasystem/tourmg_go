@@ -15,8 +15,9 @@ func SchemaMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		schema := c.GetHeader("X-Tenant-Schema")
 		if schema == "" {
-			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "schema header required"})
-			return
+			schema = "global"
+			//	c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "schema header required"})
+			// return
 		}
 		c.Set("schema", schema)
 		c.Next()

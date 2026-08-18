@@ -104,8 +104,8 @@ func (s *flowService) InitPayment(ctx context.Context, req models.InitFlowPaymen
 		"amount":          strconv.Itoa(req.Monto),
 		"email":           curso.Correo,
 		"paymentMethod":   "9",
-		"urlConfirmation": "https://flowresponse.onrender.com/token", // Webhook
-		"urlReturn":       req.Urlreturn,                             // Return URL
+		"urlConfirmation": "https://tourmg-go.onrender.com/api/v3.5/token", // Webhook
+		"urlReturn":       req.Urlreturn,                                   // Return URL
 		"optional":        string(optionalJSON),
 	}
 	flowAPI := util.NewFlowAPI(flowAPIKey, flowSecretKey, s.config.FlowAPIURL)

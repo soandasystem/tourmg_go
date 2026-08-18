@@ -19,18 +19,20 @@ type Installment struct {
 
 // Resp  response struct
 type InstallmentResp struct {
-	ID          string    `json:"id"`
-	PassengerId int64     `json:"passenger_id"`
-	QuotaNumber int       `json:"quota_number"`
-	DueDate     time.Time `json:"due_date"`
-	Amount      float32   `json:"amount"`
-	PaidAmount  float32   `json:"paid_amount"`
-	Balance     float32   `json:"balance"`
-	Status      string    `json:"status"`
-	CompanyId   int64     `json:"company_id"`
-	SaleId      int64     `json:"sale_id"`
-	CreatedDate time.Time `gorm:"autoCreateTime"`
-	UpdatedDate time.Time `gorm:"autoUpdateTime"`
+	ID          string          `json:"id"`
+	PassengerId int64           `json:"passenger_id"`
+	Passenger   CursoReport     `json:"curso" gorm:"foreignKey:PassengerId;references:ID"`
+	QuotaNumber int             `json:"quota_number"`
+	DueDate     time.Time       `json:"due_date"`
+	Amount      float32         `json:"amount"`
+	PaidAmount  float32         `json:"paid_amount"`
+	Balance     float32         `json:"balance"`
+	Status      string          `json:"status"`
+	CompanyId   int64           `json:"company_id"`
+	SaleId      int64           `json:"sale_id"`
+	Sale        SaleCursoReport `json:"sale" gorm:"foreignKey:SaleId;references:ID"`
+	CreatedDate time.Time       `gorm:"autoCreateTime"`
+	UpdatedDate time.Time       `gorm:"autoUpdateTime"`
 }
 
 func (InstallmentResp) TableName() string {

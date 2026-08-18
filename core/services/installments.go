@@ -109,7 +109,7 @@ func (p *installmentsService) GetByID(ctx context.Context, ID string) (resp mode
 }
 
 // get by id for update
-func (p *installmentsService) GetByIDu(ctx context.Context, ID string) (resp models.InstallmentResp, err error) {
+func (p *installmentsService) GetByIDu(ctx context.Context, ID string) (resp models.Installment, err error) {
 	installment, err := p.repository.GetByID(ctx, ID)
 
 	if err != nil {
@@ -118,10 +118,10 @@ func (p *installmentsService) GetByIDu(ctx context.Context, ID string) (resp mod
 
 	if installment == nil {
 		// Si no se encuentra el colegio (colegios es nil), devolver un valor en blanco y un error
-		return models.InstallmentResp{}, fmt.Errorf("pago con ID %s no encontrado", ID)
+		return models.Installment{}, fmt.Errorf("pago con ID %s no encontrado", ID)
 	}
 
-	resp = *installment.(*models.InstallmentResp)
+	resp = *installment.(*models.Installment)
 
 	return
 }
