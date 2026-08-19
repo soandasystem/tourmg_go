@@ -13,11 +13,17 @@ import (
 
 func SchemaMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
+
+		if c.Request.URL.Path == "/api/v3.5/token" {
+			c.Set("schema", "global")
+			c.Next()
+			return
+		}
+
 		schema := c.GetHeader("X-Tenant-Schema")
 		if schema == "" {
-			schema = "global"
-			//	c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "schema header required"})
-			// return
+			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "schema header required"})
+			return
 		}
 		c.Set("schema", schema)
 		c.Next()
