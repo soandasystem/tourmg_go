@@ -292,7 +292,7 @@ func (s *flowService) FlowToken(ctx context.Context, token string) (models.Token
 	// Procesar la respuesta
 	if continuaOperacion {
 		flowStatus := flowResponse.Status
-		//	emailDestinatario := flowResponse.Optional.Email
+		emailDestinatario := flowResponse.Optional.Email
 		switch flowStatus {
 		case "1":
 			fmt.Println("Pendiente")
@@ -302,18 +302,16 @@ func (s *flowService) FlowToken(ctx context.Context, token string) (models.Token
 			}
 			s.paymentRepo.Update(ctx, paymentResponse.ID, ingreso)
 			// Enviar notificación por email
-			/*
-				if emailDestinatario != "" {
-					go func() {
-						if err := util.SendPaymentNotification(
-							s.config, emailDestinatario, flowResponse.Optional.Alumno,
-							"Pendiente", flowResponse.Amount, flowResponse.CommerceOrder,
-						); err != nil {
-							fmt.Println("Error enviando email:", err)
-						}
-					}()
-				}
-			*/
+			if emailDestinatario != "" {
+				go func() {
+					if err := util.SendPaymentNotification(
+						s.config, emailDestinatario, flowResponse.Optional.Alumno,
+						"Pendiente", flowResponse.Amount, flowResponse.CommerceOrder,
+					); err != nil {
+						fmt.Println("Error enviando email:", err)
+					}
+				}()
+			}
 		case "2":
 			fmt.Println("Pagado")
 			// Convertir la cadena a float64
@@ -385,18 +383,18 @@ func (s *flowService) FlowToken(ctx context.Context, token string) (models.Token
 			}
 			s.paymentInstallmentRepo.Create(ctx, payment_installments)
 			// Enviar notificación por email
-			/*
-				if emailDestinatario != "" {
-					go func() {
-						if err := util.SendPaymentNotification(
-							s.config, emailDestinatario, flowResponse.Optional.Alumno,
-							"Pagado", flowResponse.Amount, flowResponse.CommerceOrder,
-						); err != nil {
-							fmt.Println("Error enviando email:", err)
-						}
-					}()
-				}
-			*/
+
+			if emailDestinatario != "" {
+				go func() {
+					if err := util.SendPaymentNotification(
+						s.config, emailDestinatario, flowResponse.Optional.Alumno,
+						"Pagado", flowResponse.Amount, flowResponse.CommerceOrder,
+					); err != nil {
+						fmt.Println("Error enviando email:", err)
+					}
+				}()
+			}
+
 		case "3":
 			fmt.Println("Transacción Rechazada")
 			paymentNotes := "Rechazado"
@@ -405,18 +403,18 @@ func (s *flowService) FlowToken(ctx context.Context, token string) (models.Token
 			}
 			s.paymentRepo.Update(ctx, paymentResponse.ID, ingreso)
 			// Enviar notificación por email
-			/*
-				if emailDestinatario != "" {
-					go func() {
-						if err := util.SendPaymentNotification(
-							s.config, emailDestinatario, flowResponse.Optional.Alumno,
-							"Rechazado", flowResponse.Amount, flowResponse.CommerceOrder,
-						); err != nil {
-							fmt.Println("Error enviando email:", err)
-						}
-					}()
-				}
-			*/
+
+			if emailDestinatario != "" {
+				go func() {
+					if err := util.SendPaymentNotification(
+						s.config, emailDestinatario, flowResponse.Optional.Alumno,
+						"Rechazado", flowResponse.Amount, flowResponse.CommerceOrder,
+					); err != nil {
+						fmt.Println("Error enviando email:", err)
+					}
+				}()
+			}
+
 		case "4":
 			fmt.Println("Transacción Anulada")
 			paymentNotes := "Anulado"
@@ -425,18 +423,18 @@ func (s *flowService) FlowToken(ctx context.Context, token string) (models.Token
 			}
 			s.paymentRepo.Update(ctx, paymentResponse.ID, ingreso)
 			// Enviar notificación por email
-			/*
-				if emailDestinatario != "" {
-					go func() {
-						if err := util.SendPaymentNotification(
-							s.config, emailDestinatario, flowResponse.Optional.Alumno,
-							"Anulado", flowResponse.Amount, flowResponse.CommerceOrder,
-						); err != nil {
-							fmt.Println("Error enviando email:", err)
-						}
-					}()
-				}
-			*/
+
+			if emailDestinatario != "" {
+				go func() {
+					if err := util.SendPaymentNotification(
+						s.config, emailDestinatario, flowResponse.Optional.Alumno,
+						"Anulado", flowResponse.Amount, flowResponse.CommerceOrder,
+					); err != nil {
+						fmt.Println("Error enviando email:", err)
+					}
+				}()
+			}
+
 		default:
 			fmt.Println("Estado desconocido")
 			paymentNotes := "Desconocido"
@@ -445,18 +443,18 @@ func (s *flowService) FlowToken(ctx context.Context, token string) (models.Token
 			}
 			s.paymentRepo.Update(ctx, paymentResponse.ID, ingreso)
 			// Enviar notificación por email
-			/*
-				if emailDestinatario != "" {
-					go func() {
-						if err := util.SendPaymentNotification(
-							s.config, emailDestinatario, flowResponse.Optional.Alumno,
-							"Desconocido", flowResponse.Amount, flowResponse.CommerceOrder,
-						); err != nil {
-							fmt.Println("Error enviando email:", err)
-						}
-					}()
-				}
-			*/
+
+			if emailDestinatario != "" {
+				go func() {
+					if err := util.SendPaymentNotification(
+						s.config, emailDestinatario, flowResponse.Optional.Alumno,
+						"Desconocido", flowResponse.Amount, flowResponse.CommerceOrder,
+					); err != nil {
+						fmt.Println("Error enviando email:", err)
+					}
+				}()
+			}
+
 		}
 	}
 	return models.TokenResponse{
