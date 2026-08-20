@@ -8,9 +8,10 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/google/uuid"
 	"tourmanager/core/models"
 	"tourmanager/util"
+
+	"github.com/google/uuid"
 )
 
 // FirmarContrato descarga el DOCX temporal desde B2, inserta la firma en el marcador "Firma"

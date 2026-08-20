@@ -14,7 +14,7 @@ import (
 func SchemaMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 
-		if c.Request.URL.Path == "/api/v3.5/token" {
+		if c.Request.URL.Path == "/api/v3.5/token" || c.Request.URL.Path == "/health" || c.Request.URL.Path == "/" {
 			c.Set("schema", "global")
 			c.Next()
 			return

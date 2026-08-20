@@ -30,19 +30,15 @@ func main() {
 		Database    string `long:"db"` //  description:"the database adapter to use" choice:"mongo" choice:"postgres" required:"true"`
 		DSN         string `long:"dsn" description:"DSN of the selected database" required:"true"`
 	}
-	env := os.Getenv("ENVIRONMENT")
-
-	if env == "" {
-		err := godotenv.Load(".env")
-
-		if err != nil {
-			log.Fatal("Error loading .env file")
-		}
-	}
+	// Carga .env si existe (entorno local) sin fallar en producción (Render)
+	_ = godotenv.Load(".env")
 
 	opts.Version = os.Getenv("VERSION")
 	opts.Environment = os.Getenv("ENVIRONMENT")
 	opts.Port, _ = strconv.Atoi(os.Getenv("PORT"))
+	if opts.Port == 0 {
+		opts.Port = 8080
+	}
 	opts.Database = os.Getenv("DATABASE")
 	opts.DSN = os.Getenv("DSN")
 
