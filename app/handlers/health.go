@@ -13,9 +13,10 @@ import (
 
 // SetHealthRoutes creates health routes
 func SetHealthRoutes(ctx context.Context, cfg config.Config, r *gin.Engine) {
-	//	r.Handle("/health", healthCheck(ctx, cfg)).Methods(http.MethodGet)
-	//	r.Use(middlewares.Recover())   este estaba activo
 	r.GET("/health", healthCheck(cfg))
+	r.HEAD("/health", healthCheck(cfg))
+	r.GET("/", healthCheck(cfg))
+	r.HEAD("/", healthCheck(cfg))
 }
 
 // @Summary Health Check
