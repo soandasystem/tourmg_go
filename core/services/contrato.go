@@ -233,6 +233,8 @@ func downloadFile(ctx context.Context, url string) ([]byte, error) {
 // automáticamente y busca {campo} dentro del DOCX.
 func buildReplacements(req models.ContratoReq) map[string]string {
 	return map[string]string{
+		"firma":        "{firma}",
+		"Firma":        "{firma}",
 		"vtaDia":       req.VtaDia,
 		"vtaMes":       req.VtaMes,
 		"vtaAgno":      req.VtaAgno,
