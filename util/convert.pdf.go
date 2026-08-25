@@ -12,6 +12,7 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strings"
 	"time"
 )
@@ -322,11 +323,16 @@ func (a *AsposeClient) InsertImageAtNode(
 	nodePath string,
 	localImagePath string,
 ) error {
+	paragraphPath := nodePath
+	if parts := strings.Split(nodePath, "."); len(parts) > 4 {
+		paragraphPath = strings.Join(parts[:4], ".")
+	}
+
 	var u string
-	if strings.HasPrefix(nodePath, "sections/") || strings.HasPrefix(nodePath, "paragraphs/") {
-		u = fmt.Sprintf("%s/%s/%s/drawingObjects", baseAPIURL, url.PathEscape(remoteDocx), nodePath)
-	} else if nodePath != "" {
-		u = fmt.Sprintf("%s/%s/paragraphs/%s/drawingObjects", baseAPIURL, url.PathEscape(remoteDocx), url.PathEscape(nodePath))
+	if strings.HasPrefix(paragraphPath, "sections/") || strings.HasPrefix(paragraphPath, "paragraphs/") {
+		u = fmt.Sprintf("%s/%s/%s/drawingObjects", baseAPIURL, url.PathEscape(remoteDocx), paragraphPath)
+	} else if paragraphPath != "" {
+		u = fmt.Sprintf("%s/%s/paragraphs/%s/drawingObjects", baseAPIURL, url.PathEscape(remoteDocx), url.PathEscape(paragraphPath))
 	} else {
 		u = fmt.Sprintf("%s/%s/drawingObjects", baseAPIURL, url.PathEscape(remoteDocx))
 	}
@@ -446,17 +452,20 @@ func (a *AsposeClient) InsertImageAtTextOrBookmark(
 	localImagePath string,
 ) error {
 	// 1. Probar patrones de texto plano
-	patterns := []string{"{{firma}}", "{{Firma}}", "{{FIRMA}}", "{firma}", "{Firma}", "{FIRMA}", "[FIRMA]", "[firma]"}
+	rawPatterns := []string{"{{firma}}", "{{Firma}}", "{{FIRMA}}", "{firma}", "{Firma}", "{FIRMA}", "[FIRMA]", "[firma]"}
 
-	for _, pattern := range patterns {
-		nodeId, err := a.SearchText(ctx, token, remoteDocx, pattern)
-		if err == nil && nodeId != "" {
-			// Borrar el texto de la etiqueta
-			_ = a.ReplaceText(ctx, token, remoteDocx, pattern, "")
+	for _, raw := range rawPatterns {
+		escapedPattern := regexp.QuoteMeta(raw)
+		for _, pattern := range []string{escapedPattern, raw} {
+			nodeId, err := a.SearchText(ctx, token, remoteDocx, pattern)
+			if err == nil && nodeId != "" {
+				// Borrar el texto de la etiqueta
+				_ = a.ReplaceText(ctx, token, remoteDocx, raw, "")
 
-			// Insertar la imagen en la ubicación/nodo encontrado
-			if err := a.InsertImageAtNode(ctx, token, remoteDocx, nodeId, localImagePath); err == nil {
-				return nil
+				// Insertar la imagen en la ubicación/nodo encontrado
+				if err := a.InsertImageAtNode(ctx, token, remoteDocx, nodeId, localImagePath); err == nil {
+					return nil
+				}
 			}
 		}
 	}
