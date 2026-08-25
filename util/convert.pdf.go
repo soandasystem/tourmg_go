@@ -222,6 +222,163 @@ type DrawingObjectInsert struct {
 	WrapType                   string  `json:"WrapType,omitempty"`
 }
 
+type ReplaceTextRequest struct {
+	OldValue    string `json:"OldValue"`
+	NewValue    string `json:"NewValue"`
+	IsMatchCase bool   `json:"IsMatchCase"`
+}
+
+type SearchResponse struct {
+	SearchResults struct {
+		List []struct {
+			RangeStart struct {
+				Node struct {
+					NodeId string `json:"NodeId"`
+				} `json:"Node"`
+			} `json:"RangeStart"`
+		} `json:"List"`
+	} `json:"SearchResults"`
+}
+
+func (a *AsposeClient) SearchText(ctx context.Context, token, remoteDocx, pattern string) (string, error) {
+	u := fmt.Sprintf("%s/%s/search?pattern=%s", baseAPIURL, url.PathEscape(remoteDocx), url.QueryEscape(pattern))
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, u, nil)
+	if err != nil {
+		return "", err
+	}
+
+	req.Header.Set("Authorization", "Bearer "+token)
+
+	resp, err := a.HTTPClient.Do(req)
+	if err != nil {
+		return "", err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		body, _ := io.ReadAll(resp.Body)
+		return "", fmt.Errorf("error buscando texto '%s': %s", pattern, string(body))
+	}
+
+	var sr SearchResponse
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return "", err
+	}
+
+	if err := json.Unmarshal(body, &sr); err != nil {
+		return "", err
+	}
+
+	if len(sr.SearchResults.List) > 0 {
+		nodeId := sr.SearchResults.List[0].RangeStart.Node.NodeId
+		return nodeId, nil
+	}
+
+	return "", nil
+}
+
+func (a *AsposeClient) ReplaceText(ctx context.Context, token, remoteDocx, oldValue, newValue string) error {
+	u := fmt.Sprintf("%s/%s/replaceText", baseAPIURL, url.PathEscape(remoteDocx))
+
+	payload := ReplaceTextRequest{
+		OldValue:    oldValue,
+		NewValue:    newValue,
+		IsMatchCase: false,
+	}
+
+	data, err := json.Marshal(payload)
+	if err != nil {
+		return err
+	}
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, u, bytes.NewBuffer(data))
+	if err != nil {
+		return err
+	}
+
+	req.Header.Set("Authorization", "Bearer "+token)
+	req.Header.Set("Content-Type", "application/json")
+
+	resp, err := a.HTTPClient.Do(req)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		body, _ := io.ReadAll(resp.Body)
+		return fmt.Errorf("error reemplazando texto '%s': %s", oldValue, string(body))
+	}
+
+	return nil
+}
+
+func (a *AsposeClient) InsertImageAtNode(
+	ctx context.Context,
+	token string,
+	remoteDocx string,
+	nodePath string,
+	localImagePath string,
+) error {
+	var u string
+	if strings.HasPrefix(nodePath, "sections/") || strings.HasPrefix(nodePath, "paragraphs/") {
+		u = fmt.Sprintf("%s/%s/%s/drawingObjects", baseAPIURL, url.PathEscape(remoteDocx), nodePath)
+	} else if nodePath != "" {
+		u = fmt.Sprintf("%s/%s/paragraphs/%s/drawingObjects", baseAPIURL, url.PathEscape(remoteDocx), url.PathEscape(nodePath))
+	} else {
+		u = fmt.Sprintf("%s/%s/drawingObjects", baseAPIURL, url.PathEscape(remoteDocx))
+	}
+
+	file, err := os.Open(localImagePath)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	body := &bytes.Buffer{}
+	writer := multipart.NewWriter(body)
+
+	drawingObj := DrawingObjectInsert{
+		WrapType: "Inline",
+		Width:    200,
+		Height:   100,
+	}
+	drawingData, _ := json.Marshal(drawingObj)
+
+	part, _ := writer.CreateFormField("DrawingObject")
+	part.Write(drawingData)
+
+	filePart, err := writer.CreateFormFile("File", filepath.Base(localImagePath))
+	if err != nil {
+		return err
+	}
+	io.Copy(filePart, file)
+	writer.Close()
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, u, body)
+	if err != nil {
+		return err
+	}
+
+	req.Header.Set("Authorization", "Bearer "+token)
+	req.Header.Set("Content-Type", writer.FormDataContentType())
+
+	resp, err := a.HTTPClient.Do(req)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		respBody, _ := io.ReadAll(resp.Body)
+		return fmt.Errorf("error insertando imagen en nodo %s: %s", nodePath, string(respBody))
+	}
+
+	return nil
+}
+
 func (a *AsposeClient) InsertImageAtBookmark(
 	ctx context.Context,
 	token string,
@@ -243,11 +400,11 @@ func (a *AsposeClient) InsertImageAtBookmark(
 	// Add JSON part for DrawingObject
 	drawingObj := DrawingObjectInsert{
 		WrapType: "Inline",
-		Width: 200,
-		Height: 100,
+		Width:    200,
+		Height:   100,
 	}
 	drawingData, _ := json.Marshal(drawingObj)
-	
+
 	part, _ := writer.CreateFormField("DrawingObject")
 	part.Write(drawingData)
 
@@ -281,3 +438,37 @@ func (a *AsposeClient) InsertImageAtBookmark(
 
 	return nil
 }
+
+func (a *AsposeClient) InsertImageAtTextOrBookmark(
+	ctx context.Context,
+	token string,
+	remoteDocx string,
+	localImagePath string,
+) error {
+	// 1. Probar patrones de texto plano
+	patterns := []string{"{{firma}}", "{{Firma}}", "{{FIRMA}}", "[FIRMA]", "[firma]"}
+
+	for _, pattern := range patterns {
+		nodeId, err := a.SearchText(ctx, token, remoteDocx, pattern)
+		if err == nil && nodeId != "" {
+			// Borrar el texto de la etiqueta
+			_ = a.ReplaceText(ctx, token, remoteDocx, pattern, "")
+
+			// Insertar la imagen en la ubicación/nodo encontrado
+			if err := a.InsertImageAtNode(ctx, token, remoteDocx, nodeId, localImagePath); err == nil {
+				return nil
+			}
+		}
+	}
+
+	// 2. Si no se encontró texto plano, intentar marcadores "Firma" o "firma"
+	bookmarks := []string{"Firma", "firma"}
+	for _, bm := range bookmarks {
+		if err := a.InsertImageAtBookmark(ctx, token, remoteDocx, bm, localImagePath); err == nil {
+			return nil
+		}
+	}
+
+	return fmt.Errorf("no se encontró la etiqueta de firma '{{firma}}' ni el marcador 'Firma' en la plantilla DOCX")
+}
+

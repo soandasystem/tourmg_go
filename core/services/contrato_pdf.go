@@ -16,6 +16,7 @@ import (
 
 // FirmarContrato descarga el DOCX temporal desde B2, inserta la firma en el marcador "Firma"
 // y utiliza Aspose Cloud para generar el PDF definitivo.
+
 func (s *contratoService) FirmarContrato(ctx context.Context, req models.ContratoFirmaReq) (models.ContratoPDFResp, error) {
 	if req.DocxURL == "" {
 		return models.ContratoPDFResp{}, fmt.Errorf("docx_url es requerido")
@@ -77,9 +78,9 @@ func (s *contratoService) FirmarContrato(ctx context.Context, req models.Contrat
 		return models.ContratoPDFResp{}, fmt.Errorf("error subiendo archivo a Aspose: %w", err)
 	}
 
-	// 6. Insertar imagen en el marcador "Firma" usando Aspose
-	if err := asposeClient.InsertImageAtBookmark(ctx, token, remoteDocxName, "Firma", firmaPath); err != nil {
-		return models.ContratoPDFResp{}, fmt.Errorf("error insertando firma en el marcador 'Firma': %w", err)
+	// 6. Insertar imagen en la marca de texto plano {{firma}} (o marcador "Firma") usando Aspose
+	if err := asposeClient.InsertImageAtTextOrBookmark(ctx, token, remoteDocxName, firmaPath); err != nil {
+		return models.ContratoPDFResp{}, fmt.Errorf("error insertando firma en el documento: %w", err)
 	}
 
 	// 7. Convertir DOCX a PDF y descargarlo
@@ -108,7 +109,7 @@ func (s *contratoService) FirmarContrato(ctx context.Context, req models.Contrat
 
 	return models.ContratoPDFResp{
 		PDFFile: finalPDFUrl,
-		Message: "Contrato PDF generado y firmado correctamente con Aspose (Marcador)",
+		Message: "Contrato PDF generado y firmado correctamente",
 	}, nil
 }
 
