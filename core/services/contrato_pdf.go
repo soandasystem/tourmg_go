@@ -44,12 +44,18 @@ func (s *contratoService) FirmarContrato(ctx context.Context, req models.Contrat
 	if err != nil {
 		return models.ContratoPDFResp{}, fmt.Errorf("error descargando DOCX temporal desde B2: %w", err)
 	}
-	localDocxPath := filepath.Join(tempDir, "contrato_temp.docx")
-	if err := os.WriteFile(localDocxPath, docxBytes, 0644); err != nil {
-		return models.ContratoPDFResp{}, fmt.Errorf("error guardando DOCX localmente: %w", err)
+
+	// 4. Inyectar la imagen de la firma PNG localmente en el DOCX reemplazando {{firma}}
+	signedDocxBytes, err := util.InjectSignatureImage(docxBytes, firmaBytes)
+	if err != nil {
+		return models.ContratoPDFResp{}, fmt.Errorf("error inyectando firma en el documento DOCX: %w", err)
+	}
+	localDocxPath := filepath.Join(tempDir, "contrato_firmado.docx")
+	if err := os.WriteFile(localDocxPath, signedDocxBytes, 0644); err != nil {
+		return models.ContratoPDFResp{}, fmt.Errorf("error guardando DOCX firmado localmente: %w", err)
 	}
 
-	// 4. Configurar Aspose Client
+	// 5. Configurar Aspose Client (usado únicamente para conversión a PDF)
 	if s.config.AsposeClientID == "" || s.config.AsposeClientSecret == "" {
 		return models.ContratoPDFResp{}, fmt.Errorf("las credenciales de Aspose (Client ID / Secret) no están configuradas")
 	}
@@ -73,17 +79,12 @@ func (s *contratoService) FirmarContrato(ctx context.Context, req models.Contrat
 	}
 	localPdfPath := filepath.Join(tempDir, localPdfName)
 
-	// 5. Subir DOCX original a Aspose
+	// 6. Subir DOCX firmado a Aspose
 	if err := asposeClient.UploadFile(ctx, token, localDocxPath, remoteDocxName); err != nil {
 		return models.ContratoPDFResp{}, fmt.Errorf("error subiendo archivo a Aspose: %w", err)
 	}
 
-	// 6. Insertar imagen en la marca de texto plano {{firma}} (o marcador "Firma") usando Aspose
-	if err := asposeClient.InsertImageAtTextOrBookmark(ctx, token, remoteDocxName, firmaPath); err != nil {
-		return models.ContratoPDFResp{}, fmt.Errorf("error insertando firma en el documento: %w", err)
-	}
-
-	// 7. Convertir DOCX a PDF y descargarlo
+	// 7. Convertir DOCX a PDF y descargarlo (sin depender de marcadores en la nube)
 	if err := asposeClient.ConvertToPDF(ctx, token, remoteDocxName, remotePdfName, localPdfPath); err != nil {
 		return models.ContratoPDFResp{}, fmt.Errorf("error convirtiendo/descargando PDF con Aspose: %w", err)
 	}
