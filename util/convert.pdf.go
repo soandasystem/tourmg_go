@@ -446,7 +446,7 @@ func (a *AsposeClient) InsertImageAtTextOrBookmark(
 	localImagePath string,
 ) error {
 	// 1. Probar patrones de texto plano
-	patterns := []string{"{{firma}}", "{{Firma}}", "{{FIRMA}}", "[FIRMA]", "[firma]"}
+	patterns := []string{"{{firma}}", "{{Firma}}", "{{FIRMA}}", "{firma}", "{Firma}", "{FIRMA}", "[FIRMA]", "[firma]"}
 
 	for _, pattern := range patterns {
 		nodeId, err := a.SearchText(ctx, token, remoteDocx, pattern)
