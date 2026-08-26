@@ -1566,6 +1566,86 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v3.5/contrato": {
+            "post": {
+                "description": "Generates a temporary DOCX with the replaced placeholders from the request",
+                "tags": [
+                    "contrato"
+                ],
+                "summary": "Create contrato DOCX temporal",
+                "parameters": [
+                    {
+                        "description": "Contrato data",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.ContratoReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "202": {
+                        "description": "Accepted",
+                        "schema": {
+                            "$ref": "#/definitions/util.ApiResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/util.ApiResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/util.ApiResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v3.5/contrato/firma": {
+            "post": {
+                "description": "Creates the final PDF by filling the DOCX data and injecting the signature",
+                "tags": [
+                    "contrato"
+                ],
+                "summary": "Create contrato PDF definitivo con firma",
+                "parameters": [
+                    {
+                        "description": "Firma request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.ContratoFirmaReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "202": {
+                        "description": "Accepted",
+                        "schema": {
+                            "$ref": "#/definitions/util.ApiResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/util.ApiResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/util.ApiResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v3.5/curso": {
             "get": {
                 "description": "Gets all the curso",
@@ -1973,6 +2053,46 @@ const docTemplate = `{
                     },
                     "408": {
                         "description": "Request Timeout",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v3.5/gateways/flow/init": {
+            "post": {
+                "description": "Inicializa el pago a través de Flow y devuelve la URL de redirección",
+                "tags": [
+                    "flow"
+                ],
+                "summary": "Init Flow Payment",
+                "parameters": [
+                    {
+                        "description": "Configuración inicial del pago",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.InitFlowPaymentReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.InitFlowPaymentResp"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
                         "schema": {
                             "type": "object"
                         }
@@ -3776,18 +3896,18 @@ const docTemplate = `{
         },
         "/api/v3.5/sale": {
             "get": {
-                "description": "Gets all the sale",
+                "description": "Gets all the schema",
                 "tags": [
-                    "sale"
+                    "schema"
                 ],
-                "summary": "Get all sale",
+                "summary": "Get all schema",
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/models.SaleResp"
+                                "$ref": "#/definitions/models.TokenSchemaRegistry"
                             }
                         }
                     },
@@ -4726,6 +4846,9 @@ const docTemplate = `{
                 "schema_name": {
                     "type": "string"
                 },
+                "subdominio": {
+                    "type": "string"
+                },
                 "terminoscondiciones": {
                     "type": "integer"
                 },
@@ -4762,6 +4885,123 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "updatedDate": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.ContratoFirmaReq": {
+            "type": "object",
+            "properties": {
+                "docx_url": {
+                    "description": "URL del DOCX en B2 devuelta en Fase 1",
+                    "type": "string"
+                },
+                "file_name_firma": {
+                    "description": "Nombre a colocar cuando cree el pdf y antes de subirlo",
+                    "type": "string"
+                },
+                "firma_base64": {
+                    "description": "Imagen de la firma en base64 (PNG o JPEG)",
+                    "type": "string"
+                },
+                "session_id": {
+                    "description": "UUID devuelto en Fase 1",
+                    "type": "string"
+                }
+            }
+        },
+        "models.ContratoReq": {
+            "type": "object",
+            "properties": {
+                "colegio": {
+                    "type": "string"
+                },
+                "comuna": {
+                    "type": "string"
+                },
+                "correoapod": {
+                    "type": "string"
+                },
+                "edireccion": {
+                    "type": "string"
+                },
+                "fonoapod": {
+                    "type": "string"
+                },
+                "fpago": {
+                    "type": "string"
+                },
+                "fsalida": {
+                    "type": "string"
+                },
+                "fsalidaaño": {
+                    "type": "string"
+                },
+                "fsalidadia": {
+                    "type": "string"
+                },
+                "fsalidames": {
+                    "type": "string"
+                },
+                "idcurso": {
+                    "type": "string"
+                },
+                "liberados": {
+                    "type": "string"
+                },
+                "nfantasia": {
+                    "type": "string"
+                },
+                "nlegal": {
+                    "type": "string"
+                },
+                "nombrealumno": {
+                    "type": "string"
+                },
+                "nombreapod": {
+                    "type": "string"
+                },
+                "observacion": {
+                    "type": "string"
+                },
+                "programa": {
+                    "type": "string"
+                },
+                "reserva": {
+                    "type": "string"
+                },
+                "rlegal": {
+                    "type": "string"
+                },
+                "rsocial": {
+                    "type": "string"
+                },
+                "rutapod": {
+                    "type": "string"
+                },
+                "rute": {
+                    "type": "string"
+                },
+                "tc": {
+                    "type": "string"
+                },
+                "template_filename": {
+                    "description": "Nombre del archivo template DOCX en B2",
+                    "type": "string"
+                },
+                "type_sale": {
+                    "type": "string"
+                },
+                "vprograma": {
+                    "type": "string"
+                },
+                "vtaAgno": {
+                    "type": "string"
+                },
+                "vtaDia": {
+                    "type": "string"
+                },
+                "vtaMes": {
                     "type": "string"
                 }
             }
@@ -4947,6 +5187,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "schema_name": {
+                    "type": "string"
+                },
+                "subdominio": {
                     "type": "string"
                 },
                 "terminoscondiciones": {
@@ -5507,6 +5750,9 @@ const docTemplate = `{
                 "auth_date": {
                     "type": "string"
                 },
+                "author": {
+                    "type": "string"
+                },
                 "card_number": {
                     "type": "string"
                 },
@@ -5539,6 +5785,9 @@ const docTemplate = `{
                 },
                 "sale_id": {
                     "type": "integer"
+                },
+                "state": {
+                    "type": "string"
                 },
                 "transaction_ref": {
                     "type": "string"
@@ -6540,6 +6789,52 @@ const docTemplate = `{
                 }
             }
         },
+        "models.InitFlowPaymentReq": {
+            "type": "object",
+            "properties": {
+                "company_id": {
+                    "type": "integer"
+                },
+                "curso_id": {
+                    "type": "integer"
+                },
+                "fechainicial": {
+                    "type": "string"
+                },
+                "identificador": {
+                    "type": "string"
+                },
+                "mpagar": {
+                    "type": "integer"
+                },
+                "nrocuotas": {
+                    "type": "integer"
+                },
+                "sale_id": {
+                    "type": "integer"
+                },
+                "urlconfirmation": {
+                    "type": "string"
+                },
+                "urlreturn": {
+                    "type": "string"
+                },
+                "user_rut": {
+                    "type": "string"
+                },
+                "valorcuota": {
+                    "type": "integer"
+                }
+            }
+        },
+        "models.InitFlowPaymentResp": {
+            "type": "object",
+            "properties": {
+                "redirect_url": {
+                    "type": "string"
+                }
+            }
+        },
         "models.InstallmentResp": {
             "type": "object",
             "properties": {
@@ -6555,6 +6850,9 @@ const docTemplate = `{
                 "createdDate": {
                     "type": "string"
                 },
+                "curso": {
+                    "$ref": "#/definitions/models.CursoReport"
+                },
                 "due_date": {
                     "type": "string"
                 },
@@ -6569,6 +6867,9 @@ const docTemplate = `{
                 },
                 "quota_number": {
                     "type": "integer"
+                },
+                "sale": {
+                    "$ref": "#/definitions/models.SaleCursoReport"
                 },
                 "sale_id": {
                     "type": "integer"
@@ -6690,6 +6991,9 @@ const docTemplate = `{
                 "auth_date": {
                     "type": "string"
                 },
+                "author": {
+                    "type": "string"
+                },
                 "card_number": {
                     "type": "string"
                 },
@@ -6728,6 +7032,9 @@ const docTemplate = `{
                 },
                 "sale_id": {
                     "type": "integer"
+                },
+                "state": {
+                    "type": "string"
                 },
                 "transaction_ref": {
                     "type": "string"
@@ -7166,6 +7473,32 @@ const docTemplate = `{
                 }
             }
         },
+        "models.TokenSchemaRegistry": {
+            "type": "object",
+            "properties": {
+                "active": {
+                    "type": "boolean"
+                },
+                "company_id": {
+                    "type": "integer"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "schema_name": {
+                    "type": "string"
+                },
+                "token": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
         "models.UpdateAirportsReq": {
             "type": "object",
             "properties": {
@@ -7324,6 +7657,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "schema_name": {
+                    "type": "string"
+                },
+                "subdominio": {
                     "type": "string"
                 },
                 "terminoscondiciones": {
@@ -7829,6 +8165,9 @@ const docTemplate = `{
                 "auth_date": {
                     "type": "string"
                 },
+                "author": {
+                    "type": "string"
+                },
                 "card_number": {
                     "type": "string"
                 },
@@ -7858,6 +8197,9 @@ const docTemplate = `{
                 },
                 "sale_id": {
                     "type": "integer"
+                },
+                "state": {
+                    "type": "string"
                 },
                 "transaction_ref": {
                     "type": "string"
@@ -8350,6 +8692,25 @@ const docTemplate = `{
                 },
                 "voucher": {
                     "type": "string"
+                }
+            }
+        },
+        "util.ApiResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "description": "Datos principales (ej: items)"
+                },
+                "error": {
+                    "description": "Error legible (si Success = false)",
+                    "type": "string"
+                },
+                "message": {
+                    "description": "Opcional: mensaje descriptivo",
+                    "type": "string"
+                },
+                "success": {
+                    "type": "boolean"
                 }
             }
         }

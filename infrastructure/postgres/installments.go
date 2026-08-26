@@ -2,7 +2,6 @@ package postgres
 
 import (
 	"context"
-	"database/sql"
 	"errors"
 	"fmt"
 	"strconv"
@@ -154,10 +153,6 @@ func (s *installmentsRepository) Get(ctx context.Context, filter map[string]inte
 		return nil, err
 	}
 
-	if len(registro) < 1 {
-		return nil, wrappers.NewNonExistentErr(sql.ErrNoRows)
-	}
-
 	// Mapear a la estructura de respuesta
 	response := models.InstallmentListResponse{
 		Items:      registro,
@@ -239,10 +234,6 @@ func (s *installmentsRepository) GetInf(ctx context.Context, filter map[string]i
 	// Ejecuta la consulta
 	if err := query.Order("id ASC").Find(&registro).Error; err != nil {
 		return nil, err
-	}
-
-	if len(registro) < 1 {
-		return nil, wrappers.NewNonExistentErr(sql.ErrNoRows)
 	}
 
 	// Mapear a la estructura de respuesta

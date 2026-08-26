@@ -118,6 +118,8 @@ definitions:
         type: string
       schema_name:
         type: string
+      subdominio:
+        type: string
       terminoscondiciones:
         type: integer
       updatedDate:
@@ -142,6 +144,85 @@ definitions:
       regions_id:
         type: integer
       updatedDate:
+        type: string
+    type: object
+  models.ContratoFirmaReq:
+    properties:
+      docx_url:
+        description: URL del DOCX en B2 devuelta en Fase 1
+        type: string
+      file_name_firma:
+        description: Nombre a colocar cuando cree el pdf y antes de subirlo
+        type: string
+      firma_base64:
+        description: Imagen de la firma en base64 (PNG o JPEG)
+        type: string
+      session_id:
+        description: UUID devuelto en Fase 1
+        type: string
+    type: object
+  models.ContratoReq:
+    properties:
+      colegio:
+        type: string
+      comuna:
+        type: string
+      correoapod:
+        type: string
+      edireccion:
+        type: string
+      fonoapod:
+        type: string
+      fpago:
+        type: string
+      fsalida:
+        type: string
+      fsalidaaño:
+        type: string
+      fsalidadia:
+        type: string
+      fsalidames:
+        type: string
+      idcurso:
+        type: string
+      liberados:
+        type: string
+      nfantasia:
+        type: string
+      nlegal:
+        type: string
+      nombrealumno:
+        type: string
+      nombreapod:
+        type: string
+      observacion:
+        type: string
+      programa:
+        type: string
+      reserva:
+        type: string
+      rlegal:
+        type: string
+      rsocial:
+        type: string
+      rutapod:
+        type: string
+      rute:
+        type: string
+      tc:
+        type: string
+      template_filename:
+        description: Nombre del archivo template DOCX en B2
+        type: string
+      type_sale:
+        type: string
+      vprograma:
+        type: string
+      vtaAgno:
+        type: string
+      vtaDia:
+        type: string
+      vtaMes:
         type: string
     type: object
   models.CountryResp:
@@ -264,6 +345,8 @@ definitions:
       rutreplegal:
         type: string
       schema_name:
+        type: string
+      subdominio:
         type: string
       terminoscondiciones:
         type: integer
@@ -632,6 +715,8 @@ definitions:
         type: string
       auth_date:
         type: string
+      author:
+        type: string
       card_number:
         type: string
       company_id:
@@ -654,6 +739,8 @@ definitions:
         type: string
       sale_id:
         type: integer
+      state:
+        type: string
       transaction_ref:
         type: string
       transaction_type:
@@ -1313,6 +1400,36 @@ definitions:
       valorcuota:
         type: number
     type: object
+  models.InitFlowPaymentReq:
+    properties:
+      company_id:
+        type: integer
+      curso_id:
+        type: integer
+      fechainicial:
+        type: string
+      identificador:
+        type: string
+      mpagar:
+        type: integer
+      nrocuotas:
+        type: integer
+      sale_id:
+        type: integer
+      urlconfirmation:
+        type: string
+      urlreturn:
+        type: string
+      user_rut:
+        type: string
+      valorcuota:
+        type: integer
+    type: object
+  models.InitFlowPaymentResp:
+    properties:
+      redirect_url:
+        type: string
+    type: object
   models.InstallmentResp:
     properties:
       amount:
@@ -1323,6 +1440,8 @@ definitions:
         type: integer
       createdDate:
         type: string
+      curso:
+        $ref: '#/definitions/models.CursoReport'
       due_date:
         type: string
       id:
@@ -1333,6 +1452,8 @@ definitions:
         type: integer
       quota_number:
         type: integer
+      sale:
+        $ref: '#/definitions/models.SaleCursoReport'
       sale_id:
         type: integer
       status:
@@ -1412,6 +1533,8 @@ definitions:
         type: string
       auth_date:
         type: string
+      author:
+        type: string
       card_number:
         type: string
       company_id:
@@ -1438,6 +1561,8 @@ definitions:
         $ref: '#/definitions/models.SaleCursoReport'
       sale_id:
         type: integer
+      state:
+        type: string
       transaction_ref:
         type: string
       transaction_type:
@@ -1726,6 +1851,23 @@ definitions:
       vprograma:
         type: integer
     type: object
+  models.TokenSchemaRegistry:
+    properties:
+      active:
+        type: boolean
+      company_id:
+        type: integer
+      createdAt:
+        type: string
+      id:
+        type: integer
+      schema_name:
+        type: string
+      token:
+        type: string
+      updatedAt:
+        type: string
+    type: object
   models.UpdateAirportsReq:
     properties:
       _id:
@@ -1831,6 +1973,8 @@ definitions:
       rutreplegal:
         type: string
       schema_name:
+        type: string
+      subdominio:
         type: string
       terminoscondiciones:
         type: integer
@@ -2164,6 +2308,8 @@ definitions:
         type: string
       auth_date:
         type: string
+      author:
+        type: string
       card_number:
         type: string
       company_id:
@@ -2184,6 +2330,8 @@ definitions:
         type: string
       sale_id:
         type: integer
+      state:
+        type: string
       transaction_ref:
         type: string
       transaction_type:
@@ -2508,6 +2656,19 @@ definitions:
         type: integer
       voucher:
         type: string
+    type: object
+  util.ApiResponse:
+    properties:
+      data:
+        description: 'Datos principales (ej: items)'
+      error:
+        description: Error legible (si Success = false)
+        type: string
+      message:
+        description: 'Opcional: mensaje descriptivo'
+        type: string
+      success:
+        type: boolean
     type: object
 info:
   contact: {}
@@ -3539,6 +3700,60 @@ paths:
       summary: Get comunas by ID
       tags:
       - comunas
+  /api/v3.5/contrato:
+    post:
+      description: Generates a temporary DOCX with the replaced placeholders from
+        the request
+      parameters:
+      - description: Contrato data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.ContratoReq'
+      responses:
+        "202":
+          description: Accepted
+          schema:
+            $ref: '#/definitions/util.ApiResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/util.ApiResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.ApiResponse'
+      summary: Create contrato DOCX temporal
+      tags:
+      - contrato
+  /api/v3.5/contrato/firma:
+    post:
+      description: Creates the final PDF by filling the DOCX data and injecting the
+        signature
+      parameters:
+      - description: Firma request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.ContratoFirmaReq'
+      responses:
+        "202":
+          description: Accepted
+          schema:
+            $ref: '#/definitions/util.ApiResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/util.ApiResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.ApiResponse'
+      summary: Create contrato PDF definitivo con firma
+      tags:
+      - contrato
   /api/v3.5/curso:
     get:
       description: Gets all the curso
@@ -3817,6 +4032,32 @@ paths:
       summary: Update fmedica
       tags:
       - fmedica
+  /api/v3.5/gateways/flow/init:
+    post:
+      description: Inicializa el pago a través de Flow y devuelve la URL de redirección
+      parameters:
+      - description: Configuración inicial del pago
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.InitFlowPaymentReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.InitFlowPaymentResp'
+        "400":
+          description: Bad Request
+          schema:
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            type: object
+      summary: Init Flow Payment
+      tags:
+      - flow
   /api/v3.5/ingreso:
     get:
       description: Gets all the ingreso
@@ -5003,13 +5244,13 @@ paths:
       - roles
   /api/v3.5/sale:
     get:
-      description: Gets all the sale
+      description: Gets all the schema
       responses:
         "200":
           description: OK
           schema:
             items:
-              $ref: '#/definitions/models.SaleResp'
+              $ref: '#/definitions/models.TokenSchemaRegistry'
             type: array
         "400":
           description: Bad Request
@@ -5027,9 +5268,9 @@ paths:
           description: Internal Server Error
           schema:
             type: object
-      summary: Get all sale
+      summary: Get all schema
       tags:
-      - sale
+      - schema
     post:
       description: Creates a new sale
       parameters:
