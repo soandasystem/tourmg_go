@@ -78,28 +78,11 @@ func InjectSignatureImage(docxBytes []byte, firmaPngBytes []byte) ([]byte, error
 		case "word/document.xml":
 			docXML := string(content)
 
-			// 1. Intentar reemplazos directos de cadenas
-			patterns := []string{
-				"{{firma}}", "{{Firma}}", "{{FIRMA}}",
-				"{firma}", "{Firma}", "{FIRMA}",
-				"[FIRMA]", "[firma]", "[Firma]",
-			}
-
-			for _, p := range patterns {
-				if strings.Contains(docXML, p) {
-					docXML = strings.ReplaceAll(docXML, p, drawingXMLTemplate)
-					foundPlaceholder = true
-				}
-			}
-
-			// 2. Si no se encontró por coincidencia exacta (posibles fragmentos de runs XML en Word)
-			if !foundPlaceholder {
-				// Buscar patrón de etiqueta fragmentada entre etiquetas <w:t>...</w:t>
-				rx := regexp.MustCompile(`(?i)<w:t[^>]*>[\s\S]*?\{{1,2}\s*firma\s*\}}{1,2}[\s\S]*?</w:t>`)
-				if rx.MatchString(docXML) {
-					docXML = rx.ReplaceAllString(docXML, "<w:t></w:t>"+drawingXMLTemplate)
-					foundPlaceholder = true
-				}
+			// Reemplazar la marca de firma dividiendo los tags <w:t> para mantener el OpenXML válido.
+			rx := regexp.MustCompile(`(?i)(<w:t[^>]*>)([\s\S]*?)(?:\{{1,2}|\[)\s*firma\s*(?:\}{1,2}|\])([\s\S]*?)(</w:t>)`)
+			if rx.MatchString(docXML) {
+				docXML = rx.ReplaceAllString(docXML, `$1$2</w:t>`+drawingXMLTemplate+`<w:t xml:space="preserve">$3$4`)
+				foundPlaceholder = true
 			}
 
 			// Escribir document.xml modificado
