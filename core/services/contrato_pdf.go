@@ -98,7 +98,7 @@ func (s *contratoService) FirmarContrato(ctx context.Context, req models.Contrat
 		}
 		defer f.Close()
 
-		objectKey := fmt.Sprintf("contratos_firmados/%s/%s", req.SessionID, localPdfName)
+		objectKey := fmt.Sprintf("contratos_firmados/%s", localPdfName)
 		url, err := s.storage.Upload(ctx, f, objectKey, "application/pdf")
 		if err != nil {
 			return models.ContratoPDFResp{}, fmt.Errorf("error subiendo PDF a B2: %w", err)
