@@ -186,8 +186,7 @@ func (a *api) Run(ctx context.Context, cancel context.CancelFunc) func() error {
 		// 1. RUTAS PÚBLICAS (No requieren Token)
 		// ==========================================
 		handlers.SetHealthRoutes(ctx, a.config, router)
-		handlers.SetCompanyRoutes(ctx, a.config, router, a.services.company)
-		// handlers.SetAuthRoutes(ctx, a.config, router, a.services.users, a.services.curso, a.services.sale)
+		handlers.SetAuthRoutes(ctx, a.config, router, a.services.company, a.services.users, a.services.curso, a.services.sale)
 
 		// ==========================================
 		// 2. RUTAS PRIVADAS (Requieren Token)

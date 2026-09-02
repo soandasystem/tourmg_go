@@ -14,15 +14,15 @@ import (
 
 // SetAuthRoutes define las rutas de autenticación públicas
 // En este caso inyectamos los servicios necesarios para validar contra la BD
-func SetAuthRoutes(ctx context.Context, cfg config.Config, router *gin.Engine, userSvc ports.UsersService, cursoSvc ports.CursoService, saleSvc ports.SaleService) {
+func SetAuthRoutes(ctx context.Context, cfg config.Config, router *gin.Engine, companyScv ports.CompanyService, userSvc ports.UsersService, cursoSvc ports.CursoService, saleSvc ports.SaleService) {
 	authGroup := router.Group("/api/auth")
 	{
-		authGroup.POST("/login", loginHandler(ctx, userSvc, cursoSvc, saleSvc))
+		authGroup.POST("/login", loginHandler(ctx, companyScv, userSvc, cursoSvc, saleSvc))
 	}
 }
 
 // loginHandler recibe la petición del frontend y según el tipo decide qué validar
-func loginHandler(ctx context.Context, userSvc ports.UsersService, cursoSvc ports.CursoService, saleSvc ports.SaleService) gin.HandlerFunc {
+func loginHandler(ctx context.Context, companyScv ports.CompanyService, userSvc ports.UsersService, cursoSvc ports.CursoService, saleSvc ports.SaleService) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		reqCtx := c.Request.Context() // Este contexto contiene el schema inyectado por el middleware
 
