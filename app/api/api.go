@@ -182,7 +182,18 @@ func (a *api) Run(ctx context.Context, cancel context.CancelFunc) func() error {
 		// Luego este que inyecta el contexto con timeout y schema:
 		router.Use(util.ContextWithSchemaMiddleware(a.config.Timeout.Duration))
 
+		// ==========================================
+		// 1. RUTAS PÚBLICAS (No requieren Token)
+		// ==========================================
 		handlers.SetHealthRoutes(ctx, a.config, router)
+		handlers.SetAuthRoutes(ctx, a.config, router, a.services.users, a.services.curso, a.services.sale)
+
+		// ==========================================
+		// 2. RUTAS PRIVADAS (Requieren Token)
+		// ==========================================
+		// Al usar Use() aquí, solo afectará a las rutas registradas debajo
+		router.Use(util.JWTAuthMiddleware())
+
 		handlers.SetCompanyRoutes(ctx, a.config, router, a.services.company)
 		handlers.SetColegiosRoutes(ctx, a.config, router, a.services.colegios)
 		handlers.SetComunasRoutes(ctx, a.config, router, a.services.comunas)
