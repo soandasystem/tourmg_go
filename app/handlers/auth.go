@@ -15,7 +15,8 @@ import (
 // SetAuthRoutes define las rutas de autenticación públicas
 // En este caso inyectamos los servicios necesarios para validar contra la BD
 func SetAuthRoutes(ctx context.Context, cfg config.Config, router *gin.Engine, companyScv ports.CompanyService, userSvc ports.UsersService, cursoSvc ports.CursoService, saleSvc ports.SaleService) {
-	authGroup := router.Group("/api/auth")
+	//authGroup := router.Group("/api/auth")
+	authGroup := router.Group("api/v3.5/")
 	{
 		authGroup.POST("/login", loginHandler(ctx, companyScv, userSvc, cursoSvc, saleSvc))
 	}
