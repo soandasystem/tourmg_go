@@ -194,7 +194,7 @@ func (a *api) Run(ctx context.Context, cancel context.CancelFunc) func() error {
 		// Al usar Use() aquí, solo afectará a las rutas registradas debajo
 		router.Use(util.JWTAuthMiddleware())
 
-		// handlers.SetCompanyRoutes(ctx, a.config, router, a.services.company)
+		handlers.SetCompanyRoutes(ctx, a.config, router, a.services.company)
 		handlers.SetColegiosRoutes(ctx, a.config, router, a.services.colegios)
 		handlers.SetComunasRoutes(ctx, a.config, router, a.services.comunas)
 		handlers.SetCursoRoutes(ctx, a.config, router, a.services.curso)
