@@ -112,3 +112,86 @@ func SendPaymentNotification(cfg config.Config, toEmail, alumno, estado, monto, 
 	fmt.Printf("Email de notificación enviado a %s - Estado: %s\n", toEmail, estado)
 	return nil
 }
+
+// SendVerificationCodeEmail envía un correo con el código de 6 dígitos para recuperación de contraseña.
+func SendVerificationCodeEmail(cfg config.Config, toEmail, code string) error {
+	if cfg.SMTPHost == "" || cfg.SMTPFrom == "" {
+		return fmt.Errorf("configuración SMTP incompleta: SMTP_HOST y SMTP_FROM son requeridos")
+	}
+
+	if toEmail == "" {
+		return fmt.Errorf("email destinatario vacío, no se envía código")
+	}
+
+	if code == "" {
+		return fmt.Errorf("código de verificación vacío")
+	}
+
+	subject := "Código de recuperación de contraseña"
+
+	body := fmt.Sprintf(`<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+</head>
+<body style="font-family: Arial, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background-color: #f4f6f8; margin: 0; padding: 24px;">
+    <div style="max-width: 520px; margin: 0 auto; background-color: #ffffff; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); border: 1px solid #e2e8f0;">
+        <div style="background: linear-gradient(135deg, #0d6efd 0%, #0b5ed7 100%); padding: 24px; text-align: center;">
+            <h1 style="color: #ffffff; margin: 0; font-size: 22px; font-weight: 700;">Recuperación de Contraseña</h1>
+        </div>
+        <div style="padding: 32px 28px;">
+            <p style="font-size: 15px; color: #334155; margin-top: 0; line-height: 1.6;">
+                Estimado/a usuario/a,
+            </p>
+            <p style="font-size: 15px; color: #475569; line-height: 1.6;">
+                Has solicitado restablecer tu contraseña de acceso. Ingresa el siguiente código de verificación de 6 dígitos para continuar:
+            </p>
+            <div style="margin: 28px 0; text-align: center;">
+                <div style="display: inline-block; background-color: #f8fafc; border: 2px dashed #0d6efd; border-radius: 12px; padding: 16px 36px;">
+                    <span style="font-family: 'Courier New', Courier, monospace; font-size: 34px; font-weight: 800; letter-spacing: 8px; color: #0d6efd;">%s</span>
+                </div>
+            </div>
+            <p style="font-size: 13px; color: #64748b; line-height: 1.5; margin-bottom: 0;">
+                ⚠️ Este código es confidencial y de uso único. Si no solicitaste este cambio, puedes ignorar este correo de manera segura.
+            </p>
+            <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 28px 0 20px 0;" />
+            <p style="font-size: 12px; color: #94a3b8; margin: 0; text-align: center;">
+                Este es un correo automático, por favor no responda a este mensaje.
+            </p>
+        </div>
+    </div>
+</body>
+</html>`, code)
+
+	// Construir headers del mensaje
+	headers := make(map[string]string)
+	headers["From"] = cfg.SMTPFrom
+	headers["To"] = toEmail
+	headers["Subject"] = subject
+	headers["MIME-Version"] = "1.0"
+	headers["Content-Type"] = "text/html; charset=UTF-8"
+
+	var msg strings.Builder
+	for k, v := range headers {
+		msg.WriteString(fmt.Sprintf("%s: %s\r\n", k, v))
+	}
+	msg.WriteString("\r\n")
+	msg.WriteString(body)
+
+	// Configurar autenticación SMTP
+	addr := fmt.Sprintf("%s:%s", cfg.SMTPHost, cfg.SMTPPort)
+
+	var auth smtp.Auth
+	if cfg.SMTPUser != "" && cfg.SMTPPassword != "" {
+		auth = smtp.PlainAuth("", cfg.SMTPUser, cfg.SMTPPassword, cfg.SMTPHost)
+	}
+
+	// Enviar el email
+	err := smtp.SendMail(addr, auth, cfg.SMTPFrom, []string{toEmail}, []byte(msg.String()))
+	if err != nil {
+		return fmt.Errorf("error enviando código a %s: %w", toEmail, err)
+	}
+
+	fmt.Printf("Código de recuperación enviado a %s\n", toEmail)
+	return nil
+}
