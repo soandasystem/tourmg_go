@@ -19,6 +19,7 @@ func SetAuthRoutes(ctx context.Context, cfg config.Config, router *gin.Engine, c
 	authGroup := router.Group("api/v3.5/")
 	{
 		authGroup.POST("/login", loginHandler(ctx, companyScv, userSvc, cursoSvc, saleSvc))
+		authGroup.POST("/restore", restoreHandler(ctx, companyScv, userSvc, cursoSvc, saleSvc))
 	}
 }
 
@@ -113,6 +114,87 @@ func loginHandler(ctx context.Context, companyScv ports.CompanyService, userSvc 
 		c.JSON(http.StatusOK, gin.H{
 			"token": token,
 			"type":  req.LoginType,
+		})
+	}
+}
+
+// loginHandler recibe la petición del frontend y según el tipo decide qué validar
+func restoreHandler(ctx context.Context, companyScv ports.CompanyService, userSvc ports.UsersService, cursoSvc ports.CursoService, saleSvc ports.SaleService) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		reqCtx := c.Request.Context() // Este contexto contiene el schema inyectado por el middleware
+
+		var req models.LoginRequest
+		if err := c.ShouldBindJSON(&req); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Faltan datos o el formato es incorrecto"})
+			return
+		}
+
+		var token string
+		var emailStr string
+		var userId string
+		var err error
+
+		// Dependiendo del login_type, realizamos la validación en la base de datos
+		switch req.LoginType {
+		case util.AuthTypeUser:
+			if userSvc == nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "Servicio de usuarios no configurado"})
+				return
+			}
+			// Buscar en la BD mediante el servicio
+			filter := map[string]interface{}{
+				"username": req.Username,
+			}
+			usersList, errSvc := userSvc.GetAll(reqCtx, filter)
+			if errSvc != nil || usersList == nil || len(usersList.Items) == 0 {
+				c.JSON(http.StatusUnauthorized, gin.H{"error": "Credenciales de usuario inválidas"})
+				return
+			}
+
+			// Tomamos el primer usuario encontrado
+			user := usersList.Items[0]
+			roleIDStr := fmt.Sprintf("%d", user.RolesId)
+			emailStr = user.Email
+			userId = user.ID
+			token, err = util.GenerateUserToken(user.ID, roleIDStr)
+
+		case util.AuthTypeCourse:
+			if cursoSvc == nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "Servicio de cursos no configurado"})
+				return
+			}
+			// Buscar en la BD
+			filter := map[string]interface{}{
+				"rutapod": req.Rutapod,
+			}
+			cursosList, errSvc := cursoSvc.GetAll(reqCtx, filter)
+			if errSvc != nil || cursosList == nil || len(cursosList.Items) == 0 {
+				c.JSON(http.StatusUnauthorized, gin.H{"error": "Credenciales de curso inválidas"})
+				return
+			}
+
+			curso := cursosList.Items[0]
+			userId = curso.ID
+			emailStr = curso.Correo
+			token, err = util.GenerateCourseToken(curso.ID, curso.Rutapod)
+
+		default:
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Tipo de login no soportado. Debe ser 'user', 'course' o 'access_code'"})
+			return
+		}
+
+		// Si ocurrió un error interno al firmar el token
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error al generar credenciales"})
+			return
+		}
+
+		// Devolver el token al frontend
+		c.JSON(http.StatusOK, gin.H{
+			"token": token,
+			"type":  req.LoginType,
+			"email": emailStr,
+			"id":    userId,
 		})
 	}
 }
