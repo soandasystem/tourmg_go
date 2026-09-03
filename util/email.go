@@ -1,20 +1,100 @@
 package util
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
+	"io"
+	"net/http"
 	"net/smtp"
+	"os"
 	"strings"
+	"time"
 
 	"tourmanager/config"
 )
 
+// Estructuras para la API de Resend
+type resendRequest struct {
+	From    string   `json:"from"`
+	To      []string `json:"to"`
+	Subject string   `json:"subject"`
+	Html    string   `json:"html"`
+}
+
+type resendResponse struct {
+	ID      string `json:"id,omitempty"`
+	Message string `json:"message,omitempty"`
+	Name    string `json:"name,omitempty"`
+}
+
+// sendViaResend envía un email usando la API REST HTTPS de Resend (puerto 443)
+func sendViaResend(apiKey, from, toEmail, subject, htmlBody string) error {
+	if from == "" {
+		from = "TourManager <onboarding@resend.dev>"
+	}
+
+	payload := resendRequest{
+		From:    from,
+		To:      []string{toEmail},
+		Subject: subject,
+		Html:    htmlBody,
+	}
+
+	jsonData, err := json.Marshal(payload)
+	if err != nil {
+		return fmt.Errorf("error codificando payload para Resend: %w", err)
+	}
+
+	req, err := http.NewRequest("POST", "https://api.resend.com/emails", bytes.NewBuffer(jsonData))
+	if err != nil {
+		return fmt.Errorf("error creando petición a Resend: %w", err)
+	}
+
+	req.Header.Set("Authorization", "Bearer "+apiKey)
+	req.Header.Set("Content-Type", "application/json")
+
+	client := &http.Client{Timeout: 15 * time.Second}
+	resp, err := client.Do(req)
+	if err != nil {
+		return fmt.Errorf("error conectando a API Resend: %w", err)
+	}
+	defer resp.Body.Close()
+
+	bodyBytes, _ := io.ReadAll(resp.Body)
+
+	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
+		var resErr resendResponse
+		if err := json.Unmarshal(bodyBytes, &resErr); err == nil && resErr.Message != "" {
+			return fmt.Errorf("error Resend (%d): %s", resp.StatusCode, resErr.Message)
+		}
+		return fmt.Errorf("error Resend (%d): %s", resp.StatusCode, string(bodyBytes))
+	}
+
+	fmt.Printf("[Resend] Email enviado exitosamente a %s\n", toEmail)
+	return nil
+}
+
+// getResendKey obtiene la key de Resend desde la config o variables de entorno
+func getResendKey(cfg config.Config) string {
+	if cfg.ResendAPIKey != "" {
+		return cfg.ResendAPIKey
+	}
+	if key := os.Getenv("PI_KEY_RESEND"); key != "" {
+		return key
+	}
+	if key := os.Getenv("API_KEY_RESEND"); key != "" {
+		return key
+	}
+	if key := os.Getenv("RESEND_API_KEY"); key != "" {
+		return key
+	}
+	return ""
+}
+
 // SendPaymentNotification envía un correo de notificación de pago al email indicado.
 // Se espera que se llame desde una goroutine para no bloquear el flujo principal.
 func SendPaymentNotification(cfg config.Config, toEmail, alumno, estado, monto, commerceOrder string) error {
-	if cfg.SMTPHost == "" || cfg.SMTPFrom == "" {
-		return fmt.Errorf("configuración SMTP incompleta: SMTP_HOST y SMTP_FROM son requeridos")
-	}
-
 	if toEmail == "" {
 		return fmt.Errorf("email destinatario vacío, no se envía notificación")
 	}
@@ -80,6 +160,16 @@ func SendPaymentNotification(cfg config.Config, toEmail, alumno, estado, monto, 
 </body>
 </html>`, colorEstado, subject, alumno, mensajeEstado, colorEstado, estado, monto, commerceOrder)
 
+	// 1. Si Resend está configurado, usar API HTTP (funciona 100% en Render)
+	if resendKey := getResendKey(cfg); resendKey != "" {
+		return sendViaResend(resendKey, cfg.ResendFrom, toEmail, subject, body)
+	}
+
+	// 2. Fallback a SMTP tradicional
+	if cfg.SMTPHost == "" || cfg.SMTPFrom == "" {
+		return fmt.Errorf("configuración de email incompleta: configure PI_KEY_RESEND o (SMTP_HOST y SMTP_FROM)")
+	}
+
 	// Construir headers del mensaje
 	headers := make(map[string]string)
 	headers["From"] = cfg.SMTPFrom
@@ -115,10 +205,6 @@ func SendPaymentNotification(cfg config.Config, toEmail, alumno, estado, monto, 
 
 // SendVerificationCodeEmail envía un correo con el código de 6 dígitos para recuperación de contraseña.
 func SendVerificationCodeEmail(cfg config.Config, toEmail, code string) error {
-	if cfg.SMTPHost == "" || cfg.SMTPFrom == "" {
-		return fmt.Errorf("configuración SMTP incompleta: SMTP_HOST y SMTP_FROM son requeridos")
-	}
-
 	if toEmail == "" {
 		return fmt.Errorf("email destinatario vacío, no se envía código")
 	}
@@ -163,6 +249,16 @@ func SendVerificationCodeEmail(cfg config.Config, toEmail, code string) error {
 </body>
 </html>`, code)
 
+	// 1. Si Resend está configurado, usar API HTTP (funciona 100% en Render)
+	if resendKey := getResendKey(cfg); resendKey != "" {
+		return sendViaResend(resendKey, cfg.ResendFrom, toEmail, subject, body)
+	}
+
+	// 2. Fallback a SMTP tradicional
+	if cfg.SMTPHost == "" || cfg.SMTPFrom == "" {
+		return fmt.Errorf("configuración de email incompleta: configure PI_KEY_RESEND o (SMTP_HOST y SMTP_FROM)")
+	}
+
 	// Construir headers del mensaje
 	headers := make(map[string]string)
 	headers["From"] = cfg.SMTPFrom
@@ -192,6 +288,6 @@ func SendVerificationCodeEmail(cfg config.Config, toEmail, code string) error {
 		return fmt.Errorf("error enviando código a %s: %w", toEmail, err)
 	}
 
-	fmt.Printf("Código de recuperación enviado a %s\n", toEmail)
+	fmt.Printf("Código de recuperación enviado a %s vía SMTP\n", toEmail)
 	return nil
 }

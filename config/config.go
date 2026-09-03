@@ -49,6 +49,10 @@ type config struct {
 	SMTPUser     string
 	SMTPPassword string
 	SMTPFrom     string
+
+	// Resend Configuration
+	ResendAPIKey string
+	ResendFrom   string
 }
 
 // ReadConfig from the project´s JSON config files.
@@ -126,6 +130,21 @@ func ReadConfig(version, env string, port int, database, dsn string) (Config, er
 	c.config.SMTPUser = os.Getenv("SMTP_USER")
 	c.config.SMTPPassword = os.Getenv("SMTP_PASSWORD")
 	c.config.SMTPFrom = os.Getenv("SMTP_FROM")
+
+	// Resend Configuration (soporta PI_KEY_RESEND, API_KEY_RESEND, RESEND_API_KEY)
+	resendKey := os.Getenv("PI_KEY_RESEND")
+	if resendKey == "" {
+		resendKey = os.Getenv("API_KEY_RESEND")
+	}
+	if resendKey == "" {
+		resendKey = os.Getenv("RESEND_API_KEY")
+	}
+	c.config.ResendAPIKey = resendKey
+	c.config.ResendFrom = os.Getenv("RESEND_FROM")
+	if c.config.ResendFrom == "" {
+		c.config.ResendFrom = "TourManager <onboarding@resend.dev>"
+	}
+
 	//	c.config.B2UploadsPath = os.Getenv("B2_UPLOADS_PATH")
 	return c, nil
 }
