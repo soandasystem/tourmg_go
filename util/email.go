@@ -136,7 +136,7 @@ func SendVerificationCodeEmail(cfg config.Config, toEmail, code string) error {
 </head>
 <body style="font-family: Arial, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background-color: #f4f6f8; margin: 0; padding: 24px;">
     <div style="max-width: 520px; margin: 0 auto; background-color: #ffffff; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); border: 1px solid #e2e8f0;">
-        <div style="background: linear-gradient(135deg, #0d6efd 0%, #0b5ed7 100%); padding: 24px; text-align: center;">
+        <div style="background: linear-gradient(135deg, #0d6efd 0%%, #0b5ed7 100%%); padding: 24px; text-align: center;">
             <h1 style="color: #ffffff; margin: 0; font-size: 22px; font-weight: 700;">Recuperación de Contraseña</h1>
         </div>
         <div style="padding: 32px 28px;">
