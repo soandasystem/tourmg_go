@@ -55,6 +55,7 @@ type svs struct {
 	contrato            ports.ContratoService
 	flow                ports.FlowService
 	schemaRegistry      ports.SchemaRegistryService
+	mpago               ports.MPagoService
 }
 
 // New creates a new API
@@ -145,6 +146,7 @@ func New(ctx context.Context, cfg config.Config) (a api) {
 	a.services.paymentInstallments = services.NewPaymentInstallmentService(a.config, paymentInstallmentsRepo)
 	a.services.flow = services.NewFlowService(a.config, gatewaysRepo, gatewayscRepo, saleRepo, cursoRepo, paymentsRepo, installmentsRepo, paymentInstallmentsRepo, schemaRegistryRepo)
 	a.services.schemaRegistry = services.NewSchemaRegistryService(a.config, schemaRegistryRepo)
+	a.services.mpago = services.NewMPagoService(a.config, gatewaysRepo, gatewayscRepo, saleRepo, cursoRepo, paymentsRepo, installmentsRepo, paymentInstallmentsRepo, schemaRegistryRepo)
 
 	// Inicializar B2 Storage y Upload Service
 	var b2Storage ports.UploadStorage
@@ -222,6 +224,7 @@ func (a *api) Run(ctx context.Context, cancel context.CancelFunc) func() error {
 		handlers.SetContratoRoutes(ctx, a.config, router, a.services.contrato)
 		handlers.SetFlowRoutes(ctx, a.config, router, a.services.flow)
 		handlers.SetSchemaRegistryRoutes(ctx, a.config, router, a.services.schemaRegistry)
+		handlers.SetMpagoRoutes(ctx, a.config, router, a.services.mpago)
 
 		if a.services.upload != nil {
 			handlers.SetUploadRoutes(ctx, a.config, router, a.services.upload)

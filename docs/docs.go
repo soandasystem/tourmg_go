@@ -1829,6 +1829,52 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v3.5/email/send-code": {
+            "post": {
+                "description": "Envía un correo electrónico con el código de verificación solicitado",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "email"
+                ],
+                "summary": "Enviar código de verificación por email",
+                "parameters": [
+                    {
+                        "description": "Email y código a enviar",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/handlers.SendCodeRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v3.5/fmedica": {
             "get": {
                 "description": "Gets all the fmedica",
@@ -2289,6 +2335,46 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v3.5/iniciopagomp": {
+            "post": {
+                "description": "Inicializa el pago a través de Mercado Pago y devuelve los datos de preferencia y clave pública",
+                "tags": [
+                    "mpago"
+                ],
+                "summary": "Init Mercado Pago Payment",
+                "parameters": [
+                    {
+                        "description": "Configuración inicial del pago",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.InitMPagoPaymentReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.InitMPagoResp"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v3.5/installment": {
             "get": {
                 "description": "Gets all the installment",
@@ -2513,6 +2599,141 @@ const docTemplate = `{
                     },
                     "408": {
                         "description": "Request Timeout",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v3.5/login": {
+            "post": {
+                "description": "Permite iniciar sesión como usuario, apoderado o curso y devuelve un JWT",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Iniciar sesión (Auth)",
+                "parameters": [
+                    {
+                        "description": "Credenciales de login",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.LoginRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v3.5/mpago/verificar": {
+            "get": {
+                "description": "Recibe el retorno del usuario desde Mercado Pago, verifica el pago y redirige a la pantalla de resultado",
+                "tags": [
+                    "mpago"
+                ],
+                "summary": "Retorno y verificación Mercado Pago",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID del pago en Mercado Pago",
+                        "name": "payment_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "ID de la preferencia en Mercado Pago",
+                        "name": "preference_id",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "302": {
+                        "description": "Redirección a /mpagopagos/resultado",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v3.5/mpago/webhook": {
+            "post": {
+                "description": "Procesa las notificaciones webhook enviadas por Mercado Pago tras eventos de pago",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "mpago"
+                ],
+                "summary": "Webhook Mercado Pago",
+                "parameters": [
+                    {
+                        "description": "Datos de la notificación webhook",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.MPagoWebhookReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
                         "schema": {
                             "type": "object"
                         }
@@ -3657,6 +3878,58 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v3.5/restore": {
+            "post": {
+                "description": "Valida la existencia del usuario o curso y retorna los datos para la recuperación",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Validar credenciales para restauración de contraseña",
+                "parameters": [
+                    {
+                        "description": "Credenciales para validación",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.LoginRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v3.5/roles": {
             "get": {
                 "description": "Gets all the roles",
@@ -4666,6 +4939,21 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "handlers.SendCodeRequest": {
+            "type": "object",
+            "required": [
+                "code",
+                "email"
+            ],
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                }
+            }
+        },
         "models.AirportsResp": {
             "type": "object",
             "properties": {
@@ -6835,6 +7123,58 @@ const docTemplate = `{
                 }
             }
         },
+        "models.InitMPagoPaymentReq": {
+            "type": "object",
+            "properties": {
+                "company_id": {
+                    "type": "integer"
+                },
+                "curso_id": {
+                    "type": "integer"
+                },
+                "fechainicial": {
+                    "type": "string"
+                },
+                "identificador": {
+                    "type": "string"
+                },
+                "mpagar": {
+                    "type": "integer"
+                },
+                "nrocuotas": {
+                    "type": "integer"
+                },
+                "sale_id": {
+                    "type": "integer"
+                },
+                "user_rut": {
+                    "type": "string"
+                },
+                "valorcuota": {
+                    "type": "integer"
+                }
+            }
+        },
+        "models.InitMPagoResp": {
+            "type": "object",
+            "properties": {
+                "id_ingreso": {
+                    "type": "string"
+                },
+                "identificador": {
+                    "type": "string"
+                },
+                "monto_pagado": {
+                    "type": "integer"
+                },
+                "preference": {
+                    "type": "string"
+                },
+                "public_key": {
+                    "type": "string"
+                }
+            }
+        },
         "models.InstallmentResp": {
             "type": "object",
             "properties": {
@@ -6878,6 +7218,53 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "updatedDate": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.LoginRequest": {
+            "type": "object",
+            "required": [
+                "login_type"
+            ],
+            "properties": {
+                "access_code": {
+                    "description": "Usado para \"access_code\"",
+                    "type": "string"
+                },
+                "login_type": {
+                    "description": "\"user\", \"course\", \"access_code\"",
+                    "type": "string"
+                },
+                "password": {
+                    "description": "Usado para \"user\" y \"course\"",
+                    "type": "string"
+                },
+                "rutapod": {
+                    "description": "Usado para \"course\"",
+                    "type": "string"
+                },
+                "username": {
+                    "description": "Usado para \"user\"",
+                    "type": "string"
+                }
+            }
+        },
+        "models.MPagoWebhookReq": {
+            "type": "object",
+            "properties": {
+                "action": {
+                    "type": "string"
+                },
+                "data": {
+                    "type": "object",
+                    "properties": {
+                        "id": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "type": {
                     "type": "string"
                 }
             }

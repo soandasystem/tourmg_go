@@ -23,7 +23,17 @@ func SetAuthRoutes(ctx context.Context, cfg config.Config, router *gin.Engine, c
 	}
 }
 
-// loginHandler recibe la petición del frontend y según el tipo decide qué validar
+// @Summary Iniciar sesión (Auth)
+// @Description Permite iniciar sesión como usuario, apoderado o curso y devuelve un JWT
+// @Tags auth
+// @Accept json
+// @Produce json
+// @Param request body models.LoginRequest true "Credenciales de login"
+// @Success 200 {object} object
+// @Failure 400 {object} object
+// @Failure 401 {object} object
+// @Failure 500 {object} object
+// @Router /api/v3.5/login [post]
 func loginHandler(ctx context.Context, companyScv ports.CompanyService, userSvc ports.UsersService, cursoSvc ports.CursoService, saleSvc ports.SaleService) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		reqCtx := c.Request.Context() // Este contexto contiene el schema inyectado por el middleware
@@ -118,7 +128,17 @@ func loginHandler(ctx context.Context, companyScv ports.CompanyService, userSvc 
 	}
 }
 
-// loginHandler recibe la petición del frontend y según el tipo decide qué validar
+// @Summary Validar credenciales para restauración de contraseña
+// @Description Valida la existencia del usuario o curso y retorna los datos para la recuperación
+// @Tags auth
+// @Accept json
+// @Produce json
+// @Param request body models.LoginRequest true "Credenciales para validación"
+// @Success 200 {object} object
+// @Failure 400 {object} object
+// @Failure 401 {object} object
+// @Failure 500 {object} object
+// @Router /api/v3.5/restore [post]
 func restoreHandler(ctx context.Context, companyScv ports.CompanyService, userSvc ports.UsersService, cursoSvc ports.CursoService, saleSvc ports.SaleService) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		reqCtx := c.Request.Context() // Este contexto contiene el schema inyectado por el middleware

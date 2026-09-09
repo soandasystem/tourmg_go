@@ -1,4 +1,14 @@
 definitions:
+  handlers.SendCodeRequest:
+    properties:
+      code:
+        type: string
+      email:
+        type: string
+    required:
+    - code
+    - email
+    type: object
   models.AirportsResp:
     properties:
       _id:
@@ -1430,6 +1440,40 @@ definitions:
       redirect_url:
         type: string
     type: object
+  models.InitMPagoPaymentReq:
+    properties:
+      company_id:
+        type: integer
+      curso_id:
+        type: integer
+      fechainicial:
+        type: string
+      identificador:
+        type: string
+      mpagar:
+        type: integer
+      nrocuotas:
+        type: integer
+      sale_id:
+        type: integer
+      user_rut:
+        type: string
+      valorcuota:
+        type: integer
+    type: object
+  models.InitMPagoResp:
+    properties:
+      id_ingreso:
+        type: string
+      identificador:
+        type: string
+      monto_pagado:
+        type: integer
+      preference:
+        type: string
+      public_key:
+        type: string
+    type: object
   models.InstallmentResp:
     properties:
       amount:
@@ -1459,6 +1503,38 @@ definitions:
       status:
         type: string
       updatedDate:
+        type: string
+    type: object
+  models.LoginRequest:
+    properties:
+      access_code:
+        description: Usado para "access_code"
+        type: string
+      login_type:
+        description: '"user", "course", "access_code"'
+        type: string
+      password:
+        description: Usado para "user" y "course"
+        type: string
+      rutapod:
+        description: Usado para "course"
+        type: string
+      username:
+        description: Usado para "user"
+        type: string
+    required:
+    - login_type
+    type: object
+  models.MPagoWebhookReq:
+    properties:
+      action:
+        type: string
+      data:
+        properties:
+          id:
+            type: string
+        type: object
+      type:
         type: string
     type: object
   models.PagosResp:
@@ -3875,6 +3951,36 @@ paths:
       summary: Get curso by ID
       tags:
       - curso
+  /api/v3.5/email/send-code:
+    post:
+      consumes:
+      - application/json
+      description: Envía un correo electrónico con el código de verificación solicitado
+      parameters:
+      - description: Email y código a enviar
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.SendCodeRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            type: object
+      summary: Enviar código de verificación por email
+      tags:
+      - email
   /api/v3.5/fmedica:
     get:
       description: Gets all the fmedica
@@ -4179,6 +4285,33 @@ paths:
       summary: Get ingreso by ID
       tags:
       - ingreso
+  /api/v3.5/iniciopagomp:
+    post:
+      description: Inicializa el pago a través de Mercado Pago y devuelve los datos
+        de preferencia y clave pública
+      parameters:
+      - description: Configuración inicial del pago
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.InitMPagoPaymentReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.InitMPagoResp'
+        "400":
+          description: Bad Request
+          schema:
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            type: object
+      summary: Init Mercado Pago Payment
+      tags:
+      - mpago
   /api/v3.5/installment:
     get:
       description: Gets all the installment
@@ -4336,6 +4469,97 @@ paths:
       summary: Update installment
       tags:
       - installment
+  /api/v3.5/login:
+    post:
+      consumes:
+      - application/json
+      description: Permite iniciar sesión como usuario, apoderado o curso y devuelve
+        un JWT
+      parameters:
+      - description: Credenciales de login
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            type: object
+      summary: Iniciar sesión (Auth)
+      tags:
+      - auth
+  /api/v3.5/mpago/verificar:
+    get:
+      description: Recibe el retorno del usuario desde Mercado Pago, verifica el pago
+        y redirige a la pantalla de resultado
+      parameters:
+      - description: ID del pago en Mercado Pago
+        in: query
+        name: payment_id
+        type: string
+      - description: ID de la preferencia en Mercado Pago
+        in: query
+        name: preference_id
+        type: string
+      responses:
+        "302":
+          description: Redirección a /mpagopagos/resultado
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: object
+      summary: Retorno y verificación Mercado Pago
+      tags:
+      - mpago
+  /api/v3.5/mpago/webhook:
+    post:
+      consumes:
+      - application/json
+      description: Procesa las notificaciones webhook enviadas por Mercado Pago tras
+        eventos de pago
+      parameters:
+      - description: Datos de la notificación webhook
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.MPagoWebhookReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            type: object
+      summary: Webhook Mercado Pago
+      tags:
+      - mpago
   /api/v3.5/pagos:
     get:
       description: Gets all the pagos
@@ -5085,6 +5309,41 @@ paths:
       summary: Update region
       tags:
       - region
+  /api/v3.5/restore:
+    post:
+      consumes:
+      - application/json
+      description: Valida la existencia del usuario o curso y retorna los datos para
+        la recuperación
+      parameters:
+      - description: Credenciales para validación
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            type: object
+      summary: Validar credenciales para restauración de contraseña
+      tags:
+      - auth
   /api/v3.5/roles:
     get:
       description: Gets all the roles

@@ -28,7 +28,16 @@ func SetEmailRoutes(ctx context.Context, cfg config.Config, router *gin.Engine) 
 	}
 }
 
-// sendCodeHandler procesa la solicitud de envío de código de verificación
+// @Summary Enviar código de verificación por email
+// @Description Envía un correo electrónico con el código de verificación solicitado
+// @Tags email
+// @Accept json
+// @Produce json
+// @Param request body handlers.SendCodeRequest true "Email y código a enviar"
+// @Success 200 {object} object
+// @Failure 400 {object} object
+// @Failure 500 {object} object
+// @Router /api/v3.5/email/send-code [post]
 func sendCodeHandler(cfg config.Config) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var req SendCodeRequest
