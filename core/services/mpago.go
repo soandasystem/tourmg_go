@@ -22,6 +22,7 @@ type mpagoService struct {
 	installmentsRepo       ports.InstallmentsRepository
 	paymentInstallmentRepo ports.PaymentInstallmentRepository
 	schemaRegistryRepo     ports.SchemaRegistryRepository
+	companyRepo            ports.CompanyRepository
 }
 
 // NewMpagoService creates a new MercadoPago service
@@ -36,6 +37,7 @@ func NewMPagoService(cfg config.Config, gatewaysRepo ports.GatewaysRepository, g
 		installmentsRepo:       installmentsRepo,
 		paymentInstallmentRepo: paymentInstallmentRepo,
 		schemaRegistryRepo:     schemaRegistryRepo,
+		companyRepo:            companyRepo,
 	}
 }
 
