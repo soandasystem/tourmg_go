@@ -234,6 +234,19 @@ func (s *mpagoService) VerifyPayment(ctx context.Context, req models.VerifyMPago
 	}
 	dbPayment := pList.Items[0]
 
+	// 4.1 con el compay_id buscar en company la empresa con el schema=global
+	companyFilter := map[string]interface{}{"id": dbPayment.CompanyId, "schema": "global"}
+	companyResult, err := s.companyRepo.Get(ctx, companyFilter, nil, nil)
+	if err != nil || len(companyResult) == 0 {
+		return models.VerifyMPagoResp{}, fmt.Errorf("empresa no encontrada con identificador: %s", dbPayment.CompanyId)
+	}
+	companyList, ok := companyResult[0].(models.CompanyListResponse)
+	if !ok || len(companyList.Items) == 0 {
+		return models.VerifyMPagoResp{}, fmt.Errorf("ingreso no encontrado en base de datos")
+	}
+	company := companyList.Items[0]
+	companySchema := company.SchemaName
+
 	// 5. Procesar según el estado de Mercado Pago
 	var message string
 	switch payment.Status {
@@ -305,6 +318,7 @@ func (s *mpagoService) VerifyPayment(ctx context.Context, req models.VerifyMPago
 	return models.VerifyMPagoResp{
 		Status:            payment.Status,
 		Message:           message,
+		Subdominio:  	   company.Subdominio,         
 		PaymentID:         payment.ID,
 		TransactionAmount: payment.TransactionAmount,
 		ExternalReference: payment.ExternalReference,

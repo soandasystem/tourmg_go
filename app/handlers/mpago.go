@@ -138,8 +138,8 @@ func mpagoRedirect(ctx context.Context, cfg config.Config, p ports.MPagoService)
 		}
 
 		// Redirigir a la vista de resultado en el frontend
-		redirectURL := fmt.Sprintf("/mpagopagos/resultado?payment_id=%d&status=%s&external_reference=%s",
-			resp.PaymentID, url.QueryEscape(resp.Status), url.QueryEscape(resp.ExternalReference))
+		redirectURL := fmt.Sprintf("https://%s/mpagopagos/resultado?payment_id=%d&status=%s&external_reference=%s",
+			resp.Subdominio, resp.PaymentID, url.QueryEscape(resp.Status), url.QueryEscape(resp.ExternalReference))
 		c.Redirect(http.StatusFound, redirectURL)
 	}
 }

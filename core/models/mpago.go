@@ -48,6 +48,7 @@ type VerifyMPagoReq struct {
 	PreferenceID string `json:"preference_id"`
 	Source       string `json:"source"` // "webhook" o "redirect"
 	CompanyID    int64  `json:"company_id"`
+	Subdominio   string `json:"subdominio"`
 }
 
 // MPagoPaymentData representa la información de un pago retornado por la API de Mercado Pago
