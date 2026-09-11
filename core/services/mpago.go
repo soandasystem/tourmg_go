@@ -245,7 +245,6 @@ func (s *mpagoService) VerifyPayment(ctx context.Context, req models.VerifyMPago
 		return models.VerifyMPagoResp{}, fmt.Errorf("ingreso no encontrado en base de datos")
 	}
 	company := companyList.Items[0]
-	companySchema := company.SchemaName
 
 	// 5. Procesar según el estado de Mercado Pago
 	var message string
