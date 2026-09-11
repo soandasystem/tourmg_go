@@ -13,12 +13,15 @@ import (
 	"tourmanager/infrastructure/b2"
 	"tourmanager/infrastructure/postgres"
 	"tourmanager/util"
+	_ "tourmanager/docs"
 
 	"github.com/antoniomarfa/hexatools/infrastructure/middleware"
 
 	"github.com/antoniomarfa/hexatools/infrastructure"
 
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 type api struct {
@@ -191,6 +194,7 @@ func (a *api) Run(ctx context.Context, cancel context.CancelFunc) func() error {
 		handlers.SetCompanyRoutes(ctx, a.config, router, a.services.company)
 		handlers.SetAuthRoutes(ctx, a.config, router, a.services.company, a.services.users, a.services.curso, a.services.sale)
 		handlers.SetEmailRoutes(ctx, a.config, router)
+		router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 		// ==========================================
 		// 2. RUTAS PRIVADAS (Requieren Token)

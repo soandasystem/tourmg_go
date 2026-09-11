@@ -310,4 +310,3 @@ func (s *mpagoService) VerifyPayment(ctx context.Context, req models.VerifyMPago
 		ExternalReference: payment.ExternalReference,
 	}, nil
 }
-

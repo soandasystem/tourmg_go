@@ -142,7 +142,7 @@ func ReadConfig(version, env string, port int, database, dsn string) (Config, er
 	c.config.ResendAPIKey = resendKey
 	c.config.ResendFrom = os.Getenv("RESEND_FROM")
 	if c.config.ResendFrom == "" {
-		c.config.ResendFrom = "TourManager <onboarding@resend.dev>"
+		c.config.ResendFrom = "TourManager <no-reply@tourmanager.cl>"
 	}
 
 	//	c.config.B2UploadsPath = os.Getenv("B2_UPLOADS_PATH")

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -14,7 +15,7 @@ import (
 func SchemaMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 
-		if c.Request.URL.Path == "/api/v3.5/token" || c.Request.URL.Path == "/health" || c.Request.URL.Path == "/" {
+		if c.Request.URL.Path == "/api/v3.5/token" || c.Request.URL.Path == "/health" || c.Request.URL.Path == "/" || strings.HasPrefix(c.Request.URL.Path, "/swagger") {
 			c.Set("schema", "global")
 			c.Next()
 			return
