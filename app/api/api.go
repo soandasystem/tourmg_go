@@ -149,7 +149,7 @@ func New(ctx context.Context, cfg config.Config) (a api) {
 	a.services.paymentInstallments = services.NewPaymentInstallmentService(a.config, paymentInstallmentsRepo)
 	a.services.flow = services.NewFlowService(a.config, gatewaysRepo, gatewayscRepo, saleRepo, cursoRepo, paymentsRepo, installmentsRepo, paymentInstallmentsRepo, schemaRegistryRepo)
 	a.services.schemaRegistry = services.NewSchemaRegistryService(a.config, schemaRegistryRepo)
-	a.services.mpago = services.NewMPagoService(a.config, gatewaysRepo, gatewayscRepo, saleRepo, cursoRepo, paymentsRepo, installmentsRepo, paymentInstallmentsRepo, schemaRegistryRepo)
+	a.services.mpago = services.NewMPagoService(a.config, gatewaysRepo, gatewayscRepo, saleRepo, cursoRepo, paymentsRepo, installmentsRepo, paymentInstallmentsRepo, schemaRegistryRepo, companyRepo)
 
 	// Inicializar B2 Storage y Upload Service
 	var b2Storage ports.UploadStorage
