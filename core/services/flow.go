@@ -469,6 +469,12 @@ func (s *flowService) ConsultaToken(ctx context.Context, token string) (*models.
 	ctxGlobal := context.WithValue(ctx, "schema", "global")
 	tokenReg := map[string]interface{}{"token": token}
 	result, err = s.schemaRegistryRepo.Get(ctxGlobal, tokenReg, nil, nil)
+	if err != nil || len(result) == 0 {
+		return &models.FlowListResponse{
+			Items:      []models.FlowResponse{},
+			TotalCount: 0,
+		}, nil
+	}
 	//el schema esta en el result de schemaRegistryRepo.Get
 	tokenSchemaRegistryResponse, ok := result[0].(models.TokenSchemaRegistryResponse)
 	if !ok || len(tokenSchemaRegistryResponse.Items) == 0 {
@@ -483,20 +489,14 @@ func (s *flowService) ConsultaToken(ctx context.Context, token string) (*models.
 	var resultPay []interface{}
 	tokenStr := map[string]interface{}{"payment_token": token}
 	resultPay, err = s.paymentRepo.Get(ctx, tokenStr, nil, nil)
-	if err != nil {
-		return &models.FlowListResponse{
-			Items:      []models.FlowResponse{},
-			TotalCount: 0,
-		}, nil
-	}
-	if len(result) == 0 {
+	if err != nil || len(resultPay) == 0 {
 		return &models.FlowListResponse{
 			Items:      []models.FlowResponse{},
 			TotalCount: 0,
 		}, nil
 	}
 	paymentResult, ok := resultPay[0].(models.PaymentListResponse)
-	if !ok {
+	if !ok || len(paymentResult.Items) == 0 {
 		return &models.FlowListResponse{
 			Items:      []models.FlowResponse{},
 			TotalCount: 0,

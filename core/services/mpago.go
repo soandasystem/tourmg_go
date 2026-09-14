@@ -240,7 +240,7 @@ func (s *mpagoService) VerifyPayment(ctx context.Context, req models.VerifyMPago
 	companyFilter := map[string]interface{}{"id": dbPayment.CompanyId, "schema": "global"}
 	companyResult, err := s.companyRepo.Get(ctx, companyFilter, nil, nil)
 	if err != nil || len(companyResult) == 0 {
-		return models.VerifyMPagoResp{}, fmt.Errorf("empresa no encontrada con identificador: %s", dbPayment.CompanyId)
+		return models.VerifyMPagoResp{}, fmt.Errorf("empresa no encontrada con identificador: %d", dbPayment.CompanyId)
 	}
 	companyList, ok := companyResult[0].(models.CompanyListResponse)
 	if !ok || len(companyList.Items) == 0 {

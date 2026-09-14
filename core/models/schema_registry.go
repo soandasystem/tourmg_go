@@ -13,8 +13,9 @@ type TokenSchemaRegistry struct {
 }
 
 func (TokenSchemaRegistry) TableName() string {
-	return "token_schema_registry" // Nombre de la tabla en la base de datos
+	return "global.token_schema_registry" // Nombre de la tabla con esquema en PostgreSQL
 }
+
 
 type TokenSchemaRegistryResponse struct {
 	Items      []TokenSchemaRegistry `json:"items"`

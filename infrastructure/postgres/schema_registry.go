@@ -39,7 +39,7 @@ func (s *schemaRegistryRepository) Create(ctx context.Context, schema interface{
 
 	err := DB.Where("token = ?", u.Token).First(&existingReg).Error
 	if err == nil {
-		// Si no hay error, significa que se encontró un rol con ese nombre
+		// Si no hay error, significa que se encontró un token con ese nombre
 		return "error", errors.New("El Token '" + u.Token + "' ya existe")
 	}
 	if !errors.Is(err, gorm.ErrRecordNotFound) {
