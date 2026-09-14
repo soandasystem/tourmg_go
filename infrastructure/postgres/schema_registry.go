@@ -32,7 +32,7 @@ func NewSchemaRegistryRepository(ctx context.Context, db *gorm.DB) ports.SchemaR
 func (s *schemaRegistryRepository) Create(ctx context.Context, schema interface{}) (string, error) {
 	//asigna el schma a usar
 	DB := infrastructure.GetDBWithSchema(ctx, s.DB)
-	// Asegúrate de que el tipo del usuario es correcto
+	// Asegúrate de que el tipo del token es correcto
 	u := schema.(models.TokenSchemaRegistry)
 
 	var existingReg models.TokenSchemaRegistry
