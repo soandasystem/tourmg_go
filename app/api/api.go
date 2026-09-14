@@ -147,7 +147,7 @@ func New(ctx context.Context, cfg config.Config) (a api) {
 	a.services.installments = services.NewInstallmentService(a.config, installmentsRepo)
 	a.services.payments = services.NewPaymentService(a.config, paymentsRepo)
 	a.services.paymentInstallments = services.NewPaymentInstallmentService(a.config, paymentInstallmentsRepo)
-	a.services.flow = services.NewFlowService(a.config, gatewaysRepo, gatewayscRepo, saleRepo, cursoRepo, paymentsRepo, installmentsRepo, paymentInstallmentsRepo, schemaRegistryRepo)
+	a.services.flow = services.NewFlowService(a.config, gatewaysRepo, gatewayscRepo, saleRepo, cursoRepo, paymentsRepo, installmentsRepo, paymentInstallmentsRepo, schemaRegistryRepo, companyRepo)
 	a.services.schemaRegistry = services.NewSchemaRegistryService(a.config, schemaRegistryRepo)
 	a.services.mpago = services.NewMPagoService(a.config, gatewaysRepo, gatewayscRepo, saleRepo, cursoRepo, paymentsRepo, installmentsRepo, paymentInstallmentsRepo, schemaRegistryRepo, companyRepo)
 

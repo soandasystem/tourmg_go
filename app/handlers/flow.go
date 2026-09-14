@@ -164,9 +164,16 @@ func returnflow(ctx context.Context, cfg config.Config, p ports.FlowService) gin
 			tokenRequest.Token = token
 		}
 
-		// Realizar la redirección HTTP aquí en el handler
-		redirectURL := "/flowpagos/resultado?commerceOrder=" + url.QueryEscape(tokenRequest.Token)
-		c.Redirect(http.StatusFound, redirectURL)
+		// Obtener la URL de redirección basada en subdominio
+		redirectURL, err := p.GetReturnURL(c.Request.Context(), tokenRequest.Token)
+		if err != nil {
+			fmt.Println("Error en returnflow al obtener redirectURL:", err)
+			fallbackURL := fmt.Sprintf("/flowpagos/returnflow?token=%s", url.QueryEscape(tokenRequest.Token))
+			c.Redirect(http.StatusFound, fallbackURL)
+			return
+		}
 
+		// Realizar la redirección HTTP aquí en el handler
+		c.Redirect(http.StatusFound, redirectURL)
 	}
 }

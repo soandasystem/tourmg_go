@@ -4,7 +4,9 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"net/url"
 	"strconv"
+	"strings"
 	"time"
 
 	"tourmanager/config"
@@ -23,10 +25,11 @@ type flowService struct {
 	installmentsRepo       ports.InstallmentsRepository
 	paymentInstallmentRepo ports.PaymentInstallmentRepository
 	schemaRegistryRepo     ports.SchemaRegistryRepository
+	companyRepo            ports.CompanyRepository
 }
 
 // NewFlowService creates a new flow service
-func NewFlowService(cfg config.Config, gatewaysRepo ports.GatewaysRepository, gatewayscRepo ports.GatewayscRepository, saleRepo ports.SaleRepository, cursoRepo ports.CursoRepository, paymentRepo ports.PaymentRepository, installmentsRepo ports.InstallmentsRepository, paymentInstallmentRepo ports.PaymentInstallmentRepository, schemaRegistryRepo ports.SchemaRegistryRepository) ports.FlowService {
+func NewFlowService(cfg config.Config, gatewaysRepo ports.GatewaysRepository, gatewayscRepo ports.GatewayscRepository, saleRepo ports.SaleRepository, cursoRepo ports.CursoRepository, paymentRepo ports.PaymentRepository, installmentsRepo ports.InstallmentsRepository, paymentInstallmentRepo ports.PaymentInstallmentRepository, schemaRegistryRepo ports.SchemaRegistryRepository, companyRepo ports.CompanyRepository) ports.FlowService {
 	return &flowService{
 		config:                 cfg,
 		gatewaysRepo:           gatewaysRepo,
@@ -37,8 +40,10 @@ func NewFlowService(cfg config.Config, gatewaysRepo ports.GatewaysRepository, ga
 		installmentsRepo:       installmentsRepo,
 		paymentInstallmentRepo: paymentInstallmentRepo,
 		schemaRegistryRepo:     schemaRegistryRepo,
+		companyRepo:            companyRepo,
 	}
 }
+
 
 func (s *flowService) InitPayment(ctx context.Context, req models.InitFlowPaymentReq) (models.InitFlowPaymentResp, error) {
 	// 1. Buscar la venta
@@ -619,5 +624,61 @@ func parseResponse(response map[string]interface{}) (models.FlowResponse, error)
 	paymentResponse.Subject = response["subject"].(string)
 
 	return paymentResponse, nil
-
 }
+
+func (s *flowService) GetReturnURL(ctx context.Context, token string) (string, error) {
+	// 1. Buscar en el registro central para saber el schema del tenant
+	ctxGlobal := context.WithValue(ctx, "schema", "global")
+	tokenReg := map[string]interface{}{"token": token}
+	result, err := s.schemaRegistryRepo.Get(ctxGlobal, tokenReg, nil, nil)
+	if err != nil || len(result) == 0 {
+		return "", fmt.Errorf("token no encontrado en schema registry: %s", token)
+	}
+
+	tokenSchemaRegistryResponse, ok := result[0].(models.TokenSchemaRegistryResponse)
+	if !ok || len(tokenSchemaRegistryResponse.Items) == 0 {
+		return "", fmt.Errorf("token no encontrado en schema registry: %s", token)
+	}
+	tokenRegistry := tokenSchemaRegistryResponse.Items[0]
+
+	// 2. Con el schema del tenant, consultar la tabla payments por payment_token
+	ctxTenant := context.WithValue(ctx, "schema", tokenRegistry.SchemaName)
+	tokenStr := map[string]interface{}{"payment_token": token}
+	resultPay, err := s.paymentRepo.Get(ctxTenant, tokenStr, nil, nil)
+	if err != nil || len(resultPay) == 0 {
+		return "", fmt.Errorf("pago no encontrado en payments con payment_token: %s", token)
+	}
+
+	paymentResult, ok := resultPay[0].(models.PaymentListResponse)
+	if !ok || len(paymentResult.Items) == 0 {
+		return "", fmt.Errorf("pago no encontrado en payments")
+	}
+	paymentResponse := paymentResult.Items[0]
+
+	// 3. Con company_id del pago, buscar en company con schema global
+	companyFilter := map[string]interface{}{"id": paymentResponse.CompanyId, "schema": "global"}
+	companyResult, err := s.companyRepo.Get(ctxGlobal, companyFilter, nil, nil)
+	if err != nil || len(companyResult) == 0 {
+		return "", fmt.Errorf("empresa no encontrada con id: %d", paymentResponse.CompanyId)
+	}
+
+	companyList, ok := companyResult[0].(models.CompanyListResponse)
+	if !ok || len(companyList.Items) == 0 {
+		return "", fmt.Errorf("empresa no encontrada")
+	}
+	company := companyList.Items[0]
+	subdominio := strings.TrimSpace(company.Subdominio)
+
+	// 4. Construir la URL de redirección: https://{subdominio}.tourmanager.cl/flowpagos/returnflow?token={token}
+	var redirectURL string
+	if strings.Contains(subdominio, ".tourmanager.cl") {
+		redirectURL = fmt.Sprintf("https://%s/flowpagos/returnflow?token=%s", subdominio, url.QueryEscape(token))
+	} else if subdominio != "" {
+		redirectURL = fmt.Sprintf("https://%s.tourmanager.cl/flowpagos/returnflow?token=%s", subdominio, url.QueryEscape(token))
+	} else {
+		redirectURL = fmt.Sprintf("https://tourmanager.cl/flowpagos/returnflow?token=%s", url.QueryEscape(token))
+	}
+
+	return redirectURL, nil
+}
+
