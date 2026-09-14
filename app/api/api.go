@@ -194,6 +194,7 @@ func (a *api) Run(ctx context.Context, cancel context.CancelFunc) func() error {
 		handlers.SetCompanyRoutes(ctx, a.config, router, a.services.company)
 		handlers.SetAuthRoutes(ctx, a.config, router, a.services.company, a.services.users, a.services.curso, a.services.sale)
 		handlers.SetEmailRoutes(ctx, a.config, router)
+		handlers.SetFlowRoutes(ctx, a.config, router, a.services.flow)
 		router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 		// ==========================================
@@ -226,7 +227,6 @@ func (a *api) Run(ctx context.Context, cancel context.CancelFunc) func() error {
 		handlers.SetPaymentsRoutes(ctx, a.config, router, a.services.payments)
 		handlers.SetPaymentInstallmentsRoutes(ctx, a.config, router, a.services.paymentInstallments)
 		handlers.SetContratoRoutes(ctx, a.config, router, a.services.contrato)
-		handlers.SetFlowRoutes(ctx, a.config, router, a.services.flow)
 		handlers.SetSchemaRegistryRoutes(ctx, a.config, router, a.services.schemaRegistry)
 		handlers.SetMpagoRoutes(ctx, a.config, router, a.services.mpago)
 
