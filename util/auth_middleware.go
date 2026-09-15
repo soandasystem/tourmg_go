@@ -17,7 +17,7 @@ func JWTAuthMiddleware() gin.HandlerFunc {
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Falta el token de autorización"})
 			return
 		}
-
+		
 		tokenString := strings.TrimPrefix(authHeader, "Bearer ")
 
 		// Parsear y validar el token usando la estructura de CustomClaims

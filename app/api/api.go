@@ -10,10 +10,10 @@ import (
 	"tourmanager/config"
 	"tourmanager/core/ports"
 	"tourmanager/core/services"
+	_ "tourmanager/docs"
 	"tourmanager/infrastructure/b2"
 	"tourmanager/infrastructure/postgres"
 	"tourmanager/util"
-	_ "tourmanager/docs"
 
 	"github.com/antoniomarfa/hexatools/infrastructure/middleware"
 
@@ -180,6 +180,20 @@ func (a *api) Run(ctx context.Context, cancel context.CancelFunc) func() error {
 
 		// Configurar CORS globalmente
 		router.Use(middleware.CORSMiddleware())
+
+		//Habilitar respuesta 505 method Not allowed
+		router.HandleMethodNotAllowed = true
+		router.NoMethod(func(c *gin.Context) {
+			c.JSON(http.StatusMethodNotAllowed, gin.H{
+				"error": "Método HTTP no permitido para esta ruta",
+			})
+		})
+
+		router.NoRoute(func(c *gin.Context) {
+			c.JSON(http.StatusNotFound, gin.H{
+				"error": "Ruta no encontrada",
+			})
+		})
 
 		//asigna el schema a trabajar
 		router.Use(util.SchemaMiddleware())
