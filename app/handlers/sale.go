@@ -20,6 +20,7 @@ func SetSaleRoutes(ctx context.Context, cfg config.Config, r *gin.Engine, p port
 
 	r.POST("/api/v3.5/sale", createSale(ctx, cfg, p))
 	r.GET("/api/v3.5/sale", getAllSale(ctx, cfg, p))
+	r.GET("/api/v3.5/sale/:page", getAllSalePage(ctx, cfg, p))
 	r.GET("/api/v3.5/sale/informe", getInfSale(ctx, cfg, p))
 	r.GET("/api/v3.5/sale/:id", getSaleByID(ctx, cfg, p))
 	r.PATCH("/api/v3.5/sale/:id", updateSale(ctx, cfg, p))
@@ -158,6 +159,40 @@ func getAllSale(ctx context.Context, cfg config.Config, p ports.SaleService) gin
 
 		// Enviar solo los items en el wrapper de éxito
 		response := util.NewSuccessResponse(result.Items, http.StatusOK)
+		c.JSON(response.StatusCode, response)
+	}
+}
+
+// @Summary Get one sale by page
+// @Description Gets one sale by page
+// @Tags sale
+// @Success 200 {array} models.SaleResp "OK"
+// @Failure 400 {object} object
+// @Failure 401 {object} object
+// @Failure 408 {object} object
+// @Failure 500 {object} object
+// @Router /api/v3.5/sale [get]
+func getAllSalePage(ctx context.Context, cfg config.Config, p ports.SaleService) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		// El ctx ya tiene timeout + schema
+		ctx := c.Request.Context()
+
+		page, err := strconv.Atoi(c.Param("page"))
+		if err != nil {
+			response := util.NewErrorResponse(err, http.StatusInternalServerError)
+			c.JSON(response.StatusCode, response)
+			return
+		}
+
+		result, err := p.GetAllPage(ctx, page)
+		if err != nil {
+			response := util.NewErrorResponse(err, http.StatusInternalServerError)
+			c.JSON(response.StatusCode, response)
+			return
+		}
+
+		// Enviar solo los items en el wrapper de éxito
+		response := util.NewSuccessResponsePage(result.TotalCount, result.Page, result.PageSize, result.TotalPages, http.StatusOK, result.Items)
 		c.JSON(response.StatusCode, response)
 	}
 }

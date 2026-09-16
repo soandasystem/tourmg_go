@@ -15,7 +15,7 @@ import (
 // rolesService adapter of an user service
 type saleService struct {
 	config     config.Config
-	repository ports.CompanyRepository
+	repository ports.SaleRepository
 }
 
 // NewURolesService creates a new user service
@@ -84,6 +84,10 @@ func (p *saleService) GetAll(ctx context.Context, filter map[string]interface{})
 	}
 
 	return &response, nil
+}
+
+func (p *saleService) GetAllPage(ctx context.Context, page int) (*models.SaleListResponse, error) {
+	return p.repository.GetAllPage(ctx, page)
 }
 
 // GetByID user
