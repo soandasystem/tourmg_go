@@ -20,7 +20,7 @@ func SetSaleRoutes(ctx context.Context, cfg config.Config, r *gin.Engine, p port
 
 	r.POST("/api/v3.5/sale", createSale(ctx, cfg, p))
 	r.GET("/api/v3.5/sale", getAllSale(ctx, cfg, p))
-	r.GET("/api/v3.5/sale/:page", getAllSalePage(ctx, cfg, p))
+	r.GET("/api/v3.5/sale/page/:page", getAllSalePage(ctx, cfg, p))
 	r.GET("/api/v3.5/sale/informe", getInfSale(ctx, cfg, p))
 	r.GET("/api/v3.5/sale/:id", getSaleByID(ctx, cfg, p))
 	r.PATCH("/api/v3.5/sale/:id", updateSale(ctx, cfg, p))
