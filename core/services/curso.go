@@ -40,6 +40,11 @@ func (p *cursoService) Create(ctx context.Context, curso models.CreateCursoReq) 
 
 	return insertedID, err
 }
+
+func (p *cursoService) GetAllCursoPage(ctx context.Context, page int) (*models.CursoListResponse, error) {
+	return p.repository.GetAllCursoPage(ctx, page)
+}
+
 func (p *cursoService) GetInforme(ctx context.Context, filter map[string]interface{}) (*models.CursoInfListResponse, error) {
 	// Obtiene los roles desde el repositorio
 	result, err := p.repository.GetInf(ctx, filter, nil, nil)

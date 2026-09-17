@@ -10,12 +10,14 @@ import (
 // UserRepositoy interface
 type CursoRepository interface {
 	repository.Repository
+	GetAllCursoPage(ctx context.Context, page int) (*models.CursoListResponse, error)
 }
 
 // SaleService interface
 type CursoService interface {
 	Create(ctx context.Context, curso models.CreateCursoReq) (string, error)
 	GetAll(ctx context.Context, filter map[string]interface{}) (*models.CursoListResponse, error)
+	GetAllCursoPage(ctx context.Context, page int) (*models.CursoListResponse, error)
 	GetInforme(ctx context.Context, filter map[string]interface{}) (*models.CursoInfListResponse, error)
 	GetByID(ctx context.Context, ID string) (models.CursoResp, error)
 	Update(ctx context.Context, ID string, curso models.UpdateCursoReq) error

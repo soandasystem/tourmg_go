@@ -171,7 +171,7 @@ func getAllSale(ctx context.Context, cfg config.Config, p ports.SaleService) gin
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
-// @Router /api/v3.5/sale [get]
+// @Router /api/v3.5/sale/page/:page [get]
 func getAllSalePage(ctx context.Context, cfg config.Config, p ports.SaleService) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// El ctx ya tiene timeout + schema

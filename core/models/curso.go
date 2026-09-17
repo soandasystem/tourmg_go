@@ -77,6 +77,9 @@ func (CursoResp) TableName() string {
 type CursoListResponse struct {
 	Items      []CursoResp `json:"items"`
 	TotalCount int64       `json:"totalCount"`
+	Page       int         `json:"page"`
+	TotalPages int64       `json:"totalPages"`
+	PageSize   int         `json:"pageSize"`
 }
 
 // Create---Req  request struct

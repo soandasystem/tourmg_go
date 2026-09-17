@@ -352,3 +352,51 @@ func (s *cursoRepository) Delete(ctx context.Context, ID string, filter map[stri
 
 	return nil
 }
+
+func (s *cursoRepository) GetAllCursoPage(ctx context.Context, page int) (*models.CursoListResponse, error) {
+	var registro []models.CursoResp
+	var totalCount int64
+
+	DB := infrastructure.GetDBWithSchema(ctx, s.DB)
+
+	query := DB.WithContext(ctx).Model(&models.CursoResp{})
+
+	if err := query.Count(&totalCount).Error; err != nil {
+		return nil, err
+	}
+
+	// Aplica paginación si 'skip' y 'take' están definidos
+	skip := (page - 1) * 50
+	take := 50
+
+	// Total pages
+	totalPages := (totalCount + int64(take) - 1) / int64(take)
+
+	if page > int(totalPages) {
+		page = int(totalPages)
+	}
+	if page <= 0 {
+		page = 1
+	}
+
+	query = query.Offset(skip).Limit(take)
+
+	// Ejecuta la consulta
+	if err := query.Order("id ASC").Find(&registro).Error; err != nil {
+		return nil, err
+	}
+
+	if len(registro) < 1 {
+		return nil, wrappers.NewNonExistentErr(sql.ErrNoRows)
+	}
+
+	// Mapear a la estructura de respuesta
+	response := models.CursoListResponse{
+		Items:      registro,
+		TotalCount: totalCount,
+		Page:       page,
+		TotalPages: totalPages,
+		PageSize:   take,
+	}
+	return &response, nil
+}

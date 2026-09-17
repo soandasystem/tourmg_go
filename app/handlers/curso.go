@@ -21,6 +21,7 @@ func SetCursoRoutes(ctx context.Context, cfg config.Config, r *gin.Engine, p por
 
 	r.POST("/api/v3.5/curso", createCurso(p))
 	r.GET("/api/v3.5/curso", getAllCurso(p))
+	r.GET("/api/v3.5/curso/page/:page", getAllCursoPage(p))
 	r.GET("/api/v3.5/curso/informe", getInfCurso(p))
 	r.GET("/api/v3.5/curso/:id", getCursoByID(p))
 	r.PATCH("/api/v3.5/curso/:id", updateCurso(p))
@@ -159,6 +160,41 @@ func getAllCurso(p ports.CursoService) gin.HandlerFunc {
 		// Enviar solo los items en el wrapper de éxito
 		response := util.NewSuccessResponse(result.Items, http.StatusOK)
 		c.JSON(response.StatusCode, response)
+	}
+}
+
+// @Summary Get one curso by page
+// @Description Gets one curso by page
+// @Tags curso
+// @Success 200 {array} models.CursoResp "OK"
+// @Failure 400 {object} object
+// @Failure 401 {object} object
+// @Failure 408 {object} object
+// @Failure 500 {object} object
+// @Router /api/v3.5/curso/page/:page [get]
+func getAllCursoPage(p ports.CursoService) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		// El ctx ya tiene timeout + schema
+		ctx := c.Request.Context()
+
+		page, err := strconv.Atoi(c.Param("page"))
+		if err != nil {
+			response := util.NewErrorResponse(err, http.StatusInternalServerError)
+			c.JSON(response.StatusCode, response)
+			return
+		}
+
+		result, err := p.GetAllCursoPage(ctx, page)
+		if err != nil {
+			response := util.NewErrorResponse(err, http.StatusInternalServerError)
+			c.JSON(response.StatusCode, response)
+			return
+		}
+
+		// Enviar solo los items en el wrapper de éxito
+		response := util.NewSuccessResponsePage(result.TotalCount, result.Page, result.PageSize, result.TotalPages, http.StatusOK, result.Items)
+		c.JSON(response.StatusCode, response)
+
 	}
 }
 
