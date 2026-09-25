@@ -34,6 +34,7 @@ func SetPaymentInstallmentsRoutes(ctx context.Context, cfg config.Config, r *gin
 // @Failure 400 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/payment_installment [post]
 func createPaymentInstallment(ctx context.Context, cfg config.Config, p ports.PaymentInstallmentService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -81,6 +82,7 @@ func createPaymentInstallment(ctx context.Context, cfg config.Config, p ports.Pa
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/payment_installment/informe [get]
 func getInfPaymentInstallment(ctx context.Context, cfg config.Config, p ports.PaymentInstallmentService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -125,6 +127,7 @@ func getInfPaymentInstallment(ctx context.Context, cfg config.Config, p ports.Pa
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/payment_installment [get]
 func getAllPaymentInstallment(ctx context.Context, cfg config.Config, p ports.PaymentInstallmentService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -169,6 +172,7 @@ func getAllPaymentInstallment(ctx context.Context, cfg config.Config, p ports.Pa
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/payment_installment/{id} [get]
 func getPaymentInstallmentByID(ctx context.Context, cfg config.Config, p ports.PaymentInstallmentService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -198,6 +202,7 @@ func getPaymentInstallmentByID(ctx context.Context, cfg config.Config, p ports.P
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/payment_installment/{id} [patch]
 func updatePaymentInstallment(ctx context.Context, cfg config.Config, p ports.PaymentInstallmentService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -242,6 +247,7 @@ func updatePaymentInstallment(ctx context.Context, cfg config.Config, p ports.Pa
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/payment_installment/{id} [delete]
 func deletePaymentInstallment(ctx context.Context, cfg config.Config, p ports.PaymentInstallmentService) gin.HandlerFunc {
 	return func(c *gin.Context) {

@@ -33,6 +33,7 @@ func SetRegionRoutes(ctx context.Context, cfg config.Config, r *gin.Engine, p po
 // @Failure 400 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/region [post]
 func createRegion(p ports.RegionService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -80,6 +81,7 @@ func createRegion(p ports.RegionService) gin.HandlerFunc {
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/region [get]
 func getAllRegion(p ports.RegionService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -111,6 +113,7 @@ func getAllRegion(p ports.RegionService) gin.HandlerFunc {
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/region/{id} [get]
 func getRegionByID(p ports.RegionService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -139,6 +142,7 @@ func getRegionByID(p ports.RegionService) gin.HandlerFunc {
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/region/{id} [patch]
 func updateRegion(p ports.RegionService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -183,6 +187,7 @@ func updateRegion(p ports.RegionService) gin.HandlerFunc {
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/region/{id} [delete]
 func deleteRegion(p ports.RegionService) gin.HandlerFunc {
 	return func(c *gin.Context) {

@@ -34,6 +34,7 @@ func SetQuotesRoutes(ctx context.Context, cfg config.Config, r *gin.Engine, p po
 // @Failure 400 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/sale [post]
 func createQuotes(p ports.QuotesService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -81,6 +82,7 @@ func createQuotes(p ports.QuotesService) gin.HandlerFunc {
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/ingreso [get]
 func getInfQuotes(p ports.QuotesService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -126,6 +128,7 @@ func getInfQuotes(p ports.QuotesService) gin.HandlerFunc {
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/sale [get]
 func getAllQuotes(p ports.QuotesService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -171,6 +174,7 @@ func getAllQuotes(p ports.QuotesService) gin.HandlerFunc {
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/sale/{id} [get]
 func getQuotesByID(p ports.QuotesService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -200,6 +204,7 @@ func getQuotesByID(p ports.QuotesService) gin.HandlerFunc {
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/users/{id} [patch]
 func updateQuotes(p ports.QuotesService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -244,6 +249,7 @@ func updateQuotes(p ports.QuotesService) gin.HandlerFunc {
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/sale/{id} [delete]
 func deleteQuotes(p ports.QuotesService) gin.HandlerFunc {
 	return func(c *gin.Context) {

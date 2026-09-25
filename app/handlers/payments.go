@@ -34,6 +34,7 @@ func SetPaymentsRoutes(ctx context.Context, cfg config.Config, r *gin.Engine, p 
 // @Failure 400 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/installment [post]
 func createPayment(ctx context.Context, cfg config.Config, p ports.PaymentService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -81,6 +82,7 @@ func createPayment(ctx context.Context, cfg config.Config, p ports.PaymentServic
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/payment [get]
 func getInfPayment(ctx context.Context, cfg config.Config, p ports.PaymentService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -125,6 +127,7 @@ func getInfPayment(ctx context.Context, cfg config.Config, p ports.PaymentServic
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/payment [get]
 func getAllPayment(ctx context.Context, cfg config.Config, p ports.PaymentService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -169,6 +172,7 @@ func getAllPayment(ctx context.Context, cfg config.Config, p ports.PaymentServic
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/payment/{id} [get]
 func getPaymentByID(ctx context.Context, cfg config.Config, p ports.PaymentService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -198,6 +202,7 @@ func getPaymentByID(ctx context.Context, cfg config.Config, p ports.PaymentServi
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/payment/{id} [patch]
 func updatePayment(ctx context.Context, cfg config.Config, p ports.PaymentService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -242,6 +247,7 @@ func updatePayment(ctx context.Context, cfg config.Config, p ports.PaymentServic
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/payment/{id} [delete]
 func deletePayment(ctx context.Context, cfg config.Config, p ports.PaymentService) gin.HandlerFunc {
 	return func(c *gin.Context) {

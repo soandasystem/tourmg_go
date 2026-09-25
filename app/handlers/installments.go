@@ -34,6 +34,7 @@ func SetInstallmentsRoutes(ctx context.Context, cfg config.Config, r *gin.Engine
 // @Failure 400 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/installment [post]
 func createInstallment(ctx context.Context, cfg config.Config, p ports.InstallmentsService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -81,6 +82,7 @@ func createInstallment(ctx context.Context, cfg config.Config, p ports.Installme
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/ingreso [get]
 func getInfInstallment(ctx context.Context, cfg config.Config, p ports.InstallmentsService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -125,6 +127,7 @@ func getInfInstallment(ctx context.Context, cfg config.Config, p ports.Installme
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/installment [get]
 func getAllInstallment(ctx context.Context, cfg config.Config, p ports.InstallmentsService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -169,6 +172,7 @@ func getAllInstallment(ctx context.Context, cfg config.Config, p ports.Installme
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/installment/{id} [get]
 func getInstallmentByID(ctx context.Context, cfg config.Config, p ports.InstallmentsService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -198,6 +202,7 @@ func getInstallmentByID(ctx context.Context, cfg config.Config, p ports.Installm
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/installment/{id} [patch]
 func updateInstallment(ctx context.Context, cfg config.Config, p ports.InstallmentsService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -242,6 +247,7 @@ func updateInstallment(ctx context.Context, cfg config.Config, p ports.Installme
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/installment/{id} [delete]
 func deleteInstallment(ctx context.Context, cfg config.Config, p ports.InstallmentsService) gin.HandlerFunc {
 	return func(c *gin.Context) {

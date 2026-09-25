@@ -35,6 +35,7 @@ func SetProgramacRoutes(ctx context.Context, cfg config.Config, r *gin.Engine, p
 // @Failure 400 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/program [post]
 func createProgramac(p ports.ProgramacService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -82,6 +83,7 @@ func createProgramac(p ports.ProgramacService) gin.HandlerFunc {
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/program [get]
 func getAllProgramac(p ports.ProgramacService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -125,6 +127,7 @@ func getAllProgramac(p ports.ProgramacService) gin.HandlerFunc {
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/program/{id} [get]
 func getProgramacByID(p ports.ProgramacService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -153,6 +156,7 @@ func getProgramacByID(p ports.ProgramacService) gin.HandlerFunc {
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/program/{id} [patch]
 func updateProgramac(p ports.ProgramacService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -197,6 +201,7 @@ func updateProgramac(p ports.ProgramacService) gin.HandlerFunc {
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/program/{id} [delete]
 func deleteProgramac(p ports.ProgramacService) gin.HandlerFunc {
 	return func(c *gin.Context) {

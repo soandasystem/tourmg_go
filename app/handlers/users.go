@@ -34,6 +34,7 @@ func SetUsersRoutes(ctx context.Context, cfg config.Config, r *gin.Engine, p por
 // @Failure 400 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/users [post]
 func createUsers(p ports.UsersService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -81,6 +82,7 @@ func createUsers(p ports.UsersService) gin.HandlerFunc {
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/users [get]
 func getAllUsers(p ports.UsersService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -127,6 +129,7 @@ func getAllUsers(p ports.UsersService) gin.HandlerFunc {
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/users/{id} [get]
 func getUsersByID(p ports.UsersService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -156,6 +159,7 @@ func getUsersByID(p ports.UsersService) gin.HandlerFunc {
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/users/{id} [patch]
 func updateUsers(p ports.UsersService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -200,6 +204,7 @@ func updateUsers(p ports.UsersService) gin.HandlerFunc {
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/users/{id} [delete]
 func deleteUsers(p ports.UsersService) gin.HandlerFunc {
 	return func(c *gin.Context) {

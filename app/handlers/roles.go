@@ -33,6 +33,7 @@ func SetRolesRoutes(ctx context.Context, cfg config.Config, r *gin.Engine, p por
 // @Failure 400 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/roles [post]
 func createRoles(p ports.RolesService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -80,6 +81,7 @@ func createRoles(p ports.RolesService) gin.HandlerFunc {
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/roles [get]
 func getAllRoles(p ports.RolesService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -126,6 +128,7 @@ func getAllRoles(p ports.RolesService) gin.HandlerFunc {
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/roles/{id} [get]
 func getRolesByID(p ports.RolesService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -154,6 +157,7 @@ func getRolesByID(p ports.RolesService) gin.HandlerFunc {
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/roles/{id} [patch]
 func updateRoles(p ports.RolesService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -198,6 +202,7 @@ func updateRoles(p ports.RolesService) gin.HandlerFunc {
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/roles/{id} [delete]
 func deleteRoles(p ports.RolesService) gin.HandlerFunc {
 	return func(c *gin.Context) {

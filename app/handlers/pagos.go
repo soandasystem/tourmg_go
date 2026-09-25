@@ -34,6 +34,7 @@ func SetPagosRoutes(ctx context.Context, cfg config.Config, r *gin.Engine, p por
 // @Failure 400 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/pagos [post]
 func createPagos(ctx context.Context, cfg config.Config, p ports.PagosService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -81,6 +82,7 @@ func createPagos(ctx context.Context, cfg config.Config, p ports.PagosService) g
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/pagos [get]
 func getInfPagos(ctx context.Context, cfg config.Config, p ports.PagosService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -125,6 +127,7 @@ func getInfPagos(ctx context.Context, cfg config.Config, p ports.PagosService) g
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/pagos [get]
 func getAllPagos(ctx context.Context, cfg config.Config, p ports.PagosService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -169,6 +172,7 @@ func getAllPagos(ctx context.Context, cfg config.Config, p ports.PagosService) g
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/pagos/{id} [get]
 func getPagosByID(ctx context.Context, cfg config.Config, p ports.PagosService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -198,6 +202,7 @@ func getPagosByID(ctx context.Context, cfg config.Config, p ports.PagosService) 
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/users/{id} [patch]
 func updatePagos(ctx context.Context, cfg config.Config, p ports.PagosService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -242,6 +247,7 @@ func updatePagos(ctx context.Context, cfg config.Config, p ports.PagosService) g
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/pagos/{id} [delete]
 func deletePagos(ctx context.Context, cfg config.Config, p ports.PagosService) gin.HandlerFunc {
 	return func(c *gin.Context) {

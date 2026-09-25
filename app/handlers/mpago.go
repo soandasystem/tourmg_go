@@ -31,6 +31,7 @@ func SetMpagoRoutes(ctx context.Context, cfg config.Config, r *gin.Engine, p por
 // @Success 200 {object} models.InitMPagoResp "OK"
 // @Failure 400 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/iniciopagomp [post]
 func initMpagoPayment(ctx context.Context, cfg config.Config, p ports.MPagoService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -70,6 +71,7 @@ func initMpagoPayment(ctx context.Context, cfg config.Config, p ports.MPagoServi
 // @Success 200 {object} object
 // @Failure 400 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/mpago/webhook [post]
 func mpagoWebhook(ctx context.Context, cfg config.Config, p ports.MPagoService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -116,6 +118,7 @@ func mpagoWebhook(ctx context.Context, cfg config.Config, p ports.MPagoService) 
 // @Param preference_id query string false "ID de la preferencia en Mercado Pago"
 // @Success 302 {string} string "Redirección a /mpagopagos/resultado"
 // @Failure 400 {object} object
+// @Security Bearer
 // @Router /api/v3.5/mpago/verificar [get]
 func mpagoRedirect(ctx context.Context, cfg config.Config, p ports.MPagoService) gin.HandlerFunc {
 	return func(c *gin.Context) {

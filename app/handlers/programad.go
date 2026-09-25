@@ -37,6 +37,7 @@ func SetProgramadRoutes(ctx context.Context, cfg config.Config, r *gin.Engine, p
 // @Failure 400 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/program [post]
 func createProgramad(p ports.ProgramadService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -84,6 +85,7 @@ func createProgramad(p ports.ProgramadService) gin.HandlerFunc {
 // @Failure 400 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /v2.0/program [post]
 func createManyProgramad(p ports.ProgramadService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -132,6 +134,7 @@ func createManyProgramad(p ports.ProgramadService) gin.HandlerFunc {
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/program [get]
 func getAllProgramad(p ports.ProgramadService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -176,6 +179,7 @@ func getAllProgramad(p ports.ProgramadService) gin.HandlerFunc {
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/program/{id} [get]
 func getProgramadByID(p ports.ProgramadService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -204,6 +208,7 @@ func getProgramadByID(p ports.ProgramadService) gin.HandlerFunc {
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/program/{id} [patch]
 func updateProgramad(p ports.ProgramadService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -248,6 +253,7 @@ func updateProgramad(p ports.ProgramadService) gin.HandlerFunc {
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/program/{id} [delete]
 func deleteProgramad(p ports.ProgramadService) gin.HandlerFunc {
 	return func(c *gin.Context) {

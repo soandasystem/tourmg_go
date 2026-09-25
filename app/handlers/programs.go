@@ -35,6 +35,7 @@ func SetProgramsRoutes(ctx context.Context, cfg config.Config, r *gin.Engine, p 
 // @Failure 400 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object|
+// @Security Bearer
 // @Router /api/v3.5/program [post]
 func createPrograms(p ports.ProgramsService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -82,6 +83,7 @@ func createPrograms(p ports.ProgramsService) gin.HandlerFunc {
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/program [get]
 func getAllPrograms(p ports.ProgramsService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -125,6 +127,7 @@ func getAllPrograms(p ports.ProgramsService) gin.HandlerFunc {
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/program/{id} [get]
 func getProgramsByID(p ports.ProgramsService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -153,6 +156,7 @@ func getProgramsByID(p ports.ProgramsService) gin.HandlerFunc {
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/program/{id} [patch]
 func updatePrograms(p ports.ProgramsService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -197,6 +201,7 @@ func updatePrograms(p ports.ProgramsService) gin.HandlerFunc {
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/program/{id} [delete]
 func deletePrograms(p ports.ProgramsService) gin.HandlerFunc {
 	return func(c *gin.Context) {

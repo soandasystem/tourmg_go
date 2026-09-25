@@ -23,6 +23,7 @@ func SetUploadRoutes(ctx context.Context, cfg config.Config, r *gin.Engine, p po
 // @Success 202 {object} object
 // @Failure 400 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/upload [post]
 func uploadFile(p ports.UploadService) gin.HandlerFunc {
 	return func(c *gin.Context) {

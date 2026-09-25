@@ -33,6 +33,7 @@ func SetCountryRoutes(ctx context.Context, cfg config.Config, r *gin.Engine, p p
 // @Failure 400 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/Country [post]
 func createCountry(p ports.CountryService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -80,6 +81,7 @@ func createCountry(p ports.CountryService) gin.HandlerFunc {
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/Country [get]
 func getAllCountry(p ports.CountryService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -120,6 +122,7 @@ func getAllCountry(p ports.CountryService) gin.HandlerFunc {
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/Country{id} [get]
 func getCountryByID(p ports.CountryService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -147,6 +150,7 @@ func getCountryByID(p ports.CountryService) gin.HandlerFunc {
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/Country/{id} [patch]
 func updateCountry(p ports.CountryService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -190,6 +194,7 @@ func updateCountry(p ports.CountryService) gin.HandlerFunc {
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/Country/{id} [delete]
 func deleteCountry(p ports.CountryService) gin.HandlerFunc {
 	return func(c *gin.Context) {

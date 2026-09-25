@@ -17,6 +17,11 @@ const docTemplate = `{
     "paths": {
         "/api/v3.5/Airports": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets all the Airports",
                 "tags": [
                     "Airports"
@@ -59,6 +64,11 @@ const docTemplate = `{
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Creates a new Airports",
                 "tags": [
                     "Airports"
@@ -105,6 +115,11 @@ const docTemplate = `{
         },
         "/api/v3.5/Airports/informe": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets all the Airports",
                 "tags": [
                     "Airports"
@@ -149,6 +164,11 @@ const docTemplate = `{
         },
         "/api/v3.5/Airports/{id}": {
             "delete": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Delete a Airports",
                 "tags": [
                     "Airports"
@@ -194,6 +214,11 @@ const docTemplate = `{
                 }
             },
             "patch": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Updates a Airports",
                 "tags": [
                     "Airports"
@@ -250,6 +275,11 @@ const docTemplate = `{
         },
         "/api/v3.5/Airports:{id}": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets a Airports by ID",
                 "tags": [
                     "Airports"
@@ -300,6 +330,11 @@ const docTemplate = `{
         },
         "/api/v3.5/Colegios": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets all the Colegios",
                 "tags": [
                     "Colegios"
@@ -344,6 +379,11 @@ const docTemplate = `{
         },
         "/api/v3.5/Colegios/{id}": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets a Colegios by ID",
                 "tags": [
                     "Colegios"
@@ -392,6 +432,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Delete a Colegios",
                 "tags": [
                     "Colegios"
@@ -439,6 +484,11 @@ const docTemplate = `{
         },
         "/api/v3.5/Country": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets all the Country",
                 "tags": [
                     "Country"
@@ -481,6 +531,11 @@ const docTemplate = `{
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Creates a new Country",
                 "tags": [
                     "Country"
@@ -527,6 +582,11 @@ const docTemplate = `{
         },
         "/api/v3.5/Country/{id}": {
             "delete": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Delete a Country",
                 "tags": [
                     "Country"
@@ -572,6 +632,11 @@ const docTemplate = `{
                 }
             },
             "patch": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Updates a Country",
                 "tags": [
                     "Country"
@@ -628,6 +693,11 @@ const docTemplate = `{
         },
         "/api/v3.5/Country{id}": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets a Country by ID",
                 "tags": [
                     "Country"
@@ -678,6 +748,11 @@ const docTemplate = `{
         },
         "/api/v3.5/Gateways": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets all the Gateways",
                 "tags": [
                     "Gateways"
@@ -720,6 +795,11 @@ const docTemplate = `{
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Creates a new Gateways",
                 "tags": [
                     "colegion"
@@ -766,6 +846,11 @@ const docTemplate = `{
         },
         "/api/v3.5/Gateways/{id}": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets a Gateways by ID",
                 "tags": [
                     "Gateways"
@@ -814,6 +899,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Delete a Gateways",
                 "tags": [
                     "Gateways"
@@ -861,6 +951,11 @@ const docTemplate = `{
         },
         "/api/v3.5/Gatewaysc": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets all the Gatewaysc",
                 "tags": [
                     "Gatewaysc"
@@ -903,6 +998,11 @@ const docTemplate = `{
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Creates a new Gatewaysc",
                 "tags": [
                     "colegion"
@@ -949,6 +1049,11 @@ const docTemplate = `{
         },
         "/api/v3.5/Gatewaysc/{id}": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets a Gatewaysc by ID",
                 "tags": [
                     "Gatewaysc"
@@ -997,6 +1102,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Delete a Gatewaysc",
                 "tags": [
                     "Gatewaysc"
@@ -1044,6 +1154,11 @@ const docTemplate = `{
         },
         "/api/v3.5/colegios": {
             "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Creates a new colegios",
                 "tags": [
                     "colegion"
@@ -1329,6 +1444,11 @@ const docTemplate = `{
         },
         "/api/v3.5/comunas": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets all the comunas",
                 "tags": [
                     "comunas"
@@ -1371,6 +1491,11 @@ const docTemplate = `{
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Creates a new comunas",
                 "tags": [
                     "comunas"
@@ -1417,6 +1542,11 @@ const docTemplate = `{
         },
         "/api/v3.5/comunas/{id}": {
             "delete": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Delete a comunas",
                 "tags": [
                     "comunas"
@@ -1462,6 +1592,11 @@ const docTemplate = `{
                 }
             },
             "patch": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Updates a comunas",
                 "tags": [
                     "comunas"
@@ -1518,6 +1653,11 @@ const docTemplate = `{
         },
         "/api/v3.5/comunas{id}": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets a comunas by ID",
                 "tags": [
                     "comunas"
@@ -1568,6 +1708,11 @@ const docTemplate = `{
         },
         "/api/v3.5/contrato": {
             "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Generates a temporary DOCX with the replaced placeholders from the request",
                 "tags": [
                     "contrato"
@@ -1608,6 +1753,11 @@ const docTemplate = `{
         },
         "/api/v3.5/contrato/firma": {
             "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Creates the final PDF by filling the DOCX data and injecting the signature",
                 "tags": [
                     "contrato"
@@ -1648,6 +1798,11 @@ const docTemplate = `{
         },
         "/api/v3.5/curso": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets all the curso",
                 "tags": [
                     "curso"
@@ -1690,6 +1845,11 @@ const docTemplate = `{
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Creates a new curso",
                 "tags": [
                     "colegion"
@@ -1734,8 +1894,62 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v3.5/curso/page/:page": {
+            "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "description": "Gets one curso by page",
+                "tags": [
+                    "curso"
+                ],
+                "summary": "Get one curso by page",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.CursoResp"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "408": {
+                        "description": "Request Timeout",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v3.5/curso/{id}": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets a curso by ID",
                 "tags": [
                     "curso"
@@ -1784,6 +1998,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Delete a curso",
                 "tags": [
                     "curso"
@@ -1877,6 +2096,11 @@ const docTemplate = `{
         },
         "/api/v3.5/fmedica": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets all the fmedica",
                 "tags": [
                     "fmedica"
@@ -1919,6 +2143,11 @@ const docTemplate = `{
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Creates a new fmedica",
                 "tags": [
                     "colegion"
@@ -1965,6 +2194,11 @@ const docTemplate = `{
         },
         "/api/v3.5/fmedica/{id}": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets a fmedica by ID",
                 "tags": [
                     "fmedica"
@@ -2013,6 +2247,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Delete a fmedica",
                 "tags": [
                     "fmedica"
@@ -2058,6 +2297,11 @@ const docTemplate = `{
                 }
             },
             "patch": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Updates a fmedica",
                 "tags": [
                     "fmedica"
@@ -2154,6 +2398,11 @@ const docTemplate = `{
         },
         "/api/v3.5/ingreso": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets all the ingreso",
                 "tags": [
                     "ingreso"
@@ -2196,6 +2445,11 @@ const docTemplate = `{
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Creates a new ingreso",
                 "tags": [
                     "ingreso"
@@ -2242,6 +2496,11 @@ const docTemplate = `{
         },
         "/api/v3.5/ingreso/{id}": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets a ingreso by ID",
                 "tags": [
                     "ingreso"
@@ -2290,6 +2549,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Delete a ingreso",
                 "tags": [
                     "ingreso"
@@ -2337,6 +2601,11 @@ const docTemplate = `{
         },
         "/api/v3.5/iniciopagomp": {
             "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Inicializa el pago a través de Mercado Pago y devuelve los datos de preferencia y clave pública",
                 "tags": [
                     "mpago"
@@ -2377,6 +2646,11 @@ const docTemplate = `{
         },
         "/api/v3.5/installment": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets all the installment",
                 "tags": [
                     "installment"
@@ -2419,6 +2693,11 @@ const docTemplate = `{
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Creates a new payment",
                 "tags": [
                     "payment"
@@ -2465,6 +2744,11 @@ const docTemplate = `{
         },
         "/api/v3.5/installment/{id}": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets a installment by ID",
                 "tags": [
                     "installment"
@@ -2513,6 +2797,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Delete a installment",
                 "tags": [
                     "installment"
@@ -2558,6 +2847,11 @@ const docTemplate = `{
                 }
             },
             "patch": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Updates a installment",
                 "tags": [
                     "installment"
@@ -2666,6 +2960,11 @@ const docTemplate = `{
         },
         "/api/v3.5/mpago/verificar": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Recibe el retorno del usuario desde Mercado Pago, verifica el pago y redirige a la pantalla de resultado",
                 "tags": [
                     "mpago"
@@ -2703,6 +3002,11 @@ const docTemplate = `{
         },
         "/api/v3.5/mpago/webhook": {
             "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Procesa las notificaciones webhook enviadas por Mercado Pago tras eventos de pago",
                 "consumes": [
                     "application/json"
@@ -2749,6 +3053,11 @@ const docTemplate = `{
         },
         "/api/v3.5/pagos": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets all the pagos",
                 "tags": [
                     "pagos"
@@ -2791,6 +3100,11 @@ const docTemplate = `{
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Creates a new pagos",
                 "tags": [
                     "pagos"
@@ -2837,6 +3151,11 @@ const docTemplate = `{
         },
         "/api/v3.5/pagos/{id}": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets a pagos by ID",
                 "tags": [
                     "pagos"
@@ -2885,6 +3204,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Delete a pagos",
                 "tags": [
                     "pagos"
@@ -2932,6 +3256,11 @@ const docTemplate = `{
         },
         "/api/v3.5/payment": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets all the payment",
                 "tags": [
                     "payment"
@@ -2976,6 +3305,11 @@ const docTemplate = `{
         },
         "/api/v3.5/payment/{id}": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets a payment by ID",
                 "tags": [
                     "payment"
@@ -3024,6 +3358,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Delete a payment",
                 "tags": [
                     "payment"
@@ -3069,6 +3408,11 @@ const docTemplate = `{
                 }
             },
             "patch": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Updates a payment",
                 "tags": [
                     "payment"
@@ -3125,6 +3469,11 @@ const docTemplate = `{
         },
         "/api/v3.5/payment_installment": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets all the payment_installment",
                 "tags": [
                     "payment_installment"
@@ -3167,6 +3516,11 @@ const docTemplate = `{
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Creates a new payment installment",
                 "tags": [
                     "payment_installment"
@@ -3213,6 +3567,11 @@ const docTemplate = `{
         },
         "/api/v3.5/payment_installment/informe": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets all the payment_installment",
                 "tags": [
                     "payment_installment"
@@ -3257,6 +3616,11 @@ const docTemplate = `{
         },
         "/api/v3.5/payment_installment/{id}": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets a payment_installment by ID",
                 "tags": [
                     "payment_installment"
@@ -3305,6 +3669,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Delete a payment_installment",
                 "tags": [
                     "payment_installment"
@@ -3350,6 +3719,11 @@ const docTemplate = `{
                 }
             },
             "patch": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Updates a payment_installment",
                 "tags": [
                     "payment_installment"
@@ -3406,6 +3780,11 @@ const docTemplate = `{
         },
         "/api/v3.5/program": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets all the program",
                 "tags": [
                     "program"
@@ -3448,6 +3827,11 @@ const docTemplate = `{
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Creates a new program",
                 "tags": [
                     "program"
@@ -3494,6 +3878,11 @@ const docTemplate = `{
         },
         "/api/v3.5/program/{id}": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets a program by ID",
                 "tags": [
                     "program"
@@ -3542,6 +3931,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Delete a program",
                 "tags": [
                     "program"
@@ -3587,6 +3981,11 @@ const docTemplate = `{
                 }
             },
             "patch": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Updates a program",
                 "tags": [
                     "program"
@@ -3643,6 +4042,11 @@ const docTemplate = `{
         },
         "/api/v3.5/region": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets all the region",
                 "tags": [
                     "region"
@@ -3685,6 +4089,11 @@ const docTemplate = `{
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Creates a new region",
                 "tags": [
                     "region"
@@ -3731,6 +4140,11 @@ const docTemplate = `{
         },
         "/api/v3.5/region/{id}": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets a region by ID",
                 "tags": [
                     "region"
@@ -3779,6 +4193,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Delete a region",
                 "tags": [
                     "region"
@@ -3824,6 +4243,11 @@ const docTemplate = `{
                 }
             },
             "patch": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Updates a region",
                 "tags": [
                     "region"
@@ -3932,6 +4356,11 @@ const docTemplate = `{
         },
         "/api/v3.5/roles": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets all the roles",
                 "tags": [
                     "roles"
@@ -3974,6 +4403,11 @@ const docTemplate = `{
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Creates a new roles",
                 "tags": [
                     "roles"
@@ -4020,6 +4454,11 @@ const docTemplate = `{
         },
         "/api/v3.5/roles/{id}": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets a roles by ID",
                 "tags": [
                     "roles"
@@ -4068,6 +4507,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Delete a roles",
                 "tags": [
                     "roles"
@@ -4113,6 +4557,11 @@ const docTemplate = `{
                 }
             },
             "patch": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Updates a roles",
                 "tags": [
                     "roles"
@@ -4169,6 +4618,11 @@ const docTemplate = `{
         },
         "/api/v3.5/sale": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets all the schema",
                 "tags": [
                     "schema"
@@ -4211,6 +4665,11 @@ const docTemplate = `{
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Creates a new sale",
                 "tags": [
                     "sale"
@@ -4255,8 +4714,62 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v3.5/sale/page/:page": {
+            "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "description": "Gets one sale by page",
+                "tags": [
+                    "sale"
+                ],
+                "summary": "Get one sale by page",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.SaleResp"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "408": {
+                        "description": "Request Timeout",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v3.5/sale/{id}": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets a sale by ID",
                 "tags": [
                     "sale"
@@ -4305,6 +4818,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Delete a sale",
                 "tags": [
                     "sale"
@@ -4352,6 +4870,11 @@ const docTemplate = `{
         },
         "/api/v3.5/upload": {
             "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Uploads a file to Backblaze B2 storage",
                 "consumes": [
                     "multipart/form-data"
@@ -4393,6 +4916,11 @@ const docTemplate = `{
         },
         "/api/v3.5/users": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets all the users",
                 "tags": [
                     "users"
@@ -4435,6 +4963,11 @@ const docTemplate = `{
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Creates a new users",
                 "tags": [
                     "users"
@@ -4481,6 +5014,11 @@ const docTemplate = `{
         },
         "/api/v3.5/users/{id}": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets a users by ID",
                 "tags": [
                     "users"
@@ -4529,6 +5067,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Delete a users",
                 "tags": [
                     "users"
@@ -4574,6 +5117,11 @@ const docTemplate = `{
                 }
             },
             "patch": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Updates a users",
                 "tags": [
                     "users"
@@ -4630,6 +5178,11 @@ const docTemplate = `{
         },
         "/api/v3.5/voucher": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets all the voucher",
                 "tags": [
                     "voucher"
@@ -4672,6 +5225,11 @@ const docTemplate = `{
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Creates a new voucher",
                 "tags": [
                     "voucher"
@@ -4718,6 +5276,11 @@ const docTemplate = `{
         },
         "/api/v3.5/voucher/{id}": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets a voucher by ID",
                 "tags": [
                     "voucher"
@@ -4766,6 +5329,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Delete a voucher",
                 "tags": [
                     "voucher"
@@ -4811,6 +5379,11 @@ const docTemplate = `{
                 }
             },
             "patch": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Updates a voucher",
                 "tags": [
                     "voucher"
@@ -4893,6 +5466,11 @@ const docTemplate = `{
         },
         "/v2.0/program": {
             "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Creates a new program",
                 "tags": [
                     "program"
@@ -9096,8 +9674,24 @@ const docTemplate = `{
                     "description": "Opcional: mensaje descriptivo",
                     "type": "string"
                 },
+                "page": {
+                    "description": "Número de página",
+                    "type": "integer"
+                },
+                "pageSize": {
+                    "description": "Tamaño de la página",
+                    "type": "integer"
+                },
                 "success": {
                     "type": "boolean"
+                },
+                "totalCount": {
+                    "description": "Total de páginas",
+                    "type": "integer"
+                },
+                "totalPages": {
+                    "description": "Total de páginas",
+                    "type": "integer"
                 }
             }
         }

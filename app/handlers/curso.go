@@ -36,6 +36,7 @@ func SetCursoRoutes(ctx context.Context, cfg config.Config, r *gin.Engine, p por
 // @Failure 400 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/curso [post]
 func createCurso(p ports.CursoService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -83,6 +84,7 @@ func createCurso(p ports.CursoService) gin.HandlerFunc {
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/curso [get]
 func getInfCurso(p ports.CursoService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -127,6 +129,7 @@ func getInfCurso(p ports.CursoService) gin.HandlerFunc {
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/curso [get]
 func getAllCurso(p ports.CursoService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -171,6 +174,7 @@ func getAllCurso(p ports.CursoService) gin.HandlerFunc {
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/curso/page/:page [get]
 func getAllCursoPage(p ports.CursoService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -207,6 +211,7 @@ func getAllCursoPage(p ports.CursoService) gin.HandlerFunc {
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/curso/{id} [get]
 func getCursoByID(p ports.CursoService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -236,6 +241,7 @@ func getCursoByID(p ports.CursoService) gin.HandlerFunc {
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/users/{id} [patch]
 func updateCurso(p ports.CursoService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -280,6 +286,7 @@ func updateCurso(p ports.CursoService) gin.HandlerFunc {
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/curso/{id} [delete]
 func deleteCurso(p ports.CursoService) gin.HandlerFunc {
 	return func(c *gin.Context) {

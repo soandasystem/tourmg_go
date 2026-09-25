@@ -35,6 +35,7 @@ func SetSaleRoutes(ctx context.Context, cfg config.Config, r *gin.Engine, p port
 // @Failure 400 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/sale [post]
 func createSale(ctx context.Context, cfg config.Config, p ports.SaleService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -82,6 +83,7 @@ func createSale(ctx context.Context, cfg config.Config, p ports.SaleService) gin
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/ingreso [get]
 func getInfSale(ctx context.Context, cfg config.Config, p ports.SaleService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -127,6 +129,7 @@ func getInfSale(ctx context.Context, cfg config.Config, p ports.SaleService) gin
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/sale [get]
 func getAllSale(ctx context.Context, cfg config.Config, p ports.SaleService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -171,6 +174,7 @@ func getAllSale(ctx context.Context, cfg config.Config, p ports.SaleService) gin
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/sale/page/:page [get]
 func getAllSalePage(ctx context.Context, cfg config.Config, p ports.SaleService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -206,6 +210,7 @@ func getAllSalePage(ctx context.Context, cfg config.Config, p ports.SaleService)
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/sale/{id} [get]
 func getSaleByID(ctx context.Context, cfg config.Config, p ports.SaleService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -235,6 +240,7 @@ func getSaleByID(ctx context.Context, cfg config.Config, p ports.SaleService) gi
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/users/{id} [patch]
 func updateSale(ctx context.Context, cfg config.Config, p ports.SaleService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -279,6 +285,7 @@ func updateSale(ctx context.Context, cfg config.Config, p ports.SaleService) gin
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/sale/{id} [delete]
 func deleteSale(ctx context.Context, cfg config.Config, p ports.SaleService) gin.HandlerFunc {
 	return func(c *gin.Context) {

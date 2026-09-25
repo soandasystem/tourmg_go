@@ -33,6 +33,7 @@ func SetComunasRoutes(ctx context.Context, cfg config.Config, r *gin.Engine, p p
 // @Failure 400 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/comunas [post]
 func createComunas(p ports.ComunasService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -80,6 +81,7 @@ func createComunas(p ports.ComunasService) gin.HandlerFunc {
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/comunas [get]
 func getAllComunas(p ports.ComunasService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -120,6 +122,7 @@ func getAllComunas(p ports.ComunasService) gin.HandlerFunc {
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/comunas{id} [get]
 func getComunasByID(p ports.ComunasService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -148,6 +151,7 @@ func getComunasByID(p ports.ComunasService) gin.HandlerFunc {
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/comunas/{id} [patch]
 func updateComunas(p ports.ComunasService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -192,6 +196,7 @@ func updateComunas(p ports.ComunasService) gin.HandlerFunc {
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/comunas/{id} [delete]
 func deleteComunas(p ports.ComunasService) gin.HandlerFunc {
 	return func(c *gin.Context) {

@@ -33,6 +33,7 @@ func SetFmedicaRoutes(ctx context.Context, cfg config.Config, r *gin.Engine, p p
 // @Failure 400 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/fmedica [post]
 func createFicha(p ports.FmedicaService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -80,6 +81,7 @@ func createFicha(p ports.FmedicaService) gin.HandlerFunc {
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/fmedica [get]
 func getAllFicha(p ports.FmedicaService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -124,6 +126,7 @@ func getAllFicha(p ports.FmedicaService) gin.HandlerFunc {
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/fmedica/{id} [get]
 func getFichaByID(p ports.FmedicaService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -152,6 +155,7 @@ func getFichaByID(p ports.FmedicaService) gin.HandlerFunc {
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/fmedica/{id} [patch]
 func updateFicha(p ports.FmedicaService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -196,6 +200,7 @@ func updateFicha(p ports.FmedicaService) gin.HandlerFunc {
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/fmedica/{id} [delete]
 func deleteFicha(p ports.FmedicaService) gin.HandlerFunc {
 	return func(c *gin.Context) {

@@ -26,6 +26,7 @@ func SetContratoRoutes(ctx context.Context, cfg config.Config, r *gin.Engine, p 
 // @Success 202 {object} util.ApiResponse "Accepted"
 // @Failure 400 {object} util.ApiResponse
 // @Failure 500 {object} util.ApiResponse
+// @Security Bearer
 // @Router /api/v3.5/contrato [post]
 func generarContrato(p ports.ContratoService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -64,6 +65,7 @@ func generarContrato(p ports.ContratoService) gin.HandlerFunc {
 // @Success 202 {object} util.ApiResponse "Accepted"
 // @Failure 400 {object} util.ApiResponse
 // @Failure 500 {object} util.ApiResponse
+// @Security Bearer
 // @Router /api/v3.5/contrato/firma [post]
 func firmarContrato(p ports.ContratoService) gin.HandlerFunc {
 	return func(c *gin.Context) {

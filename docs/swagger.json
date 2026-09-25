@@ -8,6 +8,11 @@
     "paths": {
         "/api/v3.5/Airports": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets all the Airports",
                 "tags": [
                     "Airports"
@@ -50,6 +55,11 @@
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Creates a new Airports",
                 "tags": [
                     "Airports"
@@ -96,6 +106,11 @@
         },
         "/api/v3.5/Airports/informe": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets all the Airports",
                 "tags": [
                     "Airports"
@@ -140,6 +155,11 @@
         },
         "/api/v3.5/Airports/{id}": {
             "delete": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Delete a Airports",
                 "tags": [
                     "Airports"
@@ -185,6 +205,11 @@
                 }
             },
             "patch": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Updates a Airports",
                 "tags": [
                     "Airports"
@@ -241,6 +266,11 @@
         },
         "/api/v3.5/Airports:{id}": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets a Airports by ID",
                 "tags": [
                     "Airports"
@@ -291,6 +321,11 @@
         },
         "/api/v3.5/Colegios": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets all the Colegios",
                 "tags": [
                     "Colegios"
@@ -335,6 +370,11 @@
         },
         "/api/v3.5/Colegios/{id}": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets a Colegios by ID",
                 "tags": [
                     "Colegios"
@@ -383,6 +423,11 @@
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Delete a Colegios",
                 "tags": [
                     "Colegios"
@@ -430,6 +475,11 @@
         },
         "/api/v3.5/Country": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets all the Country",
                 "tags": [
                     "Country"
@@ -472,6 +522,11 @@
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Creates a new Country",
                 "tags": [
                     "Country"
@@ -518,6 +573,11 @@
         },
         "/api/v3.5/Country/{id}": {
             "delete": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Delete a Country",
                 "tags": [
                     "Country"
@@ -563,6 +623,11 @@
                 }
             },
             "patch": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Updates a Country",
                 "tags": [
                     "Country"
@@ -619,6 +684,11 @@
         },
         "/api/v3.5/Country{id}": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets a Country by ID",
                 "tags": [
                     "Country"
@@ -669,6 +739,11 @@
         },
         "/api/v3.5/Gateways": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets all the Gateways",
                 "tags": [
                     "Gateways"
@@ -711,6 +786,11 @@
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Creates a new Gateways",
                 "tags": [
                     "colegion"
@@ -757,6 +837,11 @@
         },
         "/api/v3.5/Gateways/{id}": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets a Gateways by ID",
                 "tags": [
                     "Gateways"
@@ -805,6 +890,11 @@
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Delete a Gateways",
                 "tags": [
                     "Gateways"
@@ -852,6 +942,11 @@
         },
         "/api/v3.5/Gatewaysc": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets all the Gatewaysc",
                 "tags": [
                     "Gatewaysc"
@@ -894,6 +989,11 @@
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Creates a new Gatewaysc",
                 "tags": [
                     "colegion"
@@ -940,6 +1040,11 @@
         },
         "/api/v3.5/Gatewaysc/{id}": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets a Gatewaysc by ID",
                 "tags": [
                     "Gatewaysc"
@@ -988,6 +1093,11 @@
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Delete a Gatewaysc",
                 "tags": [
                     "Gatewaysc"
@@ -1035,6 +1145,11 @@
         },
         "/api/v3.5/colegios": {
             "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Creates a new colegios",
                 "tags": [
                     "colegion"
@@ -1320,6 +1435,11 @@
         },
         "/api/v3.5/comunas": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets all the comunas",
                 "tags": [
                     "comunas"
@@ -1362,6 +1482,11 @@
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Creates a new comunas",
                 "tags": [
                     "comunas"
@@ -1408,6 +1533,11 @@
         },
         "/api/v3.5/comunas/{id}": {
             "delete": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Delete a comunas",
                 "tags": [
                     "comunas"
@@ -1453,6 +1583,11 @@
                 }
             },
             "patch": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Updates a comunas",
                 "tags": [
                     "comunas"
@@ -1509,6 +1644,11 @@
         },
         "/api/v3.5/comunas{id}": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets a comunas by ID",
                 "tags": [
                     "comunas"
@@ -1559,6 +1699,11 @@
         },
         "/api/v3.5/contrato": {
             "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Generates a temporary DOCX with the replaced placeholders from the request",
                 "tags": [
                     "contrato"
@@ -1599,6 +1744,11 @@
         },
         "/api/v3.5/contrato/firma": {
             "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Creates the final PDF by filling the DOCX data and injecting the signature",
                 "tags": [
                     "contrato"
@@ -1639,6 +1789,11 @@
         },
         "/api/v3.5/curso": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets all the curso",
                 "tags": [
                     "curso"
@@ -1681,6 +1836,11 @@
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Creates a new curso",
                 "tags": [
                     "colegion"
@@ -1725,8 +1885,62 @@
                 }
             }
         },
+        "/api/v3.5/curso/page/:page": {
+            "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "description": "Gets one curso by page",
+                "tags": [
+                    "curso"
+                ],
+                "summary": "Get one curso by page",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.CursoResp"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "408": {
+                        "description": "Request Timeout",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v3.5/curso/{id}": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets a curso by ID",
                 "tags": [
                     "curso"
@@ -1775,6 +1989,11 @@
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Delete a curso",
                 "tags": [
                     "curso"
@@ -1868,6 +2087,11 @@
         },
         "/api/v3.5/fmedica": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets all the fmedica",
                 "tags": [
                     "fmedica"
@@ -1910,6 +2134,11 @@
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Creates a new fmedica",
                 "tags": [
                     "colegion"
@@ -1956,6 +2185,11 @@
         },
         "/api/v3.5/fmedica/{id}": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets a fmedica by ID",
                 "tags": [
                     "fmedica"
@@ -2004,6 +2238,11 @@
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Delete a fmedica",
                 "tags": [
                     "fmedica"
@@ -2049,6 +2288,11 @@
                 }
             },
             "patch": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Updates a fmedica",
                 "tags": [
                     "fmedica"
@@ -2145,6 +2389,11 @@
         },
         "/api/v3.5/ingreso": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets all the ingreso",
                 "tags": [
                     "ingreso"
@@ -2187,6 +2436,11 @@
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Creates a new ingreso",
                 "tags": [
                     "ingreso"
@@ -2233,6 +2487,11 @@
         },
         "/api/v3.5/ingreso/{id}": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets a ingreso by ID",
                 "tags": [
                     "ingreso"
@@ -2281,6 +2540,11 @@
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Delete a ingreso",
                 "tags": [
                     "ingreso"
@@ -2328,6 +2592,11 @@
         },
         "/api/v3.5/iniciopagomp": {
             "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Inicializa el pago a través de Mercado Pago y devuelve los datos de preferencia y clave pública",
                 "tags": [
                     "mpago"
@@ -2368,6 +2637,11 @@
         },
         "/api/v3.5/installment": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets all the installment",
                 "tags": [
                     "installment"
@@ -2410,6 +2684,11 @@
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Creates a new payment",
                 "tags": [
                     "payment"
@@ -2456,6 +2735,11 @@
         },
         "/api/v3.5/installment/{id}": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets a installment by ID",
                 "tags": [
                     "installment"
@@ -2504,6 +2788,11 @@
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Delete a installment",
                 "tags": [
                     "installment"
@@ -2549,6 +2838,11 @@
                 }
             },
             "patch": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Updates a installment",
                 "tags": [
                     "installment"
@@ -2657,6 +2951,11 @@
         },
         "/api/v3.5/mpago/verificar": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Recibe el retorno del usuario desde Mercado Pago, verifica el pago y redirige a la pantalla de resultado",
                 "tags": [
                     "mpago"
@@ -2694,6 +2993,11 @@
         },
         "/api/v3.5/mpago/webhook": {
             "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Procesa las notificaciones webhook enviadas por Mercado Pago tras eventos de pago",
                 "consumes": [
                     "application/json"
@@ -2740,6 +3044,11 @@
         },
         "/api/v3.5/pagos": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets all the pagos",
                 "tags": [
                     "pagos"
@@ -2782,6 +3091,11 @@
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Creates a new pagos",
                 "tags": [
                     "pagos"
@@ -2828,6 +3142,11 @@
         },
         "/api/v3.5/pagos/{id}": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets a pagos by ID",
                 "tags": [
                     "pagos"
@@ -2876,6 +3195,11 @@
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Delete a pagos",
                 "tags": [
                     "pagos"
@@ -2923,6 +3247,11 @@
         },
         "/api/v3.5/payment": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets all the payment",
                 "tags": [
                     "payment"
@@ -2967,6 +3296,11 @@
         },
         "/api/v3.5/payment/{id}": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets a payment by ID",
                 "tags": [
                     "payment"
@@ -3015,6 +3349,11 @@
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Delete a payment",
                 "tags": [
                     "payment"
@@ -3060,6 +3399,11 @@
                 }
             },
             "patch": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Updates a payment",
                 "tags": [
                     "payment"
@@ -3116,6 +3460,11 @@
         },
         "/api/v3.5/payment_installment": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets all the payment_installment",
                 "tags": [
                     "payment_installment"
@@ -3158,6 +3507,11 @@
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Creates a new payment installment",
                 "tags": [
                     "payment_installment"
@@ -3204,6 +3558,11 @@
         },
         "/api/v3.5/payment_installment/informe": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets all the payment_installment",
                 "tags": [
                     "payment_installment"
@@ -3248,6 +3607,11 @@
         },
         "/api/v3.5/payment_installment/{id}": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets a payment_installment by ID",
                 "tags": [
                     "payment_installment"
@@ -3296,6 +3660,11 @@
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Delete a payment_installment",
                 "tags": [
                     "payment_installment"
@@ -3341,6 +3710,11 @@
                 }
             },
             "patch": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Updates a payment_installment",
                 "tags": [
                     "payment_installment"
@@ -3397,6 +3771,11 @@
         },
         "/api/v3.5/program": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets all the program",
                 "tags": [
                     "program"
@@ -3439,6 +3818,11 @@
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Creates a new program",
                 "tags": [
                     "program"
@@ -3485,6 +3869,11 @@
         },
         "/api/v3.5/program/{id}": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets a program by ID",
                 "tags": [
                     "program"
@@ -3533,6 +3922,11 @@
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Delete a program",
                 "tags": [
                     "program"
@@ -3578,6 +3972,11 @@
                 }
             },
             "patch": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Updates a program",
                 "tags": [
                     "program"
@@ -3634,6 +4033,11 @@
         },
         "/api/v3.5/region": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets all the region",
                 "tags": [
                     "region"
@@ -3676,6 +4080,11 @@
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Creates a new region",
                 "tags": [
                     "region"
@@ -3722,6 +4131,11 @@
         },
         "/api/v3.5/region/{id}": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets a region by ID",
                 "tags": [
                     "region"
@@ -3770,6 +4184,11 @@
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Delete a region",
                 "tags": [
                     "region"
@@ -3815,6 +4234,11 @@
                 }
             },
             "patch": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Updates a region",
                 "tags": [
                     "region"
@@ -3923,6 +4347,11 @@
         },
         "/api/v3.5/roles": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets all the roles",
                 "tags": [
                     "roles"
@@ -3965,6 +4394,11 @@
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Creates a new roles",
                 "tags": [
                     "roles"
@@ -4011,6 +4445,11 @@
         },
         "/api/v3.5/roles/{id}": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets a roles by ID",
                 "tags": [
                     "roles"
@@ -4059,6 +4498,11 @@
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Delete a roles",
                 "tags": [
                     "roles"
@@ -4104,6 +4548,11 @@
                 }
             },
             "patch": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Updates a roles",
                 "tags": [
                     "roles"
@@ -4160,6 +4609,11 @@
         },
         "/api/v3.5/sale": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets all the schema",
                 "tags": [
                     "schema"
@@ -4202,6 +4656,11 @@
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Creates a new sale",
                 "tags": [
                     "sale"
@@ -4246,8 +4705,62 @@
                 }
             }
         },
+        "/api/v3.5/sale/page/:page": {
+            "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "description": "Gets one sale by page",
+                "tags": [
+                    "sale"
+                ],
+                "summary": "Get one sale by page",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.SaleResp"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "408": {
+                        "description": "Request Timeout",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v3.5/sale/{id}": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets a sale by ID",
                 "tags": [
                     "sale"
@@ -4296,6 +4809,11 @@
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Delete a sale",
                 "tags": [
                     "sale"
@@ -4343,6 +4861,11 @@
         },
         "/api/v3.5/upload": {
             "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Uploads a file to Backblaze B2 storage",
                 "consumes": [
                     "multipart/form-data"
@@ -4384,6 +4907,11 @@
         },
         "/api/v3.5/users": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets all the users",
                 "tags": [
                     "users"
@@ -4426,6 +4954,11 @@
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Creates a new users",
                 "tags": [
                     "users"
@@ -4472,6 +5005,11 @@
         },
         "/api/v3.5/users/{id}": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets a users by ID",
                 "tags": [
                     "users"
@@ -4520,6 +5058,11 @@
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Delete a users",
                 "tags": [
                     "users"
@@ -4565,6 +5108,11 @@
                 }
             },
             "patch": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Updates a users",
                 "tags": [
                     "users"
@@ -4621,6 +5169,11 @@
         },
         "/api/v3.5/voucher": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets all the voucher",
                 "tags": [
                     "voucher"
@@ -4663,6 +5216,11 @@
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Creates a new voucher",
                 "tags": [
                     "voucher"
@@ -4709,6 +5267,11 @@
         },
         "/api/v3.5/voucher/{id}": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Gets a voucher by ID",
                 "tags": [
                     "voucher"
@@ -4757,6 +5320,11 @@
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Delete a voucher",
                 "tags": [
                     "voucher"
@@ -4802,6 +5370,11 @@
                 }
             },
             "patch": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Updates a voucher",
                 "tags": [
                     "voucher"
@@ -4884,6 +5457,11 @@
         },
         "/v2.0/program": {
             "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Creates a new program",
                 "tags": [
                     "program"
@@ -9087,8 +9665,24 @@
                     "description": "Opcional: mensaje descriptivo",
                     "type": "string"
                 },
+                "page": {
+                    "description": "Número de página",
+                    "type": "integer"
+                },
+                "pageSize": {
+                    "description": "Tamaño de la página",
+                    "type": "integer"
+                },
                 "success": {
                     "type": "boolean"
+                },
+                "totalCount": {
+                    "description": "Total de páginas",
+                    "type": "integer"
+                },
+                "totalPages": {
+                    "description": "Total de páginas",
+                    "type": "integer"
                 }
             }
         }

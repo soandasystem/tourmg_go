@@ -34,6 +34,7 @@ func SetIngresoRoutes(ctx context.Context, cfg config.Config, r *gin.Engine, p p
 // @Failure 400 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/ingreso [post]
 func createIngreso(ctx context.Context, cfg config.Config, p ports.IngresoService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -81,6 +82,7 @@ func createIngreso(ctx context.Context, cfg config.Config, p ports.IngresoServic
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/ingreso [get]
 func getInfIngreso(ctx context.Context, cfg config.Config, p ports.IngresoService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -125,6 +127,7 @@ func getInfIngreso(ctx context.Context, cfg config.Config, p ports.IngresoServic
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/ingreso [get]
 func getAllIngreso(ctx context.Context, cfg config.Config, p ports.IngresoService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -169,6 +172,7 @@ func getAllIngreso(ctx context.Context, cfg config.Config, p ports.IngresoServic
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/ingreso/{id} [get]
 func getIngresoByID(ctx context.Context, cfg config.Config, p ports.IngresoService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -198,6 +202,7 @@ func getIngresoByID(ctx context.Context, cfg config.Config, p ports.IngresoServi
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/users/{id} [patch]
 func updateIngreso(ctx context.Context, cfg config.Config, p ports.IngresoService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -242,6 +247,7 @@ func updateIngreso(ctx context.Context, cfg config.Config, p ports.IngresoServic
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/ingreso/{id} [delete]
 func deleteIngreso(ctx context.Context, cfg config.Config, p ports.IngresoService) gin.HandlerFunc {
 	return func(c *gin.Context) {

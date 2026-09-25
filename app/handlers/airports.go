@@ -34,6 +34,7 @@ func SetAirportsRoutes(ctx context.Context, cfg config.Config, r *gin.Engine, p 
 // @Failure 400 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/Airports [post]
 func createAirports(p ports.AirportsService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -73,6 +74,7 @@ func createAirports(p ports.AirportsService) gin.HandlerFunc {
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/Airports [get]
 func getAllAirports(p ports.AirportsService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -116,6 +118,7 @@ func getAllAirports(p ports.AirportsService) gin.HandlerFunc {
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/Airports/informe [get]
 func getInfAirports(p ports.AirportsService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -162,6 +165,7 @@ func getInfAirports(p ports.AirportsService) gin.HandlerFunc {
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/Airports:{id} [get]
 func getAirportsByID(p ports.AirportsService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -189,6 +193,7 @@ func getAirportsByID(p ports.AirportsService) gin.HandlerFunc {
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/Airports/{id} [patch]
 func updateAirports(p ports.AirportsService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -232,6 +237,7 @@ func updateAirports(p ports.AirportsService) gin.HandlerFunc {
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/Airports/{id} [delete]
 func deleteAirports(p ports.AirportsService) gin.HandlerFunc {
 	return func(c *gin.Context) {

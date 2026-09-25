@@ -21,11 +21,6 @@ type companyRepository struct {
 	infrastructure.PostgresRepositoryOrm
 }
 
-// GetUpdateByID implements ports.CompanyRepository.
-func (s *companyRepository) GetUpdateByID(ctx context.Context, ID string) (interface{}, error) {
-	panic("unimplemented")
-}
-
 // NewUserRepository creates a roles repository for postgres
 func NewCompanyRepository(ctx context.Context, db *gorm.DB) ports.CompanyRepository {
 	return &companyRepository{

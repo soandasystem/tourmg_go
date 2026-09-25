@@ -31,6 +31,7 @@ func SetSchemaRegistryRoutes(ctx context.Context, cfg config.Config, r *gin.Engi
 // @Failure 400 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/sale [post]
 func createSchema(ctx context.Context, cfg config.Config, p ports.SchemaRegistryService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -78,6 +79,7 @@ func createSchema(ctx context.Context, cfg config.Config, p ports.SchemaRegistry
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/sale [get]
 func getAllSchema(ctx context.Context, cfg config.Config, p ports.SchemaRegistryService) gin.HandlerFunc {
 	return func(c *gin.Context) {

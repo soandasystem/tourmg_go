@@ -2743,8 +2743,20 @@ definitions:
       message:
         description: 'Opcional: mensaje descriptivo'
         type: string
+      page:
+        description: Número de página
+        type: integer
+      pageSize:
+        description: Tamaño de la página
+        type: integer
       success:
         type: boolean
+      totalCount:
+        description: Total de páginas
+        type: integer
+      totalPages:
+        description: Total de páginas
+        type: integer
     type: object
 info:
   contact: {}
@@ -2777,6 +2789,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Get all Airports
       tags:
       - Airports
@@ -2806,6 +2820,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Create Airports
       tags:
       - Airports
@@ -2837,6 +2853,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Delete Airports
       tags:
       - Airports
@@ -2873,6 +2891,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Update Airports
       tags:
       - Airports
@@ -2902,6 +2922,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Get inf all Airports
       tags:
       - Airports
@@ -2935,6 +2957,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Get Airports by ID
       tags:
       - Airports
@@ -2964,6 +2988,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Get all Colegios
       tags:
       - Colegios
@@ -2995,6 +3021,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Delete Colegios
       tags:
       - Colegios
@@ -3027,6 +3055,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Get Colegios by ID
       tags:
       - Colegios
@@ -3056,6 +3086,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Get all Country
       tags:
       - Country
@@ -3085,6 +3117,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Create Country
       tags:
       - Country
@@ -3116,6 +3150,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Delete Country
       tags:
       - Country
@@ -3152,6 +3188,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Update Country
       tags:
       - Country
@@ -3185,6 +3223,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Get Country by ID
       tags:
       - Country
@@ -3214,6 +3254,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Get all Gateways
       tags:
       - Gateways
@@ -3243,6 +3285,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Create Gateways
       tags:
       - colegion
@@ -3274,6 +3318,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Delete Gateways
       tags:
       - Gateways
@@ -3306,6 +3352,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Get Gateways by ID
       tags:
       - Gateways
@@ -3335,6 +3383,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Get all Gatewaysc
       tags:
       - Gatewaysc
@@ -3364,6 +3414,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Create Gatewaysc
       tags:
       - colegion
@@ -3395,6 +3447,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Delete Gatewaysc
       tags:
       - Gatewaysc
@@ -3427,6 +3481,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Get Gatewaysc by ID
       tags:
       - Gatewaysc
@@ -3457,6 +3513,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Create colegios
       tags:
       - colegion
@@ -3644,6 +3702,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Get all comunas
       tags:
       - comunas
@@ -3673,6 +3733,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Create comunas
       tags:
       - comunas
@@ -3704,6 +3766,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Delete comunas
       tags:
       - comunas
@@ -3740,6 +3804,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Update comunas
       tags:
       - comunas
@@ -3773,6 +3839,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Get comunas by ID
       tags:
       - comunas
@@ -3800,6 +3868,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/util.ApiResponse'
+      security:
+      - Bearer: []
       summary: Create contrato DOCX temporal
       tags:
       - contrato
@@ -3827,6 +3897,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/util.ApiResponse'
+      security:
+      - Bearer: []
       summary: Create contrato PDF definitivo con firma
       tags:
       - contrato
@@ -3856,6 +3928,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Get all curso
       tags:
       - curso
@@ -3885,6 +3959,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Create curso
       tags:
       - colegion
@@ -3916,6 +3992,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Delete curso
       tags:
       - curso
@@ -3948,7 +4026,40 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Get curso by ID
+      tags:
+      - curso
+  /api/v3.5/curso/page/:page:
+    get:
+      description: Gets one curso by page
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.CursoResp'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            type: object
+        "408":
+          description: Request Timeout
+          schema:
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            type: object
+      security:
+      - Bearer: []
+      summary: Get one curso by page
       tags:
       - curso
   /api/v3.5/email/send-code:
@@ -4007,6 +4118,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Get all fmedica
       tags:
       - fmedica
@@ -4036,6 +4149,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Create fmedica
       tags:
       - colegion
@@ -4067,6 +4182,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Delete fmedica
       tags:
       - fmedica
@@ -4099,6 +4216,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Get fmedica by ID
       tags:
       - fmedica
@@ -4135,6 +4254,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Update fmedica
       tags:
       - fmedica
@@ -4190,6 +4311,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Get inf all ingreso
       tags:
       - ingreso
@@ -4219,6 +4342,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Create ingreso
       tags:
       - ingreso
@@ -4250,6 +4375,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Delete ingreso
       tags:
       - ingreso
@@ -4282,6 +4409,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Get ingreso by ID
       tags:
       - ingreso
@@ -4309,6 +4438,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Init Mercado Pago Payment
       tags:
       - mpago
@@ -4338,6 +4469,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Get all installment
       tags:
       - installment
@@ -4367,6 +4500,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Create payment
       tags:
       - payment
@@ -4398,6 +4533,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Delete installment
       tags:
       - installment
@@ -4430,6 +4567,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Get installment by ID
       tags:
       - installment
@@ -4466,6 +4605,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Update installment
       tags:
       - installment
@@ -4526,6 +4667,8 @@ paths:
           description: Bad Request
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Retorno y verificación Mercado Pago
       tags:
       - mpago
@@ -4557,6 +4700,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Webhook Mercado Pago
       tags:
       - mpago
@@ -4586,6 +4731,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Get all pagos
       tags:
       - pagos
@@ -4615,6 +4762,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Create pagos
       tags:
       - pagos
@@ -4646,6 +4795,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Delete pagos
       tags:
       - pagos
@@ -4678,6 +4829,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Get pagos by ID
       tags:
       - pagos
@@ -4707,6 +4860,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Get all payment
       tags:
       - payment
@@ -4738,6 +4893,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Delete payment
       tags:
       - payment
@@ -4770,6 +4927,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Get payment by ID
       tags:
       - payment
@@ -4806,6 +4965,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Update payment
       tags:
       - payment
@@ -4835,6 +4996,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Get all payment_installment
       tags:
       - payment_installment
@@ -4864,6 +5027,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Create payment installment
       tags:
       - payment_installment
@@ -4895,6 +5060,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Delete payment_installment
       tags:
       - payment_installment
@@ -4927,6 +5094,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Get payment_installment by ID
       tags:
       - payment_installment
@@ -4963,6 +5132,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Update payment_installment
       tags:
       - payment_installment
@@ -4992,6 +5163,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Get inf all payment_installment
       tags:
       - payment_installment
@@ -5021,6 +5194,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Get all program
       tags:
       - program
@@ -5050,6 +5225,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Create program
       tags:
       - program
@@ -5081,6 +5258,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Delete program
       tags:
       - program
@@ -5113,6 +5292,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Get program by ID
       tags:
       - program
@@ -5149,6 +5330,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Update program
       tags:
       - program
@@ -5178,6 +5361,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Get all region
       tags:
       - region
@@ -5207,6 +5392,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Create region
       tags:
       - region
@@ -5238,6 +5425,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Delete region
       tags:
       - region
@@ -5270,6 +5459,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Get region by ID
       tags:
       - region
@@ -5306,6 +5497,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Update region
       tags:
       - region
@@ -5370,6 +5563,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Get all roles
       tags:
       - roles
@@ -5399,6 +5594,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Create roles
       tags:
       - roles
@@ -5430,6 +5627,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Delete roles
       tags:
       - roles
@@ -5462,6 +5661,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Get roles by ID
       tags:
       - roles
@@ -5498,6 +5699,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Update roles
       tags:
       - roles
@@ -5527,6 +5730,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Get all schema
       tags:
       - schema
@@ -5556,6 +5761,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Create sale
       tags:
       - sale
@@ -5587,6 +5794,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Delete sale
       tags:
       - sale
@@ -5619,7 +5828,40 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Get sale by ID
+      tags:
+      - sale
+  /api/v3.5/sale/page/:page:
+    get:
+      description: Gets one sale by page
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.SaleResp'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            type: object
+        "408":
+          description: Request Timeout
+          schema:
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            type: object
+      security:
+      - Bearer: []
+      summary: Get one sale by page
       tags:
       - sale
   /api/v3.5/upload:
@@ -5646,6 +5888,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Upload file to B2
       tags:
       - upload
@@ -5675,6 +5919,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Get all users
       tags:
       - users
@@ -5704,6 +5950,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Create users
       tags:
       - users
@@ -5735,6 +5983,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Delete users
       tags:
       - users
@@ -5767,6 +6017,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Get users by ID
       tags:
       - users
@@ -5803,6 +6055,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Update users
       tags:
       - users
@@ -5832,6 +6086,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Get all voucher
       tags:
       - voucher
@@ -5861,6 +6117,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Create voucher
       tags:
       - voucher
@@ -5892,6 +6150,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Delete voucher
       tags:
       - voucher
@@ -5924,6 +6184,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Get voucher by ID
       tags:
       - voucher
@@ -5960,6 +6222,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Update voucher
       tags:
       - voucher
@@ -6007,6 +6271,8 @@ paths:
           description: Internal Server Error
           schema:
             type: object
+      security:
+      - Bearer: []
       summary: Create program
       tags:
       - program

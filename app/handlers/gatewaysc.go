@@ -35,6 +35,7 @@ func SetGatewayscRoutes(ctx context.Context, cfg config.Config, r *gin.Engine, p
 // @Failure 400 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/Gatewaysc [post]
 func createGatewaysc(p ports.GatewayscService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -82,6 +83,7 @@ func createGatewaysc(p ports.GatewayscService) gin.HandlerFunc {
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/Gatewaysc [get]
 func getAllGatewaysc(p ports.GatewayscService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -128,6 +130,7 @@ func getAllGatewaysc(p ports.GatewayscService) gin.HandlerFunc {
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/Gatewaysc/{id} [get]
 func getGatewayscByID(p ports.GatewayscService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -156,6 +159,7 @@ func getGatewayscByID(p ports.GatewayscService) gin.HandlerFunc {
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/users/{id} [patch]
 func updateGatewaysc(p ports.GatewayscService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -200,6 +204,7 @@ func updateGatewaysc(p ports.GatewayscService) gin.HandlerFunc {
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/Gatewaysc/{id} [delete]
 func deleteGatewaysc(p ports.GatewayscService) gin.HandlerFunc {
 	return func(c *gin.Context) {

@@ -34,6 +34,7 @@ func SetVoucherRoutes(ctx context.Context, cfg config.Config, r *gin.Engine, p p
 // @Failure 400 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/voucher [post]
 func createVoucher(p ports.VoucherService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -81,6 +82,7 @@ func createVoucher(p ports.VoucherService) gin.HandlerFunc {
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/voucher [get]
 func getAllVoucher(p ports.VoucherService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -126,6 +128,7 @@ func getAllVoucher(p ports.VoucherService) gin.HandlerFunc {
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/voucher/{id} [get]
 func getVoucherByID(p ports.VoucherService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -155,6 +158,7 @@ func getVoucherByID(p ports.VoucherService) gin.HandlerFunc {
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/voucher/{id} [patch]
 func updateVoucher(p ports.VoucherService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -199,6 +203,7 @@ func updateVoucher(p ports.VoucherService) gin.HandlerFunc {
 // @Failure 401 {object} object
 // @Failure 408 {object} object
 // @Failure 500 {object} object
+// @Security Bearer
 // @Router /api/v3.5/voucher/{id} [delete]
 func deleteVoucher(p ports.VoucherService) gin.HandlerFunc {
 	return func(c *gin.Context) {
