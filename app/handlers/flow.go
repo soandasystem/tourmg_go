@@ -23,6 +23,7 @@ func SetFlowRoutes(ctx context.Context, cfg config.Config, r *gin.Engine, p port
 	r.POST("/api/v3.5/token", tokenflow(ctx, cfg, p))
 	r.POST("/api/v3.5/consulta-token", consultatoken(ctx, cfg, p))
 	r.POST("/api/v3.5/returnflow", returnflow(ctx, cfg, p))
+	r.GET("/flowpagos/returnflow", returnflowGet(ctx, cfg, p))
 }
 
 // @Summary Init Flow Payment
@@ -168,12 +169,34 @@ func returnflow(ctx context.Context, cfg config.Config, p ports.FlowService) gin
 		redirectURL, err := p.GetReturnURL(c.Request.Context(), tokenRequest.Token)
 		if err != nil {
 			fmt.Println("Error en returnflow al obtener redirectURL:", err)
-			fallbackURL := fmt.Sprintf("/flowpagos/returnflow?token=%s", url.QueryEscape(tokenRequest.Token))
+			fallbackURL := fmt.Sprintf("https://tourmanager.cl/flowpagos/returnflow?token=%s", url.QueryEscape(tokenRequest.Token))
 			c.Redirect(http.StatusFound, fallbackURL)
 			return
 		}
 
 		// Realizar la redirección HTTP aquí en el handler
 		c.Redirect(http.StatusFound, redirectURL)
+	}
+}
+
+func returnflowGet(ctx context.Context, cfg config.Config, p ports.FlowService) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		token := c.Query("token")
+		if token == "" {
+			response := util.NewErrorResponse(fmt.Errorf("Token no encontrado en la URL"), http.StatusBadRequest)
+			c.JSON(response.StatusCode, response)
+			return
+		}
+
+		// Consultar el estado del pago con el token
+		response, err := p.ConsultaToken(c.Request.Context(), token)
+		if err != nil {
+			errResp := util.NewErrorResponse(fmt.Errorf("Error consultando token: %v", err), http.StatusInternalServerError)
+			c.JSON(errResp.StatusCode, errResp)
+			return
+		}
+
+		// Devolver la información del pago al navegador
+		c.JSON(http.StatusOK, response)
 	}
 }
