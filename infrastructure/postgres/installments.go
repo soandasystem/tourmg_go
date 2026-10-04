@@ -246,6 +246,10 @@ func (s *installmentsRepository) GetInf(ctx context.Context, filter map[string]i
 }
 
 func (s *installmentsRepository) GetByID(ctx context.Context, ID string) (interface{}, error) {
+	if ID == "" {
+		return nil, wrappers.NewNonExistentErr(errors.New("ID cannot be empty"))
+	}
+
 	//asigna el schma a usar
 	DB := infrastructure.GetDBWithSchema(ctx, s.DB)
 
@@ -263,6 +267,10 @@ func (s *installmentsRepository) GetByID(ctx context.Context, ID string) (interf
 }
 
 func (s *installmentsRepository) Update(ctx context.Context, ID string, installments interface{}) error {
+	if ID == "" {
+		return wrappers.NewNonExistentErr(errors.New("ID cannot be empty"))
+	}
+
 	//asigna el schma a usar
 	DB := infrastructure.GetDBWithSchema(ctx, s.DB).Begin()
 
@@ -295,6 +303,10 @@ func (s *installmentsRepository) Update(ctx context.Context, ID string, installm
 }
 
 func (s *installmentsRepository) Delete(ctx context.Context, ID string, filter map[string]interface{}) error {
+	if ID == "" {
+		return wrappers.NewNonExistentErr(errors.New("ID cannot be empty"))
+	}
+
 	//asigna el schma a usar
 	DB := infrastructure.GetDBWithSchema(ctx, s.DB).Begin()
 

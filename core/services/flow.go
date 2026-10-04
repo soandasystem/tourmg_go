@@ -341,102 +341,69 @@ func (s *flowService) FlowToken(ctx context.Context, token string) (models.Token
 			//en installments busco el balance <> 0 y sumo al paid_amount
 			//balace = amount - paid_amount
 			installmentsFilter := map[string]interface{}{"passenger_id": paymentResponse.PassengerId, "company_id": paymentResponse.CompanyId, "sale_id": paymentResponse.SaleId} // 3 = Flow
-			installmentsResult, _ := s.installmentsRepo.Get(ctx, installmentsFilter, nil, nil)
-			fmt.Println(installmentsResult)
-			/*
-				var amount float32
-				var newpaidAmount float32
-				var newBalance float32
-			*/
-			var status string
-			var ID string
-			var installmentUpdate models.UpdateInstallmentReq
+			installmentsResult, err := s.installmentsRepo.Get(ctx, installmentsFilter, nil, nil)
 			if err != nil {
 				fmt.Println("Error al buscar installments", err)
 			}
 
-			result := installmentsResult[0].(models.InstallmentListResponse)
+			if len(installmentsResult) > 0 {
+				if result, ok := installmentsResult[0].(models.InstallmentListResponse); ok {
+					paymentRemaining := float32(paymentResponse.Amount)
+					pID, _ := strconv.ParseInt(paymentResponse.ID, 10, 64)
 
-			paymentRemaining := float32(paymentResponse.Amount)
-			for _, installment := range result.Items {
-				if installment.Balance <= 0 {
-					continue
-				}
+					for _, installment := range result.Items {
+						if installment.Balance <= 0 {
+							continue
+						}
 
-				installmentBalance := float32(installment.Balance)
+						installmentBalance := float32(installment.Balance)
+						var appliedAmount float32
+						var newPaidAmount float32
+						var newBalance float32
+						var status string
 
-				if paymentRemaining >= installmentBalance {
-					// El pago alcanza para cancelar esta cuota
-					newPaidAmount := float32(installment.PaidAmount) + installmentBalance
-					newBalance := float32(0)
+						if paymentRemaining >= installmentBalance {
+							// El pago alcanza para cancelar esta cuota
+							appliedAmount = installmentBalance
+							newPaidAmount = float32(installment.PaidAmount) + appliedAmount
+							newBalance = 0
+							status = "PAID"
+							paymentRemaining -= appliedAmount
+						} else {
+							// El pago no alcanza para cancelar esta cuota completa
+							appliedAmount = paymentRemaining
+							newPaidAmount = float32(installment.PaidAmount) + appliedAmount
+							newBalance = installmentBalance - appliedAmount
+							status = "PARTIAL"
+							paymentRemaining = 0
+						}
 
-					// guardar cuota como PAID
-					status = "PAID"
-					paymentRemaining -= installmentBalance
-					installmentUpdate = models.UpdateInstallmentReq{
-						PaidAmount: &newPaidAmount,
-						Balance:    &newBalance,
-						Status:     &status,
-					}
+						installmentUpdate := models.UpdateInstallmentReq{
+							PaidAmount: &newPaidAmount,
+							Balance:    &newBalance,
+							Status:     &status,
+						}
 
-					s.installmentsRepo.Update(ctx, ID, installmentUpdate)
+						instID := fmt.Sprint(installment.ID)
+						if err := s.installmentsRepo.Update(ctx, instID, installmentUpdate); err != nil {
+							fmt.Println("Error actualizando installment:", err)
+						}
 
-				} else {
-					// El pago no alcanza para cancelar esta cuota
-					newPaidAmount := float32(installment.PaidAmount) + paymentRemaining
-					newBalance := installmentBalance - paymentRemaining
+						// grabo payment_installments con el monto pagado
+						iID, _ := strconv.ParseInt(instID, 10, 64)
+						paymentInstallment := models.CreatePaymentInstallmentReq{
+							PaymentId:     pID,
+							InstallmentId: iID,
+							AppliedAmount: appliedAmount,
+						}
+						s.paymentInstallmentRepo.Create(ctx, paymentInstallment)
 
-					// guardar cuota como PARTIAL
-					status = "PARTIAL"
-					paymentRemaining -= installmentBalance
-					installmentUpdate = models.UpdateInstallmentReq{
-						PaidAmount: &newPaidAmount,
-						Balance:    &newBalance,
-						Status:     &status,
-					}
-
-					paymentRemaining = 0
-				}
-
-				if paymentRemaining <= 0 {
-					break
-				}
-				/*
-						if installment.Balance != 0 {
-							ID = fmt.Sprint(installment.ID)
-							amount = float32(installment.Amount)
-							newpaidAmount = float32(installment.PaidAmount)
+						if paymentRemaining <= 0 {
 							break
 						}
 					}
-					var status string
-					newpaidAmount += float32(paymentResponse.Amount)
-					newBalance = amount - newpaidAmount
-					if newBalance != 0 {
-						status = "PARTIAL"
-					} else {
-						status = "PAID"
-					}
-
-					installmentUpdate := models.UpdateInstallmentReq{
-						PaidAmount: &newpaidAmount,
-						Balance:    &newBalance,
-						Status:     &status,
-					}
-
-
-					s.installmentsRepo.Update(ctx, ID, installmentUpdate)
-				*/
+				}
 			}
-			//grabo payment_installments con el monto pagado
-			id_ip, _ := strconv.ParseInt(paymentResponse.ID, 10, 64)
-			id_in, _ := strconv.ParseInt(ID, 10, 64)
-			payment_installments := models.CreatePaymentInstallmentReq{
-				PaymentId:     id_ip,
-				InstallmentId: id_in,
-				AppliedAmount: float32(paymentResponse.Amount),
-			}
-			s.paymentInstallmentRepo.Create(ctx, payment_installments)
 			// Enviar notificación por email
 
 			if emailDestinatario != "" {
