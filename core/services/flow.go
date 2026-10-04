@@ -636,7 +636,7 @@ func parseResponse(response map[string]interface{}) (models.FlowResponse, error)
 		paymentResponse.Merchantid = fmt.Sprint(response["merchantId"])
 	} else {
 		paymentResponse.Merchantid = ""
-	} // Si es nil, se asigna un valor vacío
+	} // Si es nil, se asigna un valor vacío al obtener el merchantiod
 
 	// Optional
 	optional := response["optional"].(map[string]interface{})
@@ -647,7 +647,7 @@ func parseResponse(response map[string]interface{}) (models.FlowResponse, error)
 	// Payer
 	paymentResponse.Payer = fmt.Sprintf("%v", response["payer"])
 
-	// PaymentData
+	// PaymentData todo el detalle de los pagos
 	paymentData := response["paymentData"].(map[string]interface{})
 	paymentResponse.PaymentData.Amount = fmt.Sprint(paymentData["amount"])
 	paymentResponse.PaymentData.Balance = fmt.Sprint(paymentData["balance"])
