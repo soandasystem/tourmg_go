@@ -706,7 +706,7 @@ func (s *flowService) GetReturnURL(ctx context.Context, token string) (string, e
 	paymentResponse := paymentResult.Items[0]
 
 	// 3. Con company_id del pago, buscar en company con schema global
-	companyFilter := map[string]interface{}{"id": paymentResponse.CompanyId, "schema": "global"}
+	companyFilter := map[string]interface{}{"id": paymentResponse.CompanyId}
 	companyResult, err := s.companyRepo.Get(ctxGlobal, companyFilter, nil, nil)
 	if err != nil || len(companyResult) == 0 {
 		return "", fmt.Errorf("empresa no encontrada con id: %d", paymentResponse.CompanyId)
