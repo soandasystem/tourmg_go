@@ -178,6 +178,15 @@ func (a *api) Run(ctx context.Context, cancel context.CancelFunc) func() error {
 		gin.SetMode(gin.ReleaseMode)
 		router := gin.Default()
 
+		// MIDDLEWARE DE SEGURIDAD
+		router.Use(util.SecurityHeaders(
+			util.SecurityConfig{
+				EnableHSTS: true,
+				EnforceCSP: false,
+				HSTSMaxAge: 86400,
+			},
+		))
+
 		// Configurar CORS globalmente
 		router.Use(middleware.CORSMiddleware())
 
