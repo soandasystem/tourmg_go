@@ -53,6 +53,9 @@ type config struct {
 	// Resend Configuration
 	ResendAPIKey string
 	ResendFrom   string
+
+	//gds apikey
+	ApikeyDuffel string
 }
 
 // ReadConfig from the project´s JSON config files.
@@ -145,6 +148,7 @@ func ReadConfig(version, env string, port int, database, dsn string) (Config, er
 		c.config.ResendFrom = "TourManager <no-reply@tourmanager.cl>"
 	}
 
+	c.config.ApikeyDuffel = os.Getenv("API_KEY_DUFFEL")
 	//	c.config.B2UploadsPath = os.Getenv("B2_UPLOADS_PATH")
 	return c, nil
 }

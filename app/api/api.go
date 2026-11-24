@@ -59,6 +59,7 @@ type svs struct {
 	flow                ports.FlowService
 	schemaRegistry      ports.SchemaRegistryService
 	mpago               ports.MPagoService
+	flightgds           ports.FlightgdsService
 }
 
 // New creates a new API
@@ -122,6 +123,7 @@ func New(ctx context.Context, cfg config.Config) (a api) {
 	paymentsRepo = postgres.NewPaymentsRepository(ctx, db)
 	paymentInstallmentsRepo = postgres.NewPaymentInstallmentsRepository(ctx, db)
 	schemaRegistryRepo = postgres.NewSchemaRegistryRepository(ctx, db)
+	flightgdsClient := postgres.NewFlightgdsClient()
 
 	a.services.company = services.NewCompanyService(a.config, companyRepo)
 	a.services.colegios = services.NewColegiosService(a.config, colegiosRepo)
@@ -150,6 +152,7 @@ func New(ctx context.Context, cfg config.Config) (a api) {
 	a.services.flow = services.NewFlowService(a.config, gatewaysRepo, gatewayscRepo, saleRepo, cursoRepo, paymentsRepo, installmentsRepo, paymentInstallmentsRepo, schemaRegistryRepo, companyRepo)
 	a.services.schemaRegistry = services.NewSchemaRegistryService(a.config, schemaRegistryRepo)
 	a.services.mpago = services.NewMPagoService(a.config, gatewaysRepo, gatewayscRepo, saleRepo, cursoRepo, paymentsRepo, installmentsRepo, paymentInstallmentsRepo, schemaRegistryRepo, companyRepo)
+	a.services.flightgds = services.NewFlightgdsService(a.config, flightgdsClient)
 
 	// Inicializar B2 Storage y Upload Service
 	var b2Storage ports.UploadStorage
@@ -252,6 +255,7 @@ func (a *api) Run(ctx context.Context, cancel context.CancelFunc) func() error {
 		handlers.SetContratoRoutes(ctx, a.config, router, a.services.contrato)
 		handlers.SetSchemaRegistryRoutes(ctx, a.config, router, a.services.schemaRegistry)
 		handlers.SetMpagoRoutes(ctx, a.config, router, a.services.mpago)
+		handlers.SetFlightGDSRoutes(ctx, a.config, router, a.services.flightgds)
 
 		if a.services.upload != nil {
 			handlers.SetUploadRoutes(ctx, a.config, router, a.services.upload)
