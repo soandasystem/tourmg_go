@@ -2,9 +2,12 @@ package handlers
 
 import (
 	"context"
+	"encoding/json"
+	"io"
 	"net/http"
 
 	"tourmanager/config"
+	"tourmanager/core/models"
 	"tourmanager/core/ports"
 	"tourmanager/util"
 
@@ -28,7 +31,24 @@ func getFlightgds(p ports.FlightgdsService) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		ctx := c.Request.Context()
 
-		resp, err := p.GetFlight(ctx)
+		// Leer el cuerpo de la solicitud
+		body, err := io.ReadAll(c.Request.Body)
+		if err != nil {
+			response := util.NewErrorResponse(err, http.StatusInternalServerError)
+			c.JSON(response.StatusCode, response)
+			return
+		}
+		// FlightRequest
+		// Parsear el JSON al modelo adecuado
+		var flightsearch models.FlightSearch
+		err = json.Unmarshal(body, &flightsearch)
+		if err != nil {
+			response := util.NewErrorResponse(err, http.StatusInternalServerError)
+			c.JSON(response.StatusCode, response)
+			return
+		}
+
+		resp, err := p.GetFlight(ctx, flightsearch)
 		if err != nil {
 			response := util.NewErrorResponse(err, http.StatusInternalServerError)
 			c.JSON(response.StatusCode, response)

@@ -279,3 +279,16 @@ type FlightRawOrder struct {
 	Payload     []byte
 	OriginalMsg []byte
 }
+
+type FlightSearch struct {
+	Data struct {
+		Slices []struct {
+			Origin        string `json:"origin"`
+			Destination   string `json:"destination"`
+			DepartureDate string `json:"departure_date"`
+		} `json:"slices"`
+		Passengers []struct {
+			Type string `json:"type"`
+		} `json:"passengers"`
+	} `json:"data"`
+}

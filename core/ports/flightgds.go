@@ -7,10 +7,10 @@ import (
 
 // FlightgdsClient define la comunicación externa con la API de Defontana
 type FlightgdsClient interface {
-	FetchFlightsGDS(ctx context.Context, key string) ([]models.FlightRawOrder, error)
+	FetchFlightsGDS(ctx context.Context, key string, flightsearch models.FlightSearch) ([]models.FlightRawOrder, error)
 }
 
 // FlightgdsService define el caso de uso del dominio para la integración de Defontana
 type FlightgdsService interface {
-	GetFlight(ctx context.Context) ([]models.FlightOfferNorm, error)
+	GetFlight(ctx context.Context, flightsearch models.FlightSearch) ([]models.FlightOfferNorm, error)
 }

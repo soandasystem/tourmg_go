@@ -27,36 +27,36 @@ func NewFlightgdsClient() ports.FlightgdsClient {
 }
 
 // FetchOrders obtiene las órdenes desde la API de Shopify usando la configuración provista y paginación con nextCursor
-func (c *flightgdsClient) FetchFlightsGDS(ctx context.Context, key string) ([]models.FlightRawOrder, error) {
+func (c *flightgdsClient) FetchFlightsGDS(ctx context.Context, key string, payload models.FlightSearch) ([]models.FlightRawOrder, error) {
 
 	baseURL := "https://api.duffel.com/air/offer_requests"
-
-	now := time.Now()
-	departureDate := now.AddDate(0, 0, +5).Format("2006-01-02")
-	returnDate := now.AddDate(0, 0, +8).Format("2006-01-02")
-	// Construir solicitud
-	payload := map[string]interface{}{
-		"data": map[string]interface{}{
-			"slices": []map[string]interface{}{
-				{
-					"origin":         "SCL",
-					"destination":    "MIA",
-					"departure_date": departureDate,
+	/*
+		now := time.Now()
+		departureDate := now.AddDate(0, 0, +5).Format("2006-01-02")
+		returnDate := now.AddDate(0, 0, +8).Format("2006-01-02")
+		// Construir solicitud
+		payload := map[string]interface{}{
+			"data": map[string]interface{}{
+				"slices": []map[string]interface{}{
+					{
+						"origin":         "SCL",
+						"destination":    "MIA",
+						"departure_date": departureDate,
+					},
+					{
+						"origin":         "MIA",
+						"destination":    "SCL",
+						"departure_date": returnDate,
+					},
 				},
-				{
-					"origin":         "MIA",
-					"destination":    "SCL",
-					"departure_date": returnDate,
+				"passengers": []map[string]interface{}{
+					{
+						"type": "adult",
+					},
 				},
 			},
-			"passengers": []map[string]interface{}{
-				{
-					"type": "adult",
-				},
-			},
-		},
-	}
-
+		}
+	*/
 	// Convertir estructura a JSON
 	jsonBody, err := json.Marshal(payload)
 	if err != nil {
@@ -65,7 +65,7 @@ func (c *flightgdsClient) FetchFlightsGDS(ctx context.Context, key string) ([]mo
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodPost, baseURL, bytes.NewBuffer(jsonBody))
 	if err != nil {
-		return nil, fmt.Errorf("error al crear solicitud HTTP para prestashop: %w", err)
+		return nil, fmt.Errorf("error al crear solicitud HTTP para duffel: %w", err)
 	}
 
 	req.Header.Set("Content-Type", "application/json")
@@ -75,17 +75,17 @@ func (c *flightgdsClient) FetchFlightsGDS(ctx context.Context, key string) ([]mo
 
 	resp, err := c.httpClient.Do(req)
 	if err != nil {
-		return nil, fmt.Errorf("error al contactar la API de prestashop: %w", err)
+		return nil, fmt.Errorf("error al contactar la API de Duffel: %w", err)
 	}
 
 	bodyBytes, err := io.ReadAll(resp.Body)
 	resp.Body.Close()
 	if err != nil {
-		return nil, fmt.Errorf("error al leer respuesta de prestashop: %w", err)
+		return nil, fmt.Errorf("error al leer respuesta de Duffel: %w", err)
 	}
 
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-		return nil, fmt.Errorf("API prestashop respondió con status %d: %s", resp.StatusCode, string(bodyBytes))
+		return nil, fmt.Errorf("API Duffel respondió con status %d: %s", resp.StatusCode, string(bodyBytes))
 	}
 
 	pageOrders, err := c.parseFlightgdsPage(bodyBytes, key, ctx)
@@ -147,7 +147,7 @@ func (c *flightgdsClient) rawMessagesFlightgds(messages json.RawMessage, key str
 	customURL := "https://api.duffel.com/air/offer_requests/" + idFinder.ID
 	flightOfferResp, err := c.getOfferRequestDuffel(customURL, key, ctx)
 	if err != nil {
-		fmt.Printf("advertencia: no se pudo obtener la orden %s: %v\n", idFinder.ID, err)
+		fmt.Printf("advertencia: no se pudo obtener la oferta %s: %v\n", idFinder.ID, err)
 	}
 
 	// Guardar la respuesta completa
@@ -177,7 +177,7 @@ func (c *flightgdsClient) getOfferRequestDuffel(orderURL string, key string, ctx
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, orderURL, nil)
 	if err != nil {
-		return nil, fmt.Errorf("error al preparar solicitud de orden: %w", err)
+		return nil, fmt.Errorf("error al preparar solicitud de oferta: %w", err)
 	}
 
 	req.Header.Set("Content-Type", "application/json")
@@ -187,17 +187,17 @@ func (c *flightgdsClient) getOfferRequestDuffel(orderURL string, key string, ctx
 
 	resp, err := c.httpClient.Do(req)
 	if err != nil {
-		return nil, fmt.Errorf("error al ejecutar petición de token: %w", err)
+		return nil, fmt.Errorf("error al ejecutar petición: %w", err)
 	}
 	defer resp.Body.Close()
 
 	respBytes, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return nil, fmt.Errorf("error al leer respuesta de token: %w", err)
+		return nil, fmt.Errorf("error al leer respuesta: %w", err)
 	}
 
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-		return nil, fmt.Errorf("echazó la autenticación (status %d): %s", resp.StatusCode, string(respBytes))
+		return nil, fmt.Errorf("Rechazó de la consulta (status %d): %s", resp.StatusCode, string(respBytes))
 	}
 
 	return respBytes, nil

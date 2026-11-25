@@ -30,10 +30,10 @@ func NewFlightgdsService(cfg config.Config,
 }
 
 // GetOrders orquesta la extracción de órdenes de Wocommerce, el guardado del JSON crudo y su posterior normalización
-func (s *flightgdsService) GetFlight(ctx context.Context) ([]models.FlightOfferNorm, error) {
+func (s *flightgdsService) GetFlight(ctx context.Context, flightsearch models.FlightSearch) ([]models.FlightOfferNorm, error) {
 	key := s.config.ApikeyDuffel
 
-	rawFlights, err := s.flightgdsClient.FetchFlightsGDS(ctx, key)
+	rawFlights, err := s.flightgdsClient.FetchFlightsGDS(ctx, key, flightsearch)
 	if err != nil {
 		return nil, fmt.Errorf("error al consultar vuelos: %w", err)
 	}
