@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"io"
@@ -16,7 +17,7 @@ import (
 
 // SetFlowRoutes creates flow payment routes
 func SetFlightGDSRoutes(ctx context.Context, cfg config.Config, r *gin.Engine, p ports.FlightgdsService) {
-	r.GET("/api/v1/flightgds", getFlightgds(p))
+	r.GET("/api/v3.5/flightgds", getFlightgds(p))
 
 }
 
@@ -38,7 +39,13 @@ func getFlightgds(p ports.FlightgdsService) gin.HandlerFunc {
 			c.JSON(response.StatusCode, response)
 			return
 		}
-		// FlightRequest
+
+		if len(bytes.TrimSpace(body)) == 0 {
+			response := util.NewErrorResponse(err, http.StatusInternalServerError)
+			c.JSON(response.StatusCode, response)
+			return
+		}
+
 		// Parsear el JSON al modelo adecuado
 		var flightsearch models.FlightSearch
 		err = json.Unmarshal(body, &flightsearch)
