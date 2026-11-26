@@ -48,6 +48,16 @@ func getFlightgds(p ports.FlightgdsService) gin.HandlerFunc {
 
 		// Parsear el JSON al modelo adecuado
 		var flightsearch models.FlightSearch
+		if len(flightsearch.Data.Slices) == 0 {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Debe indicar al menos un tramo de vuelo"})
+			return
+		}
+
+		if len(flightsearch.Data.Passengers) == 0 {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Debe indicar al menos un pasajero"})
+			return
+		}
+
 		err = json.Unmarshal(body, &flightsearch)
 		if err != nil {
 			response := util.NewErrorResponse(err, http.StatusInternalServerError)
