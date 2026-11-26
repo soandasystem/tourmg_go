@@ -18,12 +18,12 @@ import (
 func SetIngresoRoutes(ctx context.Context, cfg config.Config, r *gin.Engine, p ports.IngresoService) {
 	//	r.Use(middlewares.Recover())
 
-	r.POST("/api/v3.5/ingreso", createIngreso(ctx, cfg, p))
-	r.GET("/api/v3.5/ingreso", getAllIngreso(ctx, cfg, p))
-	r.GET("/api/v3.5/ingreso/informe", getInfIngreso(ctx, cfg, p))
-	r.GET("/api/v3.5/ingreso/:id", getIngresoByID(ctx, cfg, p))
-	r.PATCH("/api/v3.5/ingreso/:id", updateIngreso(ctx, cfg, p))
-	r.DELETE("/api/v3.5/ingreso/:id", deleteIngreso(ctx, cfg, p))
+	r.POST("/api/v3.5/ingreso", createIngreso(p))
+	r.GET("/api/v3.5/ingreso", getAllIngreso(p))
+	r.GET("/api/v3.5/ingreso/informe", getInfIngreso(p))
+	r.GET("/api/v3.5/ingreso/:id", getIngresoByID(p))
+	r.PATCH("/api/v3.5/ingreso/:id", updateIngreso(p))
+	r.DELETE("/api/v3.5/ingreso/:id", deleteIngreso(p))
 }
 
 // @Summary Create ingreso
@@ -36,7 +36,7 @@ func SetIngresoRoutes(ctx context.Context, cfg config.Config, r *gin.Engine, p p
 // @Failure 500 {object} object
 // @Security Bearer
 // @Router /api/v3.5/ingreso [post]
-func createIngreso(ctx context.Context, cfg config.Config, p ports.IngresoService) gin.HandlerFunc {
+func createIngreso(p ports.IngresoService) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// El ctx ya tiene timeout + schema
 		ctx := c.Request.Context()
@@ -84,7 +84,7 @@ func createIngreso(ctx context.Context, cfg config.Config, p ports.IngresoServic
 // @Failure 500 {object} object
 // @Security Bearer
 // @Router /api/v3.5/ingreso [get]
-func getInfIngreso(ctx context.Context, cfg config.Config, p ports.IngresoService) gin.HandlerFunc {
+func getInfIngreso(p ports.IngresoService) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// El ctx ya tiene timeout + schema
 		ctx := c.Request.Context()
@@ -129,7 +129,7 @@ func getInfIngreso(ctx context.Context, cfg config.Config, p ports.IngresoServic
 // @Failure 500 {object} object
 // @Security Bearer
 // @Router /api/v3.5/ingreso [get]
-func getAllIngreso(ctx context.Context, cfg config.Config, p ports.IngresoService) gin.HandlerFunc {
+func getAllIngreso(p ports.IngresoService) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// El ctx ya tiene timeout + schema
 		ctx := c.Request.Context()
@@ -174,7 +174,7 @@ func getAllIngreso(ctx context.Context, cfg config.Config, p ports.IngresoServic
 // @Failure 500 {object} object
 // @Security Bearer
 // @Router /api/v3.5/ingreso/{id} [get]
-func getIngresoByID(ctx context.Context, cfg config.Config, p ports.IngresoService) gin.HandlerFunc {
+func getIngresoByID(p ports.IngresoService) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// El ctx ya tiene timeout + schema
 		ctx := c.Request.Context()
@@ -204,7 +204,7 @@ func getIngresoByID(ctx context.Context, cfg config.Config, p ports.IngresoServi
 // @Failure 500 {object} object
 // @Security Bearer
 // @Router /api/v3.5/users/{id} [patch]
-func updateIngreso(ctx context.Context, cfg config.Config, p ports.IngresoService) gin.HandlerFunc {
+func updateIngreso(p ports.IngresoService) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// El ctx ya tiene timeout + schema
 		ctx := c.Request.Context()
@@ -249,7 +249,7 @@ func updateIngreso(ctx context.Context, cfg config.Config, p ports.IngresoServic
 // @Failure 500 {object} object
 // @Security Bearer
 // @Router /api/v3.5/ingreso/{id} [delete]
-func deleteIngreso(ctx context.Context, cfg config.Config, p ports.IngresoService) gin.HandlerFunc {
+func deleteIngreso(p ports.IngresoService) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// El ctx ya tiene timeout + schema
 		ctx := c.Request.Context()

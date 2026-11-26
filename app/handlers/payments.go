@@ -18,12 +18,12 @@ import (
 func SetPaymentsRoutes(ctx context.Context, cfg config.Config, r *gin.Engine, p ports.PaymentService) {
 	//	r.Use(middlewares.Recover())
 
-	r.POST("/api/v3.5/payment", createPayment(ctx, cfg, p))
-	r.GET("/api/v3.5/payment", getAllPayment(ctx, cfg, p))
-	r.GET("/api/v3.5/payment/informe", getInfPayment(ctx, cfg, p))
-	r.GET("/api/v3.5/payment/:id", getPaymentByID(ctx, cfg, p))
-	r.PATCH("/api/v3.5/payment/:id", updatePayment(ctx, cfg, p))
-	r.DELETE("/api/v3.5/payment/:id", deletePayment(ctx, cfg, p))
+	r.POST("/api/v3.5/payment", createPayment(p))
+	r.GET("/api/v3.5/payment", getAllPayment(p))
+	r.GET("/api/v3.5/payment/informe", getInfPayment(p))
+	r.GET("/api/v3.5/payment/:id", getPaymentByID(p))
+	r.PATCH("/api/v3.5/payment/:id", updatePayment(p))
+	r.DELETE("/api/v3.5/payment/:id", deletePayment(p))
 }
 
 // @Summary Create payment
@@ -36,7 +36,7 @@ func SetPaymentsRoutes(ctx context.Context, cfg config.Config, r *gin.Engine, p 
 // @Failure 500 {object} object
 // @Security Bearer
 // @Router /api/v3.5/installment [post]
-func createPayment(ctx context.Context, cfg config.Config, p ports.PaymentService) gin.HandlerFunc {
+func createPayment(p ports.PaymentService) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// El ctx ya tiene timeout + schema
 		ctx := c.Request.Context()
@@ -84,7 +84,7 @@ func createPayment(ctx context.Context, cfg config.Config, p ports.PaymentServic
 // @Failure 500 {object} object
 // @Security Bearer
 // @Router /api/v3.5/payment [get]
-func getInfPayment(ctx context.Context, cfg config.Config, p ports.PaymentService) gin.HandlerFunc {
+func getInfPayment(p ports.PaymentService) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// El ctx ya tiene timeout + schema
 		ctx := c.Request.Context()
@@ -129,7 +129,7 @@ func getInfPayment(ctx context.Context, cfg config.Config, p ports.PaymentServic
 // @Failure 500 {object} object
 // @Security Bearer
 // @Router /api/v3.5/payment [get]
-func getAllPayment(ctx context.Context, cfg config.Config, p ports.PaymentService) gin.HandlerFunc {
+func getAllPayment(p ports.PaymentService) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// El ctx ya tiene timeout + schema
 		ctx := c.Request.Context()
@@ -174,7 +174,7 @@ func getAllPayment(ctx context.Context, cfg config.Config, p ports.PaymentServic
 // @Failure 500 {object} object
 // @Security Bearer
 // @Router /api/v3.5/payment/{id} [get]
-func getPaymentByID(ctx context.Context, cfg config.Config, p ports.PaymentService) gin.HandlerFunc {
+func getPaymentByID(p ports.PaymentService) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// El ctx ya tiene timeout + schema
 		ctx := c.Request.Context()
@@ -204,7 +204,7 @@ func getPaymentByID(ctx context.Context, cfg config.Config, p ports.PaymentServi
 // @Failure 500 {object} object
 // @Security Bearer
 // @Router /api/v3.5/payment/{id} [patch]
-func updatePayment(ctx context.Context, cfg config.Config, p ports.PaymentService) gin.HandlerFunc {
+func updatePayment(p ports.PaymentService) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// El ctx ya tiene timeout + schema
 		ctx := c.Request.Context()
@@ -249,7 +249,7 @@ func updatePayment(ctx context.Context, cfg config.Config, p ports.PaymentServic
 // @Failure 500 {object} object
 // @Security Bearer
 // @Router /api/v3.5/payment/{id} [delete]
-func deletePayment(ctx context.Context, cfg config.Config, p ports.PaymentService) gin.HandlerFunc {
+func deletePayment(p ports.PaymentService) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// El ctx ya tiene timeout + schema
 		ctx := c.Request.Context()

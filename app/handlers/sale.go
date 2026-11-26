@@ -18,13 +18,13 @@ import (
 func SetSaleRoutes(ctx context.Context, cfg config.Config, r *gin.Engine, p ports.SaleService) {
 	//	r.Use(middlewares.Recover())
 
-	r.POST("/api/v3.5/sale", createSale(ctx, cfg, p))
-	r.GET("/api/v3.5/sale", getAllSale(ctx, cfg, p))
-	r.GET("/api/v3.5/sale/page/:page", getAllSalePage(ctx, cfg, p))
-	r.GET("/api/v3.5/sale/informe", getInfSale(ctx, cfg, p))
-	r.GET("/api/v3.5/sale/:id", getSaleByID(ctx, cfg, p))
-	r.PATCH("/api/v3.5/sale/:id", updateSale(ctx, cfg, p))
-	r.DELETE("/api/v3.5/sale/:id", deleteSale(ctx, cfg, p))
+	r.POST("/api/v3.5/sale", createSale(p))
+	r.GET("/api/v3.5/sale", getAllSale(p))
+	r.GET("/api/v3.5/sale/page/:page", getAllSalePage(p))
+	r.GET("/api/v3.5/sale/informe", getInfSale(p))
+	r.GET("/api/v3.5/sale/:id", getSaleByID(p))
+	r.PATCH("/api/v3.5/sale/:id", updateSale(p))
+	r.DELETE("/api/v3.5/sale/:id", deleteSale(p))
 }
 
 // @Summary Create sale
@@ -37,7 +37,7 @@ func SetSaleRoutes(ctx context.Context, cfg config.Config, r *gin.Engine, p port
 // @Failure 500 {object} object
 // @Security Bearer
 // @Router /api/v3.5/sale [post]
-func createSale(ctx context.Context, cfg config.Config, p ports.SaleService) gin.HandlerFunc {
+func createSale(p ports.SaleService) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// El ctx ya tiene timeout + schema
 		ctx := c.Request.Context()
@@ -85,7 +85,7 @@ func createSale(ctx context.Context, cfg config.Config, p ports.SaleService) gin
 // @Failure 500 {object} object
 // @Security Bearer
 // @Router /api/v3.5/ingreso [get]
-func getInfSale(ctx context.Context, cfg config.Config, p ports.SaleService) gin.HandlerFunc {
+func getInfSale(p ports.SaleService) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// El ctx ya tiene timeout + schema
 		ctx := c.Request.Context()
@@ -131,7 +131,7 @@ func getInfSale(ctx context.Context, cfg config.Config, p ports.SaleService) gin
 // @Failure 500 {object} object
 // @Security Bearer
 // @Router /api/v3.5/sale [get]
-func getAllSale(ctx context.Context, cfg config.Config, p ports.SaleService) gin.HandlerFunc {
+func getAllSale(p ports.SaleService) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// El ctx ya tiene timeout + schema
 		ctx := c.Request.Context()
@@ -176,7 +176,7 @@ func getAllSale(ctx context.Context, cfg config.Config, p ports.SaleService) gin
 // @Failure 500 {object} object
 // @Security Bearer
 // @Router /api/v3.5/sale/page/:page [get]
-func getAllSalePage(ctx context.Context, cfg config.Config, p ports.SaleService) gin.HandlerFunc {
+func getAllSalePage(p ports.SaleService) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// El ctx ya tiene timeout + schema
 		ctx := c.Request.Context()
@@ -212,7 +212,7 @@ func getAllSalePage(ctx context.Context, cfg config.Config, p ports.SaleService)
 // @Failure 500 {object} object
 // @Security Bearer
 // @Router /api/v3.5/sale/{id} [get]
-func getSaleByID(ctx context.Context, cfg config.Config, p ports.SaleService) gin.HandlerFunc {
+func getSaleByID(p ports.SaleService) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// El ctx ya tiene timeout + schema
 		ctx := c.Request.Context()
@@ -242,7 +242,7 @@ func getSaleByID(ctx context.Context, cfg config.Config, p ports.SaleService) gi
 // @Failure 500 {object} object
 // @Security Bearer
 // @Router /api/v3.5/users/{id} [patch]
-func updateSale(ctx context.Context, cfg config.Config, p ports.SaleService) gin.HandlerFunc {
+func updateSale(p ports.SaleService) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// El ctx ya tiene timeout + schema
 		ctx := c.Request.Context()
@@ -287,7 +287,7 @@ func updateSale(ctx context.Context, cfg config.Config, p ports.SaleService) gin
 // @Failure 500 {object} object
 // @Security Bearer
 // @Router /api/v3.5/sale/{id} [delete]
-func deleteSale(ctx context.Context, cfg config.Config, p ports.SaleService) gin.HandlerFunc {
+func deleteSale(p ports.SaleService) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// El ctx ya tiene timeout + schema
 		ctx := c.Request.Context()

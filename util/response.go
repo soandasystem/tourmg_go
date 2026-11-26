@@ -45,9 +45,13 @@ func NewMessageResponse(message string, returnid string) *ApiMessage {
 }
 
 func NewErrorResponse(err error, statusCode int) *ApiResponse {
+	errMsg := ""
+	if err != nil {
+		errMsg = err.Error()
+	}
 	return &ApiResponse{
 		Success:    false,
-		Error:      err.Error(),
+		Error:      errMsg,
 		StatusCode: statusCode,
 	}
 }

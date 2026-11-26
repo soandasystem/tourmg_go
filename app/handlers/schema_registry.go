@@ -18,8 +18,8 @@ import (
 func SetSchemaRegistryRoutes(ctx context.Context, cfg config.Config, r *gin.Engine, p ports.SchemaRegistryService) {
 	//	r.Use(middlewares.Recover())
 
-	r.POST("/api/v3.5/schema_registry", createSchema(ctx, cfg, p))
-	r.GET("/api/v3.5/schema_registry", getAllSchema(ctx, cfg, p))
+	r.POST("/api/v3.5/schema_registry", createSchema(p))
+	r.GET("/api/v3.5/schema_registry", getAllSchema(p))
 
 }
 
@@ -33,7 +33,7 @@ func SetSchemaRegistryRoutes(ctx context.Context, cfg config.Config, r *gin.Engi
 // @Failure 500 {object} object
 // @Security Bearer
 // @Router /api/v3.5/sale [post]
-func createSchema(ctx context.Context, cfg config.Config, p ports.SchemaRegistryService) gin.HandlerFunc {
+func createSchema(p ports.SchemaRegistryService) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// El ctx ya tiene timeout + schema
 		ctx := c.Request.Context()
@@ -81,7 +81,7 @@ func createSchema(ctx context.Context, cfg config.Config, p ports.SchemaRegistry
 // @Failure 500 {object} object
 // @Security Bearer
 // @Router /api/v3.5/sale [get]
-func getAllSchema(ctx context.Context, cfg config.Config, p ports.SchemaRegistryService) gin.HandlerFunc {
+func getAllSchema(p ports.SchemaRegistryService) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// El ctx ya tiene timeout + schema
 		ctx := c.Request.Context()

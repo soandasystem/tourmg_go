@@ -17,7 +17,7 @@ import (
 
 // SetFlowRoutes creates flow payment routes
 func SetFlightGDSRoutes(ctx context.Context, cfg config.Config, r *gin.Engine, p ports.FlightgdsService) {
-	r.GET("/api/v3.5/flightgds", getFlightgds(p))
+	r.POST("/api/v3.5/flightgds", setFlightgds(p))
 
 }
 
@@ -28,26 +28,33 @@ func SetFlightGDSRoutes(ctx context.Context, cfg config.Config, r *gin.Engine, p
 // @Failure 400 {object} object
 // @Failure 500 {object} object
 // @Router /api/v1/getFlightgds/ [get]
-func getFlightgds(p ports.FlightgdsService) gin.HandlerFunc {
+func setFlightgds(p ports.FlightgdsService) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		ctx := c.Request.Context()
 
 		// Leer el cuerpo de la solicitud
 		body, err := io.ReadAll(c.Request.Body)
 		if err != nil {
-			response := util.NewErrorResponse(err, http.StatusInternalServerError)
+			response := util.NewErrorResponse(err, http.StatusBadRequest)
 			c.JSON(response.StatusCode, response)
 			return
 		}
 
 		if len(bytes.TrimSpace(body)) == 0 {
-			response := util.NewErrorResponse(err, http.StatusInternalServerError)
-			c.JSON(response.StatusCode, response)
+			c.JSON(http.StatusBadRequest, gin.H{"error": "El cuerpo de la solicitud no puede estar vacío"})
 			return
 		}
 
 		// Parsear el JSON al modelo adecuado
 		var flightsearch models.FlightSearch
+
+		err = json.Unmarshal(body, &flightsearch)
+		if err != nil {
+			response := util.NewErrorResponse(err, http.StatusBadRequest)
+			c.JSON(response.StatusCode, response)
+			return
+		}
+
 		if len(flightsearch.Data.Slices) == 0 {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "Debe indicar al menos un tramo de vuelo"})
 			return
@@ -55,13 +62,6 @@ func getFlightgds(p ports.FlightgdsService) gin.HandlerFunc {
 
 		if len(flightsearch.Data.Passengers) == 0 {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "Debe indicar al menos un pasajero"})
-			return
-		}
-
-		err = json.Unmarshal(body, &flightsearch)
-		if err != nil {
-			response := util.NewErrorResponse(err, http.StatusInternalServerError)
-			c.JSON(response.StatusCode, response)
 			return
 		}
 

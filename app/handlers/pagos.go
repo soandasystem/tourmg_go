@@ -18,12 +18,12 @@ import (
 func SetPagosRoutes(ctx context.Context, cfg config.Config, r *gin.Engine, p ports.PagosService) {
 	//	r.Use(middlewares.Recover())
 
-	r.POST("/api/v3.5/pagos", createPagos(ctx, cfg, p))
-	r.GET("/api/v3.5/pagos", getAllPagos(ctx, cfg, p))
-	r.GET("/api/v3.5/pagos/informe", getInfPagos(ctx, cfg, p))
-	r.GET("/api/v3.5/pagos/:id", getPagosByID(ctx, cfg, p))
-	r.PATCH("/api/v3.5/pagos/:id", updatePagos(ctx, cfg, p))
-	r.DELETE("/api/v3.5/pagos/:id", deletePagos(ctx, cfg, p))
+	r.POST("/api/v3.5/pagos", createPagos(p))
+	r.GET("/api/v3.5/pagos", getAllPagos(p))
+	r.GET("/api/v3.5/pagos/informe", getInfPagos(p))
+	r.GET("/api/v3.5/pagos/:id", getPagosByID(p))
+	r.PATCH("/api/v3.5/pagos/:id", updatePagos(p))
+	r.DELETE("/api/v3.5/pagos/:id", deletePagos(p))
 }
 
 // @Summary Create pagos
@@ -36,7 +36,7 @@ func SetPagosRoutes(ctx context.Context, cfg config.Config, r *gin.Engine, p por
 // @Failure 500 {object} object
 // @Security Bearer
 // @Router /api/v3.5/pagos [post]
-func createPagos(ctx context.Context, cfg config.Config, p ports.PagosService) gin.HandlerFunc {
+func createPagos(p ports.PagosService) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// El ctx ya tiene timeout + schema
 		ctx := c.Request.Context()
@@ -84,7 +84,7 @@ func createPagos(ctx context.Context, cfg config.Config, p ports.PagosService) g
 // @Failure 500 {object} object
 // @Security Bearer
 // @Router /api/v3.5/pagos [get]
-func getInfPagos(ctx context.Context, cfg config.Config, p ports.PagosService) gin.HandlerFunc {
+func getInfPagos(p ports.PagosService) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// El ctx ya tiene timeout + schema
 		ctx := c.Request.Context()
@@ -129,7 +129,7 @@ func getInfPagos(ctx context.Context, cfg config.Config, p ports.PagosService) g
 // @Failure 500 {object} object
 // @Security Bearer
 // @Router /api/v3.5/pagos [get]
-func getAllPagos(ctx context.Context, cfg config.Config, p ports.PagosService) gin.HandlerFunc {
+func getAllPagos(p ports.PagosService) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// El ctx ya tiene timeout + schema
 		ctx := c.Request.Context()
@@ -174,7 +174,7 @@ func getAllPagos(ctx context.Context, cfg config.Config, p ports.PagosService) g
 // @Failure 500 {object} object
 // @Security Bearer
 // @Router /api/v3.5/pagos/{id} [get]
-func getPagosByID(ctx context.Context, cfg config.Config, p ports.PagosService) gin.HandlerFunc {
+func getPagosByID(p ports.PagosService) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// El ctx ya tiene timeout + schema
 		ctx := c.Request.Context()
@@ -204,7 +204,7 @@ func getPagosByID(ctx context.Context, cfg config.Config, p ports.PagosService) 
 // @Failure 500 {object} object
 // @Security Bearer
 // @Router /api/v3.5/users/{id} [patch]
-func updatePagos(ctx context.Context, cfg config.Config, p ports.PagosService) gin.HandlerFunc {
+func updatePagos(p ports.PagosService) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// El ctx ya tiene timeout + schema
 		ctx := c.Request.Context()
@@ -249,7 +249,7 @@ func updatePagos(ctx context.Context, cfg config.Config, p ports.PagosService) g
 // @Failure 500 {object} object
 // @Security Bearer
 // @Router /api/v3.5/pagos/{id} [delete]
-func deletePagos(ctx context.Context, cfg config.Config, p ports.PagosService) gin.HandlerFunc {
+func deletePagos(p ports.PagosService) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// El ctx ya tiene timeout + schema
 		ctx := c.Request.Context()

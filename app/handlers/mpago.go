@@ -18,10 +18,10 @@ import (
 
 // SetMpagoRoutes creates MercadoPago payment routes
 func SetMpagoRoutes(ctx context.Context, cfg config.Config, r *gin.Engine, p ports.MPagoService) {
-	r.POST("/api/v3.5/iniciopagomp", initMpagoPayment(ctx, cfg, p))
-	r.POST("/api/v3.5/mpago/webhook", mpagoWebhook(ctx, cfg, p))
-	r.GET("/api/v3.5/mpago/verificar", mpagoRedirect(ctx, cfg, p))
-	r.POST("/api/v3.5/mpago/verificar", mpagoWebhook(ctx, cfg, p))
+	r.POST("/api/v3.5/iniciopagomp", initMpagoPayment(p))
+	r.POST("/api/v3.5/mpago/webhook", mpagoWebhook(p))
+	r.GET("/api/v3.5/mpago/verificar", mpagoRedirect(p))
+	r.POST("/api/v3.5/mpago/verificar", mpagoWebhook(p))
 }
 
 // @Summary Init Mercado Pago Payment
@@ -33,7 +33,7 @@ func SetMpagoRoutes(ctx context.Context, cfg config.Config, r *gin.Engine, p por
 // @Failure 500 {object} object
 // @Security Bearer
 // @Router /api/v3.5/iniciopagomp [post]
-func initMpagoPayment(ctx context.Context, cfg config.Config, p ports.MPagoService) gin.HandlerFunc {
+func initMpagoPayment(p ports.MPagoService) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		ctx := c.Request.Context()
 
@@ -73,7 +73,7 @@ func initMpagoPayment(ctx context.Context, cfg config.Config, p ports.MPagoServi
 // @Failure 500 {object} object
 // @Security Bearer
 // @Router /api/v3.5/mpago/webhook [post]
-func mpagoWebhook(ctx context.Context, cfg config.Config, p ports.MPagoService) gin.HandlerFunc {
+func mpagoWebhook(p ports.MPagoService) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		body, err := io.ReadAll(c.Request.Body)
 		if err != nil {
@@ -120,7 +120,7 @@ func mpagoWebhook(ctx context.Context, cfg config.Config, p ports.MPagoService) 
 // @Failure 400 {object} object
 // @Security Bearer
 // @Router /api/v3.5/mpago/verificar [get]
-func mpagoRedirect(ctx context.Context, cfg config.Config, p ports.MPagoService) gin.HandlerFunc {
+func mpagoRedirect(p ports.MPagoService) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		paymentID := c.Query("payment_id")
 		preferenceID := c.Query("preference_id")

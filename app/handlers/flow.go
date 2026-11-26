@@ -19,11 +19,11 @@ import (
 
 // SetFlowRoutes creates flow payment routes
 func SetFlowRoutes(ctx context.Context, cfg config.Config, r *gin.Engine, p ports.FlowService) {
-	r.POST("/api/v3.5/iniciopagoflow", initFlowPayment(ctx, cfg, p))
-	r.POST("/api/v3.5/token", tokenflow(ctx, cfg, p))
-	r.POST("/api/v3.5/consulta-token", consultatoken(ctx, cfg, p))
-	r.POST("/api/v3.5/returnflow", returnflow(ctx, cfg, p))
-	r.GET("/flowpagos/returnflow", returnflowGet(ctx, cfg, p))
+	r.POST("/api/v3.5/iniciopagoflow", initFlowPayment(p))
+	r.POST("/api/v3.5/token", tokenflow(ctx, p))
+	r.POST("/api/v3.5/consulta-token", consultatoken(ctx, p))
+	r.POST("/api/v3.5/returnflow", returnflow(p))
+	r.GET("/flowpagos/returnflow", returnflowGet(p))
 }
 
 // @Summary Init Flow Payment
@@ -34,7 +34,7 @@ func SetFlowRoutes(ctx context.Context, cfg config.Config, r *gin.Engine, p port
 // @Failure 400 {object} object
 // @Failure 500 {object} object
 // @Router /api/v3.5/gateways/flow/init [post]
-func initFlowPayment(ctx context.Context, cfg config.Config, p ports.FlowService) gin.HandlerFunc {
+func initFlowPayment(p ports.FlowService) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		ctx := c.Request.Context()
 
@@ -71,7 +71,7 @@ func initFlowPayment(ctx context.Context, cfg config.Config, p ports.FlowService
 // @Failure 400 {object} object
 // @Failure 500 {object} object
 // @Router /api/v3.5/gateways/flow/init [post]
-func tokenflow(ctx context.Context, cfg config.Config, p ports.FlowService) gin.HandlerFunc {
+func tokenflow(ctx context.Context, p ports.FlowService) gin.HandlerFunc {
 	return func(c *gin.Context) {
 
 		if c.Request.Method != http.MethodPost {
@@ -106,7 +106,7 @@ func tokenflow(ctx context.Context, cfg config.Config, p ports.FlowService) gin.
 	}
 }
 
-func consultatoken(ctx context.Context, cfg config.Config, p ports.FlowService) gin.HandlerFunc {
+func consultatoken(ctx context.Context, p ports.FlowService) gin.HandlerFunc {
 	return func(c *gin.Context) {
 
 		if c.Request.Method != http.MethodPost {
@@ -141,7 +141,7 @@ func consultatoken(ctx context.Context, cfg config.Config, p ports.FlowService) 
 	}
 }
 
-func returnflow(ctx context.Context, cfg config.Config, p ports.FlowService) gin.HandlerFunc {
+func returnflow(p ports.FlowService) gin.HandlerFunc {
 	return func(c *gin.Context) {
 
 		if c.Request.Method != http.MethodPost {
@@ -179,7 +179,7 @@ func returnflow(ctx context.Context, cfg config.Config, p ports.FlowService) gin
 	}
 }
 
-func returnflowGet(ctx context.Context, cfg config.Config, p ports.FlowService) gin.HandlerFunc {
+func returnflowGet(p ports.FlowService) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		token := c.Query("token")
 		if token == "" {

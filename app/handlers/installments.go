@@ -18,12 +18,12 @@ import (
 func SetInstallmentsRoutes(ctx context.Context, cfg config.Config, r *gin.Engine, p ports.InstallmentsService) {
 	//	r.Use(middlewares.Recover())
 
-	r.POST("/api/v3.5/installment", createInstallment(ctx, cfg, p))
-	r.GET("/api/v3.5/installment", getAllInstallment(ctx, cfg, p))
-	r.GET("/api/v3.5/installment/informe", getInfInstallment(ctx, cfg, p))
-	r.GET("/api/v3.5/installment/:id", getInstallmentByID(ctx, cfg, p))
-	r.PATCH("/api/v3.5/installment/:id", updateInstallment(ctx, cfg, p))
-	r.DELETE("/api/v3.5/installment/:id", deleteInstallment(ctx, cfg, p))
+	r.POST("/api/v3.5/installment", createInstallment(p))
+	r.GET("/api/v3.5/installment", getAllInstallment(p))
+	r.GET("/api/v3.5/installment/informe", getInfInstallment(p))
+	r.GET("/api/v3.5/installment/:id", getInstallmentByID(p))
+	r.PATCH("/api/v3.5/installment/:id", updateInstallment(p))
+	r.DELETE("/api/v3.5/installment/:id", deleteInstallment(p))
 }
 
 // @Summary Create installment
@@ -36,7 +36,7 @@ func SetInstallmentsRoutes(ctx context.Context, cfg config.Config, r *gin.Engine
 // @Failure 500 {object} object
 // @Security Bearer
 // @Router /api/v3.5/installment [post]
-func createInstallment(ctx context.Context, cfg config.Config, p ports.InstallmentsService) gin.HandlerFunc {
+func createInstallment(p ports.InstallmentsService) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// El ctx ya tiene timeout + schema
 		ctx := c.Request.Context()
@@ -84,7 +84,7 @@ func createInstallment(ctx context.Context, cfg config.Config, p ports.Installme
 // @Failure 500 {object} object
 // @Security Bearer
 // @Router /api/v3.5/ingreso [get]
-func getInfInstallment(ctx context.Context, cfg config.Config, p ports.InstallmentsService) gin.HandlerFunc {
+func getInfInstallment(p ports.InstallmentsService) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// El ctx ya tiene timeout + schema
 		ctx := c.Request.Context()
@@ -129,7 +129,7 @@ func getInfInstallment(ctx context.Context, cfg config.Config, p ports.Installme
 // @Failure 500 {object} object
 // @Security Bearer
 // @Router /api/v3.5/installment [get]
-func getAllInstallment(ctx context.Context, cfg config.Config, p ports.InstallmentsService) gin.HandlerFunc {
+func getAllInstallment(p ports.InstallmentsService) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// El ctx ya tiene timeout + schema
 		ctx := c.Request.Context()
@@ -174,7 +174,7 @@ func getAllInstallment(ctx context.Context, cfg config.Config, p ports.Installme
 // @Failure 500 {object} object
 // @Security Bearer
 // @Router /api/v3.5/installment/{id} [get]
-func getInstallmentByID(ctx context.Context, cfg config.Config, p ports.InstallmentsService) gin.HandlerFunc {
+func getInstallmentByID(p ports.InstallmentsService) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// El ctx ya tiene timeout + schema
 		ctx := c.Request.Context()
@@ -204,7 +204,7 @@ func getInstallmentByID(ctx context.Context, cfg config.Config, p ports.Installm
 // @Failure 500 {object} object
 // @Security Bearer
 // @Router /api/v3.5/installment/{id} [patch]
-func updateInstallment(ctx context.Context, cfg config.Config, p ports.InstallmentsService) gin.HandlerFunc {
+func updateInstallment(p ports.InstallmentsService) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// El ctx ya tiene timeout + schema
 		ctx := c.Request.Context()
@@ -249,7 +249,7 @@ func updateInstallment(ctx context.Context, cfg config.Config, p ports.Installme
 // @Failure 500 {object} object
 // @Security Bearer
 // @Router /api/v3.5/installment/{id} [delete]
-func deleteInstallment(ctx context.Context, cfg config.Config, p ports.InstallmentsService) gin.HandlerFunc {
+func deleteInstallment(p ports.InstallmentsService) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// El ctx ya tiene timeout + schema
 		ctx := c.Request.Context()

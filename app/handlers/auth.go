@@ -18,8 +18,8 @@ func SetAuthRoutes(ctx context.Context, cfg config.Config, router *gin.Engine, c
 	//authGroup := router.Group("/api/auth")
 	authGroup := router.Group("api/v3.5/")
 	{
-		authGroup.POST("/login", loginHandler(ctx, companyScv, userSvc, cursoSvc, saleSvc))
-		authGroup.POST("/restore", restoreHandler(ctx, companyScv, userSvc, cursoSvc, saleSvc))
+		authGroup.POST("/login", loginHandler(userSvc, cursoSvc, saleSvc))
+		authGroup.POST("/restore", restoreHandler(userSvc, cursoSvc))
 	}
 }
 
@@ -34,7 +34,7 @@ func SetAuthRoutes(ctx context.Context, cfg config.Config, router *gin.Engine, c
 // @Failure 401 {object} object
 // @Failure 500 {object} object
 // @Router /api/v3.5/login [post]
-func loginHandler(ctx context.Context, companyScv ports.CompanyService, userSvc ports.UsersService, cursoSvc ports.CursoService, saleSvc ports.SaleService) gin.HandlerFunc {
+func loginHandler(userSvc ports.UsersService, cursoSvc ports.CursoService, saleSvc ports.SaleService) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		reqCtx := c.Request.Context() // Este contexto contiene el schema inyectado por el middleware
 
@@ -139,7 +139,7 @@ func loginHandler(ctx context.Context, companyScv ports.CompanyService, userSvc 
 // @Failure 401 {object} object
 // @Failure 500 {object} object
 // @Router /api/v3.5/restore [post]
-func restoreHandler(ctx context.Context, companyScv ports.CompanyService, userSvc ports.UsersService, cursoSvc ports.CursoService, saleSvc ports.SaleService) gin.HandlerFunc {
+func restoreHandler(userSvc ports.UsersService, cursoSvc ports.CursoService) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		reqCtx := c.Request.Context() // Este contexto contiene el schema inyectado por el middleware
 
